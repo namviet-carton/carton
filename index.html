@@ -997,26 +997,62 @@ async function sbFetch(method, table, body=null, params='') {
     'Prefer': method==='POST'?'return=representation':'return=minimal'
   };
   if(method==='GET')headers['Prefer']='';
-  const res = await fetch(url, {method, headers, body: body?JSON.stringify(body):null});
-  if(!res.ok){ const e=await res.text(); console.error('SB Error',table,e); return null; }
-  if(method==='DELETE'||method==='PATCH')return true;
-  const txt=await res.text(); return txt?JSON.parse(txt):[];
+  try {
+    const res = await fetch(url, {method, headers, body: body?JSON.stringify(body):null});
+    if(!res.ok){
+      const e=await res.text();
+      console.error('SB Error',table,method,e);
+      // Hiện lỗi cụ thể để dễ debug
+      const errObj=JSON.parse(e||'{}');
+      const errMsg=errObj.message||errObj.error||e||'Unknown error';
+      toast(`❌ Lỗi ${table}: ${errMsg.substring(0,80)}`);
+      return null;
+    }
+    if(method==='DELETE'||method==='PATCH')return true;
+    const txt=await res.text();
+    return txt?JSON.parse(txt):[];
+  } catch(err) {
+    console.error('Network error',table,err);
+    toast('❌ Lỗi mạng – kiểm tra internet và thử lại');
+    return null;
+  }
 }
 
 // Shorthand helpers
-const sbGet    = (t,p='')       => sbFetch('GET',   t, null, p);
-const sbPost   = (t,b)          => sbFetch('POST',  t, b);
-const sbPatch  = (t,b,p)        => sbFetch('PATCH', t, b, p);
-const sbDelete = (t,p)          => sbFetch('DELETE',t, null, p);
+const sbGet    = (t,p='') => sbFetch('GET',   t, null, p);
+const sbPost   = (t,b)    => sbFetch('POST',  t, b);
+const sbPatch  = (t,b,p)  => sbFetch('PATCH', t, b, p);
+const sbDelete = (t,p)    => sbFetch('DELETE',t, null, p);
 const sbUpsert = async (t,b) => {
   const headers = {
     'apikey': SB_KEY,'Authorization': `Bearer ${SB_KEY}`,
-    'Content-Type': 'application/json','Prefer': 'resolution=merge-duplicates,return=representation'
+    'Content-Type': 'application/json',
+    'Prefer': 'resolution=merge-duplicates,return=representation'
   };
-  const res = await fetch(`${SB_URL}/rest/v1/${t}`,{method:'POST',headers,body:JSON.stringify(b)});
-  if(!res.ok){ const e=await res.text();console.error('Upsert error',t,e);return null; }
-  const txt=await res.text();return txt?JSON.parse(txt):[];
+  try {
+    const res = await fetch(`${SB_URL}/rest/v1/${t}`,{method:'POST',headers,body:JSON.stringify(b)});
+    if(!res.ok){
+      const e=await res.text();
+      console.error('Upsert error',t,e);
+      const errObj=JSON.parse(e||'{}');
+      toast(`❌ Lỗi lưu ${t}: ${(errObj.message||e||'').substring(0,80)}`);
+      return null;
+    }
+    const txt=await res.text();return txt?JSON.parse(txt):[];
+  } catch(err) {
+    console.error('Upsert network error',t,err);
+    toast('❌ Lỗi mạng khi lưu – kiểm tra internet');
+    return null;
+  }
 };
+
+// sbInsert: POST 1 object (không phải array) → trả về object đầu tiên hoặc true
+async function sbInsert(table, obj) {
+  const result = await sbPost(table, obj);
+  // POST với Prefer:return=representation trả về array
+  if(Array.isArray(result)) return result[0]||true;
+  return result;
+}
 
 
 // ══════════════════════════
@@ -1028,7 +1064,6 @@ async function sbSaveKH(){
 async function sbSaveCFG(){
   await sbUpsert('cfg',[{id:1,cty:cfg.cty,mst:cfg.mst,ptr:cfg.ptr,pxk_counter:pxkN,updated_at:new Date().toISOString()}]);
 }
-async function sbInsert(table,obj){ return await sbPost(table,obj); }
 async function sbDel(table,id){ return await sbDelete(table,'?id=eq.'+id); }
 async function sbDelWhere(table,col,val){ return await sbDelete(table,'?'+col+'=eq.'+val); }
 // ══════════════════════════════════════
@@ -1186,7 +1221,7 @@ function renderDashboard(){
 // ══════════════════════════
 async function saveKH(){kh={name:v('kh-name').trim(),vt:v('kh-vt').trim().toUpperCase(),mst:v('kh-mst').trim(),phone:v('kh-phone').trim(),contact:v('kh-contact').trim(),email:v('kh-email').trim(),addr:v('kh-addr').trim()};await sbSaveKH();renderAll();toast('✅ Lưu thông tin khách hàng');}
 async function saveDD(){if(dds.length>=20){toast('Tối đa 20!');return;}const name=v('dd-name').trim(),addr=v('dd-addr').trim();if(!name||!addr){toast('Nhập tên & địa chỉ!');return;}const id=Date.now();const obj={id,name,addr,nguoi:v('dd-nguoi').trim(),sdt:v('dd-sdt').trim(),note:v('dd-note').trim()};const r=await sbInsert('dds',obj);if(r){dds.push(obj);renderKH();clearDD();toast('✅ Đã thêm: '+name);}else toast('❌ Lỗi lưu dữ liệu');}
-function delDD(id){if(!confirm('Xóa?'))return;dds=dds.filter(d=>d.id!==id);sv();renderKH();}
+async function delDD(id){if(!confirm('Xóa địa điểm này?'))return;await sbDel('dds',id);dds=dds.filter(d=>d.id!==id);renderKH();}
 function clearDD(){['dd-name','dd-addr','dd-nguoi','dd-sdt','dd-note'].forEach(id=>set(id,''));}
 async function saveNCC(){const name=v('ncc-name').trim(),vt=v('ncc-vt').trim().toUpperCase();if(!name||!vt){toast('Nhập tên & viết tắt!');return;}const id=Date.now();const obj={id,name,vt,mst:v('ncc-mst').trim(),sdt:v('ncc-sdt').trim(),contact:v('ncc-contact').trim(),email:v('ncc-email').trim(),addr:v('ncc-addr').trim(),note:v('ncc-note').trim()};const r=await sbInsert('nccs',obj);if(r){nccs.push(obj);renderNCC();clearNCC();toast('✅ Đã thêm NCC: '+name);}else toast('❌ Lỗi lưu');}
 async function delNCC(id){if(!confirm('Xóa NCC này?'))return;await sbDel('nccs',id);nccs=nccs.filter(n=>n.id!==id);renderNCC();}
@@ -1231,12 +1266,51 @@ function renderXe(){
 // ══════════════════════════
 async function saveSP(){
   if(sps.length>=50&&!g_('sp-code').dataset.editing){toast('Tối đa 50!');return;}
-  const code=v('sp-code').trim().toUpperCase();if(!code){toast('Nhập mã SP!');return;}
-  const obj={code,name:v('sp-name').trim(),lop:v('sp-lop'),song:v('sp-song'),size:v('sp-size').trim(),in:v('sp-in'),tp:v('sp-tp'),mang:v('sp-mang'),dm:parseInt(v('sp-dm'))||0,note:v('sp-note').trim()};
-  const ed=g_('sp-code').dataset.editing;
-  if(ed){const i=sps.findIndex(s=>s.code===ed);if(i>=0)sps[i]=obj;delete g_('sp-code').dataset.editing;}
-  else{if(sps.find(s=>s.code===code)){toast('Mã đã tồn tại!');return;}sps.push(obj);}
-  const spRow={id:obj.id,code:obj.code,name:obj.name,lop:obj.lop,song:obj.song,size:obj.size,'in':obj.in,tp:obj.tp,mang:obj.mang,dm:obj.dm,note:obj.note};const ed2=ed;if(ed2){await sbUpsert('sps',[spRow]);const i=sps.findIndex(s=>s.code===ed2);if(i>=0)sps[i]=obj;}else{const r=await sbInsert('sps',spRow);if(!r){toast('❌ Lỗi lưu');return;}sps.push(obj);}renderAll();clearSP();toast(`✅ Lưu SP ${code}`);
+  const code=v('sp-code').trim().toUpperCase();
+  if(!code){toast('Nhập mã SP!');return;}
+  const ed=g_('sp-code').dataset.editing||'';
+  const existSP=sps.find(s=>s.code===code);
+  if(!ed&&existSP){toast('Mã SP đã tồn tại!');return;}
+
+  // Lấy id: nếu sửa thì giữ id cũ, nếu thêm mới thì tạo id mới
+  const existId=ed?sps.find(s=>s.code===ed)?.id:null;
+  const id=existId||Date.now();
+
+  const obj={
+    id,code,
+    name:v('sp-name').trim(),
+    lop:v('sp-lop'),
+    song:v('sp-song'),
+    size:v('sp-size').trim(),
+    in:v('sp-in'),
+    tp:v('sp-tp'),
+    mang:v('sp-mang'),
+    dm:parseInt(v('sp-dm'))||0,
+    note:v('sp-note').trim()
+  };
+
+  const dbRow={
+    id,code:obj.code,name:obj.name,lop:obj.lop,song:obj.song,
+    size:obj.size,'in':obj.in,tp:obj.tp,mang:obj.mang,dm:obj.dm,note:obj.note||null
+  };
+
+  if(ed){
+    // Cập nhật SP đã có
+    const r=await sbUpsert('sps',[dbRow]);
+    if(!r){toast('❌ Lỗi lưu – kiểm tra kết nối');return;}
+    const i=sps.findIndex(s=>s.code===ed);
+    if(i>=0)sps[i]=obj;
+    delete g_('sp-code').dataset.editing;
+  } else {
+    // Thêm SP mới
+    const r=await sbInsert('sps',dbRow);
+    if(!r){toast('❌ Lỗi lưu – kiểm tra kết nối');return;}
+    sps.push(obj);
+  }
+
+  renderAll();
+  clearSP();
+  toast(`✅ Lưu sản phẩm ${code}`);
 }
 function editSP(i){const s=sps[i];set('sp-code',s.code);set('sp-name',s.name||'');set('sp-lop',s.lop||'5');set('sp-song',s.song||'EB');set('sp-size',s.size||'');set('sp-in',s.in||'0');set('sp-tp',s.tp||'kim');set('sp-mang',s.mang||'khong');set('sp-dm',s.dm||'');set('sp-note',s.note||'');g_('sp-code').dataset.editing=s.code;}
 async function delSP(i){if(!confirm('Xóa SP?'))return;await sbDel('sps',sps[i].id);sps.splice(i,1);renderAll();}
@@ -1366,9 +1440,11 @@ async function saveGYDel(gyId){
   renderGY();toast(`✅ Ghi nhận: ${f(qty)} tấm từ NCC`);
   const form=document.getElementById('gy-del-form-'+gyId);if(form)form.remove();
 }
-function delGYDel(gyId,delId){
+async function delGYDel(gyId,delId){
   if(!confirm('Xóa lần giao này?'))return;
-  const gy=gys.find(g=>g.id===gyId);if(gy){gy.deliveries=(gy.deliveries||[]).filter(d=>d.id!==delId);sv();renderGY();toast('Đã xóa');}
+  await sbDel('gy_deliveries',delId);
+  const gy=gys.find(g=>g.id===gyId);
+  if(gy){gy.deliveries=(gy.deliveries||[]).filter(d=>d.id!==delId);renderGY();toast('✅ Đã xóa');}
 }
 async function delGY(id){if(!confirm('Xóa?'))return;await sbDel('gys',id);gys=gys.filter(g=>g.id!==id);renderGY();}
 function renderGY(){
