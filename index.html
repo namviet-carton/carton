@@ -145,7 +145,7 @@ body.role-staff .btr{display:none!important;}
   <button class="sbb active" onclick="sw('db',this)"><span class="si">📊</span><span>Dashboard</span></button>
   <div class="sbs">DANH MỤC</div>
   <button class="sbb" onclick="sw('khs',this)"><span class="si">👥</span><span>Danh sách KH</span></button>
-  <button class="sbb" onclick="sw('kh',this)"><span class="si">🏢</span><span>Thông tin KH</span></button>
+  <button class="sbb" onclick="sw('kh',this)"><span class="si">📍</span><span>Địa điểm giao hàng</span></button>
   <button class="sbb" onclick="sw('ncc',this)"><span class="si">🏭</span><span>Nhà cung cấp</span></button>
   <button class="sbb" onclick="sw('xe',this)"><span class="si">🚛</span><span>Xe & Tài xế</span></button>
   <button class="sbb" onclick="sw('ns',this)"><span class="si">👷</span><span>Nhân sự</span></button>
@@ -260,22 +260,6 @@ body.role-staff .btr{display:none!important;}
 
 <!-- KHÁCH HÀNG -->
 <div class="pane" id="pane-kh">
-  <div class="card">
-    <div class="ct">🏢 Thông tin khách hàng</div>
-    <div class="al al-i" style="margin-bottom:10px;font-size:10px">💡 Điền thông tin khách hàng một lần — sẽ tự động điền vào phiếu xuất kho và đơn hàng. <b>Tên viết tắt</b> bắt buộc phải điền.</div>
-    <div class="fg f4">
-      <div class="fg-g"><label class="fl">Tên khách hàng <span>*</span></label><input class="fi" id="kh-name" placeholder="VD: Công ty TNHH XNK Minh Long"><div class="hint">Tên đầy đủ của công ty khách hàng — dùng in trên hợp đồng, phiếu xuất kho</div></div>
-      <div class="fg-g"><label class="fl">Tên viết tắt <span>*</span></label><input class="fi" id="kh-vt" placeholder="VD: ML"></div>
-      <div class="fg-g"><label class="fl">Mã số thuế </label><input class="fi" id="kh-mst" placeholder="VD: 0312345678"><div class="hint">10 hoặc 13 chữ số — dùng khi xuất hoá đơn VAT cho khách hàng</div></div>
-      <div class="fg-g"><label class="fl">Số điện thoại </label><input class="fi" id="kh-phone" placeholder="VD: 0909 123 456"><div class="hint">Số liên hệ chính của công ty khách hàng</div></div>
-    </div>
-    <div class="fg f3">
-      <div class="fg-g"><label class="fl">Người liên hệ </label><input class="fi" id="kh-contact" placeholder="VD: Anh Minh – Trưởng phòng mua hàng"><div class="hint">Tên người phụ trách đặt hàng bên khách hàng</div></div>
-      <div class="fg-g"><label class="fl">Email </label><input class="fi" id="kh-email" placeholder="VD: muahang@minhlongco.vn"><div class="hint">Email nhận báo cáo giao hàng và xác nhận đơn</div></div>
-      <div class="fg-g"><label class="fl">Địa chỉ trụ sở </label><input class="fi" id="kh-addr" placeholder="VD: 123 Lý Tự Trọng, Q.1, TP.HCM"><div class="hint">Địa chỉ đăng ký kinh doanh của khách hàng</div></div>
-    </div>
-    <div class="br_"><button class="btn btg" onclick="saveKH()">💾 Lưu</button></div>
-  </div>
   <div class="card">
     <div class="ct">📍 Địa điểm giao hàng (tối đa 20)</div>
     <div class="al al-i" style="margin-bottom:10px;font-size:10px">💡 Thêm tất cả địa điểm kho của khách hàng. Mỗi lần giao hàng sẽ chọn địa điểm từ danh sách này. Tối đa 20 địa điểm.</div>
@@ -1391,7 +1375,7 @@ async function saveKHS(){
   const r=await sbInsert('khs',{id,name,vt,
     mst:obj.mst||null,phone:obj.phone||null,contact:obj.contact||null,
     email:obj.email||null,addr:obj.addr||null,note:obj.note||null,active:true});
-  if(!r){toast('❌ Lỗi lưu');return;}
+  if(!r){return;}
   khs.push(obj);
   if(!curKhId){curKhId=id;kh=obj;}
   // Cập nhật selector ngay sau khi thêm KH
@@ -1588,7 +1572,7 @@ async function saveDH(){
   if(dhs.find(d=>d.code===code)){toast('Mã PO đã tồn tại!');return;}
   const dhId=Date.now();const dhObj={id:dhId,code,khVt:kh.vt||'',date,due:v('dh-due'),note:v('dh-note').trim(),items};
   dhObj.khId=curKhId;const r=await sbInsert('dhs',{id:dhId,code,kh_vt:dhObj.khVt,date:date||null,due:dhObj.due||null,note:dhObj.note,kh_id:curKhId});
-  if(!r){toast('❌ Lỗi lưu');return;}
+  if(!r){return;}
   const itemRows=items.map(it=>({dh_id:dhId,sp_code:it.spCode,ord_qty:it.ordQty,bu_hao_qty:it.buHaoQty,total_qty:it.totalQty}));
   if(itemRows.length)await sbInsert('dh_items',itemRows);
   dhs.push(dhObj);renderAll();clearDH();toast(`✅ Tạo PO ${code}`);
@@ -1640,7 +1624,7 @@ async function saveGY(){
   if(!items.length){toast('Thêm ít nhất 1 SP!');return;}
   const gyId=Date.now();const gyObj={id:gyId,date,nccId:parseInt(v('gy-ncc'))||0,giao:v('gy-giao'),dhCode:v('gy-dh'),note:v('gy-note').trim(),items,deliveries:[]};
   gyObj.khId=curKhId;const r=await sbInsert('gys',{id:gyId,date:date||null,ncc_id:gyObj.nccId||null,giao:gyObj.giao||null,dh_code:gyObj.dhCode||null,note:gyObj.note,kh_id:curKhId});
-  if(!r){toast('❌ Lỗi lưu');return;}
+  if(!r){return;}
   const gyRows=items.map(it=>({gy_id:gyId,sp_code:it.spCode,qty:it.qty,kho:it.kho||null,dai:it.dai||null,dm:it.dm||0,total_tam:it.totalTam||0,bu_hao_tam:it.buHaoTam||0}));
   if(gyRows.length)await sbInsert('gy_items',gyRows);
   gys.push(gyObj);renderGY();updateSels();clearGY();toast('✅ Lưu KH giấy');
@@ -1674,7 +1658,7 @@ async function saveGYDel(gyId){
   if(!sp||!qty||!date){toast('Nhập đủ thông tin!');return;}
   const delId=Date.now();const delObj={sp,qty,date,ref,id:delId};
   const r=await sbInsert('gy_deliveries',{id:delId,gy_id:gyId,sp,qty,date:date||null,ref:ref||null});
-  if(!r){toast('❌ Lỗi lưu');return;}
+  if(!r){return;}
   gy.deliveries=(gy.deliveries||[]);gy.deliveries.push(delObj);
   renderGY();toast(`✅ Ghi nhận: ${f(qty)} tấm từ NCC`);
   const form=document.getElementById('gy-del-form-'+gyId);if(form)form.remove();
@@ -1783,7 +1767,7 @@ async function saveLSX(){
   const no=lsxNo(spCode,date)+'_'+Date.now().toString().slice(-4);
   const lsxId=Date.now();const lsxObj={id:lsxId,no,poCode,spCode,date,due:v('lsx-due'),qty,note:v('lsx-note').trim(),ptr:v('lsx-ptr').trim(),ptrs:{IN:v('lsx-ptr-in').trim(),CAN:v('lsx-ptr-can').trim(),BE:v('lsx-ptr-be').trim(),KIM:v('lsx-ptr-kim').trim(),KHO:v('lsx-ptr-kho').trim()},machines:{IN:v('lsx-m-in'),CAN:v('lsx-m-can'),BE:v('lsx-m-be'),KIM:v('lsx-m-kim')},status:'cho'};
   lsxObj.khId=curKhId;const r=await sbInsert('lsxs',{id:lsxId,no,po_code:poCode,sp_code:spCode,date:date||null,due:lsxObj.due||null,qty,note:lsxObj.note,ptr:lsxObj.ptr,ptr_in:lsxObj.ptrs.IN||null,ptr_can:lsxObj.ptrs.CAN||null,ptr_be:lsxObj.ptrs.BE||null,ptr_kim:lsxObj.ptrs.KIM||null,ptr_kho:lsxObj.ptrs.KHO||null,may_in:lsxObj.machines.IN||null,may_can:lsxObj.machines.CAN||null,may_be:lsxObj.machines.BE||null,may_kim:lsxObj.machines.KIM||null,status:'cho',kh_id:curKhId});
-  if(!r){toast('❌ Lỗi lưu');return;}
+  if(!r){return;}
   lsxs.push(lsxObj);renderLSX();updateSels();clearLSX();toast(`✅ Tạo lệnh SX ${no}`);
 }
 function clearLSX(){set('lsx-po','');set('lsx-sp','');set('lsx-date',todayISO());set('lsx-due','');set('lsx-qty','');set('lsx-note','');set('lsx-ptr','');set('lsx-no',lsxNo('',''));['lsx-m-in','lsx-m-can','lsx-m-be','lsx-m-kim'].forEach(id=>set(id,''));['lsx-ptr-in','lsx-ptr-can','lsx-ptr-be','lsx-ptr-kim','lsx-ptr-kho'].forEach(id=>set(id,''));set('lsx-ord','');set('lsx-bh','');set('lsx-total','');lsxNvlCheck();}
@@ -1862,7 +1846,7 @@ async function saveLS(){
   const lsNs=lsMins>0?Math.round(qty/(lsMins/60)):0;
   const lsId=Date.now();const lsObj={id:lsId,lsxNo:lsxNo2,spCode:lsx.spCode,poCode:lsx.poCode,date,ca:v('ls-ca'),cd,may:v('ls-may'),nguoi:v('ls-nguoi').trim(),qty,ns:lsNs,mins:lsMins,start:lsStart,end:lsEnd,note:v('ls-note').trim()};
   lsObj.khId=curKhId;const r=await sbInsert('lss',{id:lsId,lsx_no:lsxNo2,sp_code:lsx.spCode,po_code:lsx.poCode,date:date||null,ca:lsObj.ca,cd,may:lsObj.may,nguoi:lsObj.nguoi,qty,ns:lsNs,mins:lsMins,start_time:lsStart||null,end_time:lsEnd||null,note:lsObj.note,kh_id:curKhId});
-  if(!r){toast('❌ Lỗi lưu');return;}
+  if(!r){return;}
   lss.push(lsObj);
   let autoNkMsg='';
   if(cd==='NHAP_KHO'){
@@ -1972,7 +1956,7 @@ async function saveNK(){
   const ref=v('nk-ref');const sp=sps.find(s=>s.code===spCode)||{};
   const nkId=Date.now();const nkObj={id:nkId,datetime:`${date}T${time}`,spCode,poCode,qty,ref,dbh:poCode,qc:sp.size||'',nccId:parseInt(v('nk-ncc'))||0,nguoi:v('nk-nguoi').trim(),note:v('nk-note2').trim()};
   nkObj.khId=curKhId;const r=await sbInsert('nks',{id:nkId,datetime:nkObj.datetime,sp_code:spCode,po_code:poCode,qty,ref,dbh:poCode,qc:nkObj.qc,ncc_id:nkObj.nccId||null,nguoi:nkObj.nguoi||null,note:nkObj.note||null,kh_id:curKhId});
-  if(!r){toast('❌ Lỗi lưu');return;}
+  if(!r){return;}
   nks.push(nkObj);
   const key=`${poCode}_${spCode}`;nkN[key]=(nkN[key]||1)+1;
   renderNKHist();renderGHHist();renderTon();renderNXT();clearNK();toast(`✅ Nhập kho ${f(qty)} thùng – ${ref}`);
@@ -2020,7 +2004,7 @@ async function saveGH(){
   const time=v('gh-time')||'08:00';
   const ghId=Date.now();const ghObj={id:ghId,datetime:`${date}T${time}`,timexong:v('gh-xong'),ddId,xeId:parseInt(v('gh-xe'))||0,poCode:v('gh-po'),pxk,khVt:kh.vt||'',items,note:v('gh-note').trim(),nguoiXK:v('gh-nguoi-xk').trim()};
   ghObj.khId=curKhId;const r=await sbInsert('ghs',{id:ghId,datetime:ghObj.datetime,timexong:ghObj.timexong||null,dd_id:ddId,xe_id:ghObj.xeId||null,po_code:ghObj.poCode||null,pxk,kh_vt:ghObj.khVt,note:ghObj.note||null,nguoi_xk:ghObj.nguoiXK||null,kh_id:curKhId});
-  if(!r){toast('❌ Lỗi lưu');return;}
+  if(!r){return;}
   const ghRows=items.map(it=>({gh_id:ghId,sp_code:it.spCode,qty:it.qty,bu_hao:it.buHao||0}));
   if(ghRows.length)await sbInsert('gh_items',ghRows);
   await sbSaveCFG();
@@ -2092,7 +2076,7 @@ async function saveDK(){
   const id=Date.now();
   const obj={id,spCode,ky,tonTP,tonNVL,ngay,note:v('dk-note').trim()};
   obj.khId=curKhId;const r=await sbInsert('dks',{id,sp_code:spCode,ky,ton_tp:tonTP,ton_nvl:tonNVL,ngay:ngay||null,note:obj.note||null,kh_id:curKhId});
-  if(!r){toast('❌ Lỗi lưu');return;}
+  if(!r){return;}
   dks.push(obj);renderTon();clearDK();toast(`✅ Lưu tồn đầu kỳ ${ky} – ${spCode}`);
 }
 function clearDK(){set('dk-ky','');set('dk-ngay','');set('dk-sp','');set('dk-ton-tp',0);set('dk-ton-nvl',0);set('dk-note','');}
@@ -2426,7 +2410,7 @@ async function saveNVL(){
   const nvlId=Date.now();
   const nvlObj={id:nvlId,datetime:`${date}T${time}`,nccId,gyId:parseInt(v('nvl-gy'))||0,spCode,kho:v('nvl-kho').trim(),dai:v('nvl-dai').trim(),qty,equiv:dm?Math.floor(qty/dm):0,ref:v('nvl-ref').trim(),xe:v('nvl-xe').trim(),nguoi:v('nvl-nguoi').trim(),note:v('nvl-note').trim()};
   nvlObj.khId=curKhId;const r=await sbInsert('nvls',{id:nvlId,datetime:nvlObj.datetime,ncc_id:nccId||null,gy_id:nvlObj.gyId||null,sp_code:spCode,kho:nvlObj.kho||null,dai:nvlObj.dai||null,qty,equiv:nvlObj.equiv,ref:nvlObj.ref||null,xe:nvlObj.xe||null,nguoi:nvlObj.nguoi||null,note:nvlObj.note||null,kh_id:curKhId});
-  if(!r){toast('❌ Lỗi lưu');return;}
+  if(!r){return;}
   nvls.push(nvlObj);renderNVLHist();renderNVLTon();clearNVL();toast(`✅ Nhập NVL: ${f(qty)} tấm`);
 }
 function clearNVL(){set('nvl-date',todayISO());set('nvl-time','08:00');set('nvl-ncc','');set('nvl-sp','');set('nvl-qty','');set('nvl-kho','');set('nvl-dai','');set('nvl-ref','');set('nvl-xe','');set('nvl-nguoi','');set('nvl-note','');set('nvl-gy','');set('nvl-equiv','');}
