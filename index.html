@@ -347,33 +347,18 @@ body.role-staff .btr{display:none!important;}
     <div class="card">
       <div class="ct">🏭 Nhân viên sản xuất theo khâu</div>
       <div class="al al-i" style="margin-bottom:10px;font-size:10px">💡 Mỗi nhân viên gắn với <b>khâu sản xuất chính</b> và <b>máy phụ trách</b>. Tên sẽ được chọn trong Lệnh SX và Lịch SX để theo dõi năng suất.</div>
-      <div class="fg f5" style="margin-bottom:9px">
+      <div class="fg f3" style="margin-bottom:9px">
         <div class="fg-g"><label class="fl">Họ và tên <span>*</span></label><input class="fi" id="ns-sx-name" placeholder="VD: Trần Văn Bình"><div class="hint">Tên đầy đủ — dùng in trên báo cáo năng suất và lệnh SX</div></div>
         <div class="fg-g"><label class="fl">Mã nhân viên</label><input class="fi" id="ns-sx-code" placeholder="VD: NV-SX-001"><div class="hint">Mã nội bộ để tra cứu — không bắt buộc</div></div>
-        <div class="fg-g"><label class="fl">Khâu phụ trách chính <span>*</span></label>
-          <select class="fs" id="ns-sx-khau">
-            <option value="">— Chọn khâu —</option>
-            <option value="IN">🖨 In</option>
-            <option value="CAN">⚙️ Cán màng</option>
-            <option value="BE">✂️ Bế</option>
-            <option value="KIM">📎 Đóng kim</option>
-            <option value="DAN">🖇 Dán tự động</option>
-            <option value="NHAP_KHO">✅ Nhập kho TP</option>
-          </select>
-          <div class="hint">Khâu sản xuất chính người này phụ trách — dùng để lọc danh sách khi phân công lệnh SX</div>
-        </div>
-        <div class="fg-g"><label class="fl">Máy phụ trách</label>
-          <select class="fs" id="ns-sx-may">
-            <option value="">— Chọn máy —</option>
-            <option>Máy In 1224</option><option>Máy In 845</option>
-            <option>Máy Cán Màng 1</option><option>Máy Cán Màng 2</option>
-            <option>Máy Bế Phẳng 1400</option><option>Máy Bế Tròn 845</option><option>Máy Bế Tròn 1224</option>
-            <option>Máy Đóng Kim 1</option><option>Máy Đóng Kim 2</option>
-            <option>Máy Dán Tự Động 1</option><option>Máy Dán Tự Động 2</option>
-          </select>
-          <div class="hint">Máy nhân viên này thường vận hành — tự động gợi ý khi phân công lệnh SX</div>
-        </div>
         <div class="fg-g"><label class="fl">SĐT</label><input class="fi" id="ns-sx-sdt" placeholder="VD: 0912 111 222"></div>
+      </div>
+      <div class="fg-g" style="margin-bottom:9px"><label class="fl">Khâu phụ trách (chọn nhiều) <span>*</span></label>
+        <div id="ns-sx-khau-box" style="display:flex;flex-wrap:wrap;gap:6px 14px;padding:6px 2px;font-size:11px"><label style="display:inline-flex;align-items:center;gap:4px"><input type="checkbox" class="ns-sx-khau-cb" value="IN"> 🖨 In</label><label style="display:inline-flex;align-items:center;gap:4px"><input type="checkbox" class="ns-sx-khau-cb" value="CAN"> ⚙️ Cán màng</label><label style="display:inline-flex;align-items:center;gap:4px"><input type="checkbox" class="ns-sx-khau-cb" value="BE"> ✂️ Bế</label><label style="display:inline-flex;align-items:center;gap:4px"><input type="checkbox" class="ns-sx-khau-cb" value="KIM"> 📎 Đóng kim</label><label style="display:inline-flex;align-items:center;gap:4px"><input type="checkbox" class="ns-sx-khau-cb" value="DAN"> 🖇 Dán tự động</label><label style="display:inline-flex;align-items:center;gap:4px"><input type="checkbox" class="ns-sx-khau-cb" value="NHAP_KHO"> ✅ Nhập kho TP</label></div>
+        <div class="hint">1 người có thể phụ trách nhiều khâu — tick các khâu phụ trách</div>
+      </div>
+      <div class="fg-g" style="margin-bottom:9px"><label class="fl">Máy phụ trách (chọn nhiều)</label>
+        <div id="ns-sx-may-box" style="display:flex;flex-wrap:wrap;gap:6px 14px;padding:6px 2px;font-size:11px"><label style="display:inline-flex;align-items:center;gap:4px"><input type="checkbox" class="ns-sx-may-cb" value="Máy In 1224"> Máy In 1224</label><label style="display:inline-flex;align-items:center;gap:4px"><input type="checkbox" class="ns-sx-may-cb" value="Máy In 845"> Máy In 845</label><label style="display:inline-flex;align-items:center;gap:4px"><input type="checkbox" class="ns-sx-may-cb" value="Máy Cán Màng 1"> Máy Cán Màng 1</label><label style="display:inline-flex;align-items:center;gap:4px"><input type="checkbox" class="ns-sx-may-cb" value="Máy Cán Màng 2"> Máy Cán Màng 2</label><label style="display:inline-flex;align-items:center;gap:4px"><input type="checkbox" class="ns-sx-may-cb" value="Máy Bế Phẳng 1400"> Máy Bế Phẳng 1400</label><label style="display:inline-flex;align-items:center;gap:4px"><input type="checkbox" class="ns-sx-may-cb" value="Máy Bế Tròn 845"> Máy Bế Tròn 845</label><label style="display:inline-flex;align-items:center;gap:4px"><input type="checkbox" class="ns-sx-may-cb" value="Máy Bế Tròn 1224"> Máy Bế Tròn 1224</label><label style="display:inline-flex;align-items:center;gap:4px"><input type="checkbox" class="ns-sx-may-cb" value="Máy Đóng Kim 1"> Máy Đóng Kim 1</label><label style="display:inline-flex;align-items:center;gap:4px"><input type="checkbox" class="ns-sx-may-cb" value="Máy Đóng Kim 2"> Máy Đóng Kim 2</label><label style="display:inline-flex;align-items:center;gap:4px"><input type="checkbox" class="ns-sx-may-cb" value="Máy Dán Tự Động 1"> Máy Dán Tự Động 1</label><label style="display:inline-flex;align-items:center;gap:4px"><input type="checkbox" class="ns-sx-may-cb" value="Máy Dán Tự Động 2"> Máy Dán Tự Động 2</label></div>
+        <div class="hint">Tick các máy người này vận hành (chọn được nhiều)</div>
       </div>
       <div class="fg f3" style="margin-bottom:9px">
         <div class="fg-g"><label class="fl">Ca làm việc thường xuyên</label>
@@ -658,10 +643,11 @@ body.role-staff .btr{display:none!important;}
       <th class="r">SL đặt</th><th class="r">Bù hao</th><th class="r">Tổng SX</th>
       <th class="r">🖨 In</th><th class="r">⚙️ Cán</th><th class="r">✂️ Bế</th>
       <th class="r">📎 Đóng/Dán</th><th class="r">✅ Nhập kho</th><th class="r">🚚 NCC giao</th><th class="r">📄 Tồn NVL</th>
-      <th class="r">Còn SX</th><th style="min-width:90px">Tiến độ</th><th class="c">TT</th>
+      <th class="r">Còn SX</th><th style="min-width:90px">Tiến độ</th><th class="c">TT</th><th>📦 Liên kết nhanh (NVL · Lệnh SX)</th>
     </tr></thead>
     <tbody id="khsx-main-tbl"></tbody>
   </table></div>
+  <div id="khsx-quick-panel" style="margin-bottom:11px"></div>
 
   <!-- Tổng hợp theo LSX -->
   <div class="sh">📝 Chi tiết lệnh SX đang thực hiện</div>
@@ -670,11 +656,12 @@ body.role-staff .btr{display:none!important;}
       <th>Số LSX</th><th>PO</th><th>SP</th><th class="r">SL lệnh</th>
       <th class="r">🖨 In</th><th class="r">⚙️ Cán</th><th class="r">✂️ Bế</th>
       <th class="r">📎 Đóng/Dán</th><th class="r">✅ Nhập kho</th>
-      <th class="r">Còn lại</th><th>Máy phân công</th>
-      <th>Ngày lệnh</th><th>Ngày KH xong</th><th class="c">Tiến độ</th><th class="c">TT</th>
+      <th class="r">⚠️ Hư</th><th class="r">Còn lại</th><th>Máy phân công</th>
+      <th>Ngày lệnh</th><th>Ngày KH xong</th><th class="c">Tiến độ</th><th class="c">TT</th><th class="c">Ghi SL</th>
     </tr></thead>
     <tbody id="khsx-lsx-tbl"></tbody>
   </table></div>
+  <div id="khsx-lsrec-panel" style="margin-top:10px"></div>
 
   <!-- Tổng hợp theo công đoạn -->
   <div class="sh">⚙️ Tổng hợp năng lực từng công đoạn hôm nay</div>
@@ -694,9 +681,10 @@ body.role-staff .btr{display:none!important;}
       <div class="fg-g"><label class="fl">Ngày <span>*</span></label><input type="date" class="fi" id="ls-date"></div>
       <div class="fg-g"><label class="fl">Ca</label><select class="fs" id="ls-ca"><option value="S">Ca sáng (6-14h)</option><option value="C">Ca chiều (14-22h)</option><option value="D">Ca đêm (22-6h)</option></select></div>
     </div>
-    <div class="fg f5">
+    <div class="fg f6">
       <div class="fg-g"><label class="fl">SP trong lệnh</label><input class="fi" id="ls-sp-info" readonly></div>
-      <div class="fg-g"><label class="fl">SL thực hiện (thùng) <span>*</span></label><input type="number" class="fi" id="ls-qty" min="1" placeholder="VD: 2500" oninput="calcLSNS()"><div class="hint">Số thùng thực tế đã hoàn thành ở công đoạn này trong ca làm việc</div></div>
+      <div class="fg-g"><label class="fl">SL đạt (thùng) <span>*</span></label><input type="number" class="fi" id="ls-qty" min="0" placeholder="VD: 2500" oninput="calcLSNS()"><div class="hint">Số thùng/tấm ĐẠT (tốt) ở công đoạn này</div></div>
+      <div class="fg-g"><label class="fl">SL hư (hỏng)</label><input type="number" class="fi" id="ls-hu" min="0" value="0" placeholder="0"><div class="hint">Số thùng/tấm HƯ tại công đoạn này — tính tỉ lệ hao hụt</div></div>
       <div class="fg-g"><label class="fl">Năng suất (tự tính)</label><input class="fi" id="ls-ns-calc" readonly style="background:var(--g5);color:var(--g2);font-weight:700"><div class="hint">= SL ÷ số phút × 60. Tự tính từ Giờ bắt đầu, Giờ kết thúc và Số lượng</div></div>
       <div class="fg-g"><label class="fl">Giờ bắt đầu <span>*</span></label><input type="time" class="fi" id="ls-start" value="06:00" oninput="calcLSNS()"><div class="hint">Giờ bắt đầu ca/lần thực hiện</div></div>
       <div class="fg-g"><label class="fl">Giờ kết thúc <span>*</span></label><input type="time" class="fi" id="ls-end" value="14:00" oninput="calcLSNS()"><div class="hint">Giờ kết thúc ca/lần thực hiện</div></div>
@@ -731,7 +719,7 @@ body.role-staff .btr{display:none!important;}
 
   <div class="tw"><table>
     <thead><tr><th>LSX</th><th>Ngày</th><th>Ca</th><th>Công đoạn</th><th>Máy</th><th>SP</th><th>Người TH</th>
-      <th class="r">SL(thùng)</th><th class="r">Phút TH</th><th class="r">NS(th/h)</th><th class="r">Tốc độ(th/ph)</th>
+      <th class="r">SL đạt</th><th class="r">⚠️ Hư</th><th class="r">Phút TH</th><th class="r">NS(th/h)</th><th class="r">Tốc độ(th/ph)</th>
       <th>Giờ bắt đầu</th><th>Giờ kết thúc</th><th>Ghi chú</th><th class="c">Xóa</th></tr></thead>
     <tbody id="ls-hist"></tbody>
   </table></div>
@@ -944,6 +932,7 @@ body.role-staff .btr{display:none!important;}
         <div class="fg-g"><label class="fl">Người nhận tại kho</label><input class="fi" id="nvl-nguoi" placeholder="VD: Anh Khoa – Thủ kho"><div class="hint">Tên thủ kho hoặc người kiểm nhận NVL</div></div>
         <div class="fg-g"><label class="fl">Ghi chú chất lượng</label><input class="fi" id="nvl-note" placeholder="VD: Giấy đạt chuẩn, ẩm 12%, không ẩm mốc"><div class="hint">Ghi nhận tình trạng chất lượng giấy khi nhận — nếu bị ẩm, rách, thiếu ghi rõ</div></div>
       </div>
+      <div id="nvl-gy-info" style="margin-bottom:9px"></div>
       <div class="br_"><button class="btn btg" onclick="saveNVL()">✅ Nhập NVL</button><button class="btn btn_" onclick="clearNVL()">🔄 Xóa form</button></div>
     </div>
     <div class="sh">📋 Lịch sử nhập NVL giấy tấm</div>
@@ -959,11 +948,11 @@ body.role-staff .btr{display:none!important;}
 
   <!-- TỒN NVL & BÁO CÁO -->
   <div class="pts" id="pts-nvl-ton">
-    <div class="sh">📊 Tồn NVL giấy tấm theo sản phẩm</div>
-    <div class="al al-i" style="margin-bottom:10px;font-size:10px">💡 Tồn NVL = Tổng tấm đã nhập − Tổng tấm đã dùng SX (= thùng NK × định mức). Cột <b>Thiếu/Đủ/Dư</b> so sánh với tổng kế hoạch giấy đã đặt.</div>
+    <div class="sh">📊 Tồn NVL giấy tấm theo từng PO</div>
+    <div class="al al-i" style="margin-bottom:10px;font-size:10px">💡 Báo cáo theo TỪNG SỐ PO (qua KH giấy gắn PO). NCC giao = số tấm nhập kho thuộc đúng PO đó. Tồn NVL = đã nhập − đã dùng SX của PO.</div>
     <div class="tw"><table>
       <thead><tr>
-        <th>Mã SP</th><th>Tên SP</th><th class="r">KH đặt (tấm)</th>
+        <th>Số PO</th><th>Mã SP</th><th>Tên SP</th><th class="r">KH đặt (tấm)</th>
         <th class="r">NCC đã giao (tấm)</th><th class="r">Đã dùng SX (tấm)</th>
         <th class="r">Tồn NVL (tấm)</th><th class="r">So với KH</th><th class="c">Trạng thái</th>
       </tr></thead>
@@ -1006,6 +995,12 @@ body.role-staff .btr{display:none!important;}
   <!-- KPI tổng trong bộ lọc -->
   <div id="nxt-summary" style="margin-bottom:10px"></div>
 
+  <div class="sh">📅 Tuổi tồn kho & Giao dư/thiếu theo PO <span style="font-weight:400;font-size:11px;color:var(--n3)">— xuất FIFO (nhập trước xuất trước)</span></div>
+  <div class="tw"><table>
+    <thead><tr><th>PO</th><th>Mã SP</th><th>Hạn KH</th><th class="r">Đặt (đơn)</th><th class="r">Nhập kho</th><th class="r">Đã giao</th><th class="r">Tồn TP</th><th class="r">Giao dư/thiếu</th><th class="c">Tuổi tồn</th><th class="c">Trạng thái</th><th class="c">Kết thúc PO</th></tr></thead>
+    <tbody id="nxt-po-tbl"></tbody>
+  </table></div>
+
   <div class="tw"><table>
     <thead><tr>
       <th>STT</th><th>Ngày giờ</th><th>Loại GD</th><th>PO</th>
@@ -1026,6 +1021,7 @@ body.role-staff .btr{display:none!important;}
     <button class="ptb" onclick="swPT('bc-lsx',this)">📝 Lệnh SX</button>
     <button class="ptb" onclick="swPT('bc-may',this)">⚙️ Năng suất máy</button>
     <button class="ptb" onclick="swPT('bc-dd',this)">📍 Theo địa điểm</button>
+    <button class="ptb" onclick="swPT('bc-sx',this)">🏭 SX & NVL</button>
   </div>
   <div class="pts active" id="pts-bc-tong">
     <div class="krow k6" id="bc-kpi"></div>
@@ -1053,6 +1049,15 @@ body.role-staff .btr{display:none!important;}
       <thead><tr><th>Địa điểm</th><th>Địa chỉ</th><th class="r">Số lần giao</th><th class="r">Tổng thùng</th><th>Lần gần nhất</th></tr></thead>
       <tbody id="bc-dd-tbl"></tbody>
     </table></div>
+  </div>
+  <div class="pts" id="pts-bc-sx">
+    <div class="krow k5" id="bc-sx-kpi" style="margin-bottom:9px"></div>
+    <div class="hint" style="margin-bottom:6px">Kết hợp: <b>NVL NCC giao</b> · <b>công đoạn SX</b> (số = còn lại đạt−hư, chỉ số đỏ nhỏ = hư) · <b>Tồn kho lấy y chang Sổ NXT</b> (FIFO). Lọc theo PO dùng chung bộ lọc tab Tổng hợp.</div>
+    <div class="tw"><table>
+      <thead><tr><th>PO</th><th>SP</th><th class="r">Giấy NCC (tấm)</th><th class="r">🖨 In</th><th class="r">⚙️ Cán</th><th class="r">✂️ Bế</th><th class="r">📎 Đóng/Dán</th><th class="r">✅ NK đạt</th><th class="r">⚠️ Hư</th><th class="r">Tỉ lệ hư</th><th class="r">Nhập kho</th><th class="r">Đã giao</th><th class="r">Tồn kho</th><th class="c">📅 Tuổi tồn</th><th class="c">Kết thúc PO</th></tr></thead>
+      <tbody id="bc-sx-tbl"></tbody>
+    </table></div>
+    <div class="br_"><button class="btn btg" onclick="window.print()">🖨️ In</button></div>
   </div>
 </div>
 
@@ -1207,12 +1212,12 @@ async function ld(){
     nss=(rNss||[]).map(r=>{return{id:r.id,loai:r.loai,name:r.name,code:r.code,sdt:r.sdt,status:r.status,note:r.note,khau:r.khau,may:r.may,ca:r.ca,vitri:r.vitri,kvuc:r.kvuc,chucvu:r.chucvu,bophan:r.bophan}});
     sps=(rSps||[]).map(r=>{return{id:r.id,code:r.code,name:r.name,lop:r.lop,song:r.song,size:r.size,in:r['in'],tp:r.tp,mang:r.mang,dm:r.dm,note:r.note,khId:r.kh_id,kho:r.kho,dai:r.dai}});
     const dhMap={};(rDhIt||[]).forEach(it=>{if(!dhMap[it.dh_id])dhMap[it.dh_id]=[];dhMap[it.dh_id].push({spCode:it.sp_code,ordQty:it.ord_qty,buHaoQty:it.bu_hao_qty,totalQty:it.total_qty});});
-    dhs=(rDhs||[]).map(d=>({id:d.id,code:d.code,khVt:d.kh_vt,date:d.date,due:d.due,note:d.note,khId:d.kh_id,items:dhMap[d.id]||[]}));
+    dhs=(rDhs||[]).map(d=>({id:d.id,code:d.code,khVt:d.kh_vt,date:d.date,due:d.due,note:d.note,khId:d.kh_id,closed:d.closed,closedAt:d.closed_at,items:dhMap[d.id]||[]}));
     const gyItMap={};(rGyIt||[]).forEach(it=>{if(!gyItMap[it.gy_id])gyItMap[it.gy_id]=[];gyItMap[it.gy_id].push({spCode:it.sp_code,qty:it.qty,kho:it.kho,dai:it.dai,dm:it.dm,totalTam:it.total_tam,buHaoTam:it.bu_hao_tam});});
     const gyDelMap={};(rGyDel||[]).forEach(d=>{if(!gyDelMap[d.gy_id])gyDelMap[d.gy_id]=[];gyDelMap[d.gy_id].push({id:d.id,sp:d.sp,qty:d.qty,date:d.date,ref:d.ref});});
-    gys=(rGys||[]).map(g=>({id:g.id,date:g.date,nccId:g.ncc_id,giao:g.giao,dhCode:g.dh_code,poGiay:g.po_giay,note:g.note,khId:g.kh_id,items:gyItMap[g.id]||[],deliveries:gyDelMap[g.id]||[]}));
+    gys=(rGys||[]).map(g=>({id:g.id,date:g.date,nccId:g.ncc_id,giao:g.giao,dhCode:g.dh_code,poGiay:g.po_giay,done:g.done,note:g.note,khId:g.kh_id,items:gyItMap[g.id]||[],deliveries:gyDelMap[g.id]||[]}));
     lsxs=(rLsxs||[]).map(l=>({id:l.id,no:l.no,poCode:l.po_code,spCode:l.sp_code,date:l.date,due:l.due,qty:l.qty,note:l.note,ptr:l.ptr,ptrs:{IN:l.ptr_in,CAN:l.ptr_can,BE:l.ptr_be,KIM:l.ptr_kim,KHO:l.ptr_kho},machines:{IN:l.may_in,CAN:l.may_can,BE:l.may_be,KIM:l.may_kim},status:l.status,khId:l.kh_id}));
-    lss=(rLss||[]).map(l=>{return{id:l.id,lsxNo:l.lsx_no,spCode:l.sp_code,poCode:l.po_code,date:l.date,ca:l.ca,cd:l.cd,may:l.may,nguoi:l.nguoi,qty:l.qty,ns:l.ns,mins:l.mins,start:l.start_time,end:l.end_time,note:l.note}});
+    lss=(rLss||[]).map(l=>{return{id:l.id,lsxNo:l.lsx_no,spCode:l.sp_code,poCode:l.po_code,date:l.date,ca:l.ca,cd:l.cd,may:l.may,nguoi:l.nguoi,qty:l.qty,ns:l.ns,mins:l.mins,start:l.start_time,end:l.end_time,note:l.note,hu:l.hu}});
     nks=(rNks||[]).map(n=>({id:n.id,datetime:n.datetime,spCode:n.sp_code,poCode:n.po_code,qty:n.qty,ref:n.ref,dbh:n.dbh,qc:n.qc,nccId:n.ncc_id,nguoi:n.nguoi,note:n.note,khId:n.kh_id}));
     const ghItMap={};(rGhIt||[]).forEach(it=>{if(!ghItMap[it.gh_id])ghItMap[it.gh_id]=[];ghItMap[it.gh_id].push({spCode:it.sp_code,qty:it.qty,buHao:it.bu_hao});});
     ghs=(rGhs||[]).map(g=>({id:g.id,datetime:g.datetime,timexong:g.timexong,ddId:g.dd_id,xeId:g.xe_id,poCode:g.po_code,pxk:g.pxk,khVt:g.kh_vt,note:g.note,nguoiXK:g.nguoi_xk,items:ghItMap[g.id]||[],khId:g.kh_id}));
@@ -1254,6 +1259,85 @@ function lsxStats(lsxNo){
   const res={};CD_ORDER.forEach(cd=>res[cd]=0);
   myLSs().filter(l=>l.lsxNo===lsxNo).forEach(l=>{if(res[l.cd]!==undefined)res[l.cd]+=l.qty;});
   return res;
+}
+function lsxHu(lsxNo){
+  const res={};CD_ORDER.forEach(cd=>res[cd]=0);res.TOTAL=0;
+  myLSs().filter(l=>l.lsxNo===lsxNo).forEach(l=>{const h=l.hu||0;if(res[l.cd]!==undefined)res[l.cd]+=h;res.TOTAL+=h;});
+  return res;
+}
+function lsxNet(lsxNo){
+  const dat={},hu={};CD_ORDER.forEach(c=>{dat[c]=0;hu[c]=0;});
+  myLSs().filter(l=>l.lsxNo===lsxNo).forEach(l=>{if(dat[l.cd]!==undefined){dat[l.cd]+=l.qty||0;hu[l.cd]+=l.hu||0;}});
+  const byStage={};let totHu=0,totDat=0;
+  CD_ORDER.forEach(c=>{byStage[c]={dat:dat[c],hu:hu[c],net:dat[c]-hu[c]};totHu+=hu[c];totDat+=dat[c];});
+  const nkDat=dat.NHAP_KHO||0,nkHu=hu.NHAP_KHO||0;
+  return {byStage,dat,hu,totHu,totDat,nkDat,nkNet:nkDat-nkHu};
+}
+function stCell(dat,hu,cls,style){
+  dat=dat||0;hu=hu||0;const net=dat-hu;const st=style?(' style="'+style+'"'):'';
+  if(!hu)return `<td class="r ${cls||''}"${st}>${f(dat)}</td>`;
+  return `<td class="r ${cls||''}"${st} title="Đạt ${f(dat)} − Hư ${f(hu)} = Còn lại ${f(net)}">${f(net)}<sup style="color:var(--r2);font-size:8px">−${f(hu)}</sup></td>`;
+}
+function lsRecordPanel(lsxNo){
+  const lsx=myLSXs().find(l=>l.no===lsxNo);if(!lsx){toast('Không tìm thấy lệnh!');return;}
+  const el=g_('khsx-lsrec-panel');if(!el)return;
+  const sp=sps.find(s=>s.code===lsx.spCode)||{};
+  const cds=[['IN','🖨 In'],['CAN','⚙️ Cán màng'],['BE','✂️ Bế'],['KIM','📎 Đóng kim'],['DAN','🖇 Dán keo'],['NHAP_KHO','✅ Nhập kho']];
+  const prog=lsxStats(lsxNo);const huS=lsxHu(lsxNo);const net=lsxNet(lsxNo);
+  const cdOpt=cds.map(([k,l])=>`<option value="${k}">${l} — đạt ${f(prog[k]||0)}${huS[k]?(' · hư '+f(huS[k])):''} · còn lại ${f(net.byStage[k].net)}</option>`).join('');
+  const bdRows=cds.map(([k,l])=>{const b=net.byStage[k];return `<tr><td>${l}</td><td class="r cb">${f(b.dat)}</td><td class="r" style="color:${b.hu?'var(--r2)':'var(--n3)'};font-weight:${b.hu?700:400}">${b.hu?f(b.hu):'—'}</td><td class="r cg" style="font-weight:700">${f(b.net)}</td></tr>`;}).join('');
+  const dm=sp.dm||0;const recvTam=nvlNccGiaoPO(lsx.poCode,lsx.spCode);
+  const nkNet=net.nkNet,totHu=net.totHu;const tamTP=nkNet*dm,tamHu=totHu*dm,tamConLai=recvTam-tamTP-tamHu;
+  const ttCls=tamConLai<0?'var(--r2)':'var(--g2)';
+  el.innerHTML=`<div class="card" style="border:2px solid var(--g3);background:var(--g6)">
+    <div class="sh" style="margin-top:0">📋 Ghi sản lượng đạt/hư — ${lsxNo} · ${lsx.spCode} ${sp.size||''} <span style="color:var(--n3);font-weight:400">(SL lệnh ${f(lsx.qty)})</span></div>
+    <div class="fg f5">
+      <div class="fg-g"><label class="fl">Công đoạn <span>*</span></label><select class="fs" id="lsr-cd" onchange="lsrMay('${lsxNo}')">${cdOpt}</select></div>
+      <div class="fg-g"><label class="fl">Máy</label><select class="fs" id="lsr-may"></select></div>
+      <div class="fg-g"><label class="fl">SL đạt (thùng) <span>*</span></label><input type="number" class="fi" id="lsr-qty" min="0" placeholder="VD: 2500"></div>
+      <div class="fg-g"><label class="fl">SL hư (hỏng)</label><input type="number" class="fi" id="lsr-hu" min="0" value="0"></div>
+      <div class="fg-g"><label class="fl">Người thực hiện</label><input class="fi" id="lsr-nguoi" list="ns-list-all"></div>
+    </div>
+    <div class="br_"><button class="btn btg" onclick="lsRecordSave('${lsxNo}')">✅ Ghi sản lượng</button><button class="btn btn_" onclick="g_('khsx-lsrec-panel').innerHTML=''">✕ Đóng</button></div>
+    <div class="hint" style="margin-top:6px">Ghi nhận tự đồng bộ sang “Lịch SX & Máy”. Chọn “✅ Nhập kho” sẽ tự tạo phiếu nhập kho thành phẩm.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+      <div>
+        <div class="sh" style="font-size:12px;margin:0 0 4px">📦 Còn lại chuyển khâu sau (đạt − hư)</div>
+        <div class="tw"><table style="font-size:11px"><thead><tr><th>Công đoạn</th><th class="r">SL đạt</th><th class="r">⚠️ Hư</th><th class="r">Còn lại</th></tr></thead><tbody>${bdRows}</tbody></table></div>
+      </div>
+      <div>
+        <div class="sh" style="font-size:12px;margin:0 0 4px">📊 Đối chiếu giấy tấm (ĐM ${f(dm)} tấm/thùng)</div>
+        <div class="tw"><table style="font-size:11px"><tbody>
+          <tr><td>Giấy tấm NCC giao (PO ${lsx.poCode})</td><td class="r cb" style="font-weight:700">${f(recvTam)} tấm</td></tr>
+          <tr><td>TP nhập kho đạt (${f(nkNet)} thùng × ĐM)</td><td class="r cg">${f(tamTP)} tấm</td></tr>
+          <tr><td>Tổng hư hao (${f(totHu)} thùng × ĐM)</td><td class="r" style="color:var(--r2)">${f(tamHu)} tấm</td></tr>
+          <tr style="border-top:2px solid var(--n4)"><td style="font-weight:700">Giấy tấm còn lại / thất thoát</td><td class="r" style="font-weight:800;color:${ttCls}">${f(tamConLai)} tấm</td></tr>
+        </tbody></table></div>
+        <div class="hint" style="margin-top:3px">Còn lại = Giấy NCC giao − (TP nhập kho + Tổng hư hao) × ĐM</div>
+      </div>
+    </div>
+  </div>`;
+  lsrMay(lsxNo);
+  if(el.scrollIntoView)el.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function lsrMay(lsxNo){
+  const cd=v('lsr-cd');const may=g_('lsr-may');if(!may)return;
+  const list=MACHINES[cd]||['Thủ công'];
+  may.innerHTML=list.map(m=>`<option value="${m}">${m}</option>`).join('');
+  const lsx=myLSXs().find(l=>l.no===lsxNo);const mc=(lsx&&lsx.machines)||{};
+  if(mc[cd]&&list.indexOf(mc[cd])>=0)may.value=mc[cd];
+  const ptrs=(lsx&&lsx.ptrs)||{};const pk=cd==='NHAP_KHO'?'KHO':cd;const ng=g_('lsr-nguoi');
+  if(ng&&ptrs[pk])ng.value=ptrs[pk];
+}
+async function lsRecordSave(lsxNo){
+  const cd=v('lsr-cd');const qty=parseInt(v('lsr-qty'))||0;const huv=parseInt(v('lsr-hu'))||0;
+  if(!cd||(qty<=0&&huv<=0)){toast('Nhập SL đạt hoặc hư!');return;}
+  clearLS();set('ls-lsx',lsxNo);lsLoadLSX();set('ls-cd',cd);lsUpdateMay();
+  const mv=v('lsr-may');if(mv)set('ls-may',mv);
+  set('ls-date',todayISO());set('ls-qty',qty||0);set('ls-hu',huv);
+  const ng=v('lsr-nguoi');if(ng)set('ls-nguoi',ng);
+  await saveLS();
+  g_('khsx-lsrec-panel').innerHTML='';
 }
 function nkDoneForPOSP(poCode,spCode){
   return myNKs().filter(n=>n.poCode===poCode&&n.spCode===spCode).reduce((s,n)=>s+n.qty,0);
@@ -1396,22 +1480,18 @@ function updateKHSelector(){
 async function saveKHS(){
   const name=v('khs-name').trim(),vt=v('khs-vt').trim().toUpperCase();
   if(!name||!vt){toast('Nhập tên và viết tắt!');return;}
-  if(khs.find(k=>k.vt===vt)){toast('Tên viết tắt đã tồn tại!');return;}
-  const id=Date.now();
+  if(khs.find(k=>k.vt===vt&&k.id!==EDIT.khs)){toast('Tên viết tắt đã tồn tại!');return;}
+  const id=EDIT.khs||Date.now();
   const obj={id,name,vt,mst:v('khs-mst').trim(),phone:v('khs-phone').trim(),
     contact:v('khs-contact').trim(),email:v('khs-email').trim(),
     addr:v('khs-addr').trim(),note:v('khs-note').trim(),active:true};
-  const r=await sbInsert('khs',{id,name,vt,
-    mst:obj.mst||null,phone:obj.phone||null,contact:obj.contact||null,
-    email:obj.email||null,addr:obj.addr||null,note:obj.note||null,active:true});
+  const _pl={id,name,vt,mst:obj.mst||null,phone:obj.phone||null,contact:obj.contact||null,email:obj.email||null,addr:obj.addr||null,note:obj.note||null,active:true};
+  const r=EDIT.khs?await sbPatch('khs',_pl,'?id=eq.'+id):await sbInsert('khs',_pl);
   if(!r){return;}
-  khs.push(obj);logAct('Thêm','Khách hàng',name);
-  if(!curKhId){curKhId=id;kh=obj;}
-  // Cập nhật selector ngay sau khi thêm KH
-  const newSel=document.getElementById('kh-selector');
-  if(newSel){newSel.innerHTML='<option value="">— Chọn khách hàng —</option>'+khs.filter(k=>k.active!==false).map(k=>`<option value="${k.id}">${k.vt} – ${k.name}</option>`).join('');newSel.value=String(curKhId);}
+  if(EDIT.khs){const i=khs.findIndex(k=>k.id===id);if(i>=0)khs[i]={...khs[i],...obj};if(String(curKhId)===String(id))kh=khs[i];EDIT.khs=null;logAct('Sửa','Khách hàng',name);}
+  else{khs.push(obj);logAct('Thêm','Khách hàng',name);if(!curKhId){curKhId=id;kh=obj;}}
   renderKHS();updateKHSelector();clearKHS();
-  toast(`✅ Đã thêm KH: ${name}`);
+  toast(`✅ Đã lưu KH: ${name}`);
 }
 
 function clearKHS(){
@@ -1447,7 +1527,7 @@ function renderKHS(){
         ?'<span class="badge bg">✅ Đang xem</span>'
         :`<button class="btn btb bsm" onclick="switchKH(${k.id})">👁 Chọn xem</button>`}
       </td>
-      <td class="c"><button class="btn btr bic" onclick="delKHS(${k.id})">✕</button></td>
+      <td class="c"><button class="btn btb bic" onclick="editKHS(${k.id})">✏️</button> <button class="btn btr bic" onclick="delKHS(${k.id})">✕</button></td>
     </tr>`;
   });
   const tbl=document.getElementById('khs-tbl');
@@ -1464,15 +1544,20 @@ async function saveKH(){
     email:v('kh-email').trim(),addr:v('kh-addr').trim()};
   await sbSaveKH();renderAll();toast('✅ Lưu thông tin khách hàng');
 }
-async function saveDD(){if(dds.length>=20){toast('Tối đa 20!');return;}const name=v('dd-name').trim(),addr=v('dd-addr').trim();if(!name||!addr){toast('Nhập tên & địa chỉ!');return;}const id=Date.now();const obj={id,name,addr,nguoi:v('dd-nguoi').trim(),sdt:v('dd-sdt').trim(),note:v('dd-note').trim()};const r=await sbInsert('dds',obj);if(r){dds.push(obj);logAct('Thêm','Địa điểm giao',name);renderKH();clearDD();toast('✅ Đã thêm: '+name);}else toast('❌ Lỗi lưu dữ liệu');}
+async function saveDD(){if(!EDIT.dd&&dds.length>=20){toast('Tối đa 20!');return;}const name=v('dd-name').trim(),addr=v('dd-addr').trim();if(!name||!addr){toast('Nhập tên & địa chỉ!');return;}const id=EDIT.dd||Date.now();const obj={id,name,addr,nguoi:v('dd-nguoi').trim(),sdt:v('dd-sdt').trim(),note:v('dd-note').trim()};const r=EDIT.dd?await sbPatch('dds',obj,'?id=eq.'+id):await sbInsert('dds',obj);if(!r)return;if(EDIT.dd){const i=dds.findIndex(x=>x.id===id);if(i>=0)dds[i]=obj;EDIT.dd=null;logAct('Sửa','Địa điểm giao',name);}else{dds.push(obj);logAct('Thêm','Địa điểm giao',name);}renderKH();clearDD();toast('✅ Đã lưu: '+name);}
 async function delDD(id){if(!confirm('Xóa địa điểm này?'))return;await sbDel('dds',id);logAct('Xóa','Địa điểm giao','');dds=dds.filter(d=>d.id!==id);renderKH();}
 function clearDD(){['dd-name','dd-addr','dd-nguoi','dd-sdt','dd-note'].forEach(id=>set(id,''));}
-async function saveNCC(){const name=v('ncc-name').trim(),vt=v('ncc-vt').trim().toUpperCase();if(!name||!vt){toast('Nhập tên & viết tắt!');return;}const id=Date.now();const obj={id,name,vt,mst:v('ncc-mst').trim(),sdt:v('ncc-sdt').trim(),contact:v('ncc-contact').trim(),email:v('ncc-email').trim(),addr:v('ncc-addr').trim(),note:v('ncc-note').trim()};const r=await sbInsert('nccs',obj);if(r){nccs.push(obj);logAct('Thêm','Nhà cung cấp',name);renderNCC();clearNCC();toast('✅ Đã thêm NCC: '+name);}else toast('❌ Lỗi lưu');}
+async function saveNCC(){const name=v('ncc-name').trim(),vt=v('ncc-vt').trim().toUpperCase();if(!name||!vt){toast('Nhập tên & viết tắt!');return;}const id=EDIT.ncc||Date.now();const obj={id,name,vt,mst:v('ncc-mst').trim(),sdt:v('ncc-sdt').trim(),contact:v('ncc-contact').trim(),email:v('ncc-email').trim(),addr:v('ncc-addr').trim(),note:v('ncc-note').trim()};const r=EDIT.ncc?await sbPatch('nccs',obj,'?id=eq.'+id):await sbInsert('nccs',obj);if(!r)return;if(EDIT.ncc){const i=nccs.findIndex(x=>x.id===id);if(i>=0)nccs[i]=obj;EDIT.ncc=null;logAct('Sửa','Nhà cung cấp',name);}else{nccs.push(obj);logAct('Thêm','Nhà cung cấp',name);}renderNCC();clearNCC();toast('✅ Đã lưu NCC: '+name);}
 async function delNCC(id){if(!confirm('Xóa NCC này?'))return;await sbDel('nccs',id);logAct('Xóa','Nhà cung cấp','');nccs=nccs.filter(n=>n.id!==id);renderNCC();}
 function clearNCC(){['ncc-name','ncc-vt','ncc-mst','ncc-sdt','ncc-contact','ncc-email','ncc-addr','ncc-note'].forEach(id=>set(id,''));}
-async function saveXe(){const tx=v('xe-tx').trim(),so=v('xe-so').trim();if(!tx||!so){toast('Nhập tài xế & số xe!');return;}const id=Date.now();const obj={id,taixe:tx,so,sdt:v('xe-sdt').trim(),note:v('xe-note').trim()};const r=await sbInsert('xes',obj);if(r){xes.push(obj);logAct('Thêm','Xe/Tài xế',tx+' '+so);renderXe();clearXe();toast('✅ Đã thêm xe');}else toast('❌ Lỗi lưu');}
+async function saveXe(){const tx=v('xe-tx').trim(),so=v('xe-so').trim();if(!tx||!so){toast('Nhập tài xế & số xe!');return;}const id=EDIT.xe||Date.now();const obj={id,taixe:tx,so,sdt:v('xe-sdt').trim(),note:v('xe-note').trim()};const r=EDIT.xe?await sbPatch('xes',obj,'?id=eq.'+id):await sbInsert('xes',obj);if(!r)return;if(EDIT.xe){const i=xes.findIndex(x=>x.id===id);if(i>=0)xes[i]=obj;EDIT.xe=null;logAct('Sửa','Xe/Tài xế',tx+' '+so);}else{xes.push(obj);logAct('Thêm','Xe/Tài xế',tx+' '+so);}renderXe();clearXe();toast('✅ Đã lưu xe');}
 async function delXe(id){if(!confirm('Xóa?'))return;await sbDel('xes',id);logAct('Xóa','Xe/Tài xế','');xes=xes.filter(x=>x.id!==id);renderXe();}
 function clearXe(){['xe-tx','xe-so','xe-sdt','xe-note'].forEach(id=>set(id,''));}
+function editKHS(id){const k=khs.find(x=>x.id===id);if(!k)return;const b=document.querySelector('.sbb[onclick*="\'khs\'"]');if(b)sw('khs',b);set('khs-name',k.name||'');set('khs-vt',k.vt||'');set('khs-mst',k.mst||'');set('khs-phone',k.phone||'');set('khs-contact',k.contact||'');set('khs-email',k.email||'');set('khs-addr',k.addr||'');set('khs-note',k.note||'');EDIT.khs=id;toast('✏️ Đang sửa khách hàng — bấm Thêm khách hàng để lưu');}
+function editDD(id){const d=dds.find(x=>x.id===id);if(!d)return;set('dd-name',d.name||'');set('dd-addr',d.addr||'');set('dd-nguoi',d.nguoi||'');set('dd-sdt',d.sdt||'');set('dd-note',d.note||'');EDIT.dd=id;toast('✏️ Đang sửa địa điểm — bấm ➕ để lưu');}
+function editNCC(id){const n=nccs.find(x=>x.id===id);if(!n)return;const b=document.querySelector('.sbb[onclick*="\'ncc\'"]');if(b)sw('ncc',b);set('ncc-name',n.name||'');set('ncc-vt',n.vt||'');set('ncc-mst',n.mst||'');set('ncc-sdt',n.sdt||'');set('ncc-contact',n.contact||'');set('ncc-email',n.email||'');set('ncc-addr',n.addr||'');set('ncc-note',n.note||'');EDIT.ncc=id;toast('✏️ Đang sửa NCC — bấm Thêm NCC để lưu');}
+function editXe(id){const x=xes.find(e=>e.id===id);if(!x)return;set('xe-tx',x.taixe||'');set('xe-so',x.so||'');set('xe-sdt',x.sdt||'');set('xe-note',x.note||'');EDIT.xe=id;toast('✏️ Đang sửa xe — bấm Thêm để lưu');}
+function editNS(id){const n=nss.find(x=>x.id===id);if(!n)return;const loai=n.loai;const tabMap={sx:0,kho:1,ql:2};const tabs=document.querySelectorAll('#pane-ns .ptb');if(tabs[tabMap[loai]])swPT('ns-'+loai,tabs[tabMap[loai]]);set(`ns-${loai}-name`,n.name||'');set(`ns-${loai}-code`,n.code||'');set(`ns-${loai}-sdt`,n.sdt||'');set(`ns-${loai}-status`,n.status||'active');set(`ns-${loai}-note`,n.note||'');if(loai==='sx'){const _kh=(n.khau||'').split(',');document.querySelectorAll('.ns-sx-khau-cb').forEach(c=>c.checked=_kh.includes(c.value));const _my=(n.may||'').split(',');document.querySelectorAll('.ns-sx-may-cb').forEach(c=>c.checked=_my.includes(c.value));set('ns-sx-ca',n.ca||'');}if(loai==='kho'){set('ns-kho-vitri',n.vitri||'');set('ns-kho-kvuc',n.kvuc||'');set('ns-kho-ca',n.ca||'');}if(loai==='ql'){set('ns-ql-chucvu',n.chucvu||'');set('ns-ql-bophan',n.bophan||'');}EDIT.ns=id;toast('✏️ Đang sửa nhân sự — bấm Thêm để lưu');}
 function renderNCC(){
   const el=document.getElementById('ncc-count');if(el)el.textContent=nccs.length;
   let h='';
@@ -1486,7 +1571,7 @@ function renderNCC(){
     <td style="font-size:10px;color:var(--n3)">${n.email||'—'}</td>
     <td style="font-size:10px;color:var(--n3)">${n.addr||'—'}</td>
     <td style="font-size:10px;color:var(--n3)">${n.note||'—'}</td>
-    <td class="c"><button class="btn btr bic" onclick="delNCC(${n.id})">✕</button></td>
+    <td class="c"><button class="btn btb bic" onclick="editNCC(${n.id})">✏️</button> <button class="btn btr bic" onclick="delNCC(${n.id})">✕</button></td>
   </tr>`);
   const tbl=document.getElementById('ncc-tbl');if(tbl)tbl.innerHTML=h;
 }
@@ -1495,15 +1580,15 @@ function renderKH(){
   const _kh=khs.find(k=>String(k.id)===String(curKhId))||kh||{};
   set('kh-name',_kh.name||'');set('kh-vt',_kh.vt||'');set('kh-mst',_kh.mst||'');set('kh-phone',_kh.phone||'');set('kh-contact',_kh.contact||'');set('kh-email',_kh.email||'');set('kh-addr',_kh.addr||'');
   let h='';if(!dds.length)h=`<tr><td colspan="6" style="text-align:center;color:var(--n3);padding:10px">Chưa có.</td></tr>`;
-  dds.forEach((d,i)=>h+=`<tr><td class="c">${i+1}</td><td class="tb">${d.name}</td><td>${d.addr}</td><td>${d.nguoi||'—'}</td><td>${d.sdt||'—'}</td><td style="font-size:10px;color:var(--y1)">${d.note||'—'}</td><td class="c"><button class="btn btr bic" onclick="delDD(${d.id})">✕</button></td></tr>`);
+  dds.forEach((d,i)=>h+=`<tr><td class="c">${i+1}</td><td class="tb">${d.name}</td><td>${d.addr}</td><td>${d.nguoi||'—'}</td><td>${d.sdt||'—'}</td><td style="font-size:10px;color:var(--y1)">${d.note||'—'}</td><td class="c"><button class="btn btb bic" onclick="editDD(${d.id})">✏️</button> <button class="btn btr bic" onclick="delDD(${d.id})">✕</button></td></tr>`);
   g_('dd-tbl').innerHTML=h;
   let nh='';if(!nccs.length)nh=`<tr><td colspan="4" style="text-align:center;color:var(--n3);padding:10px">Chưa có.</td></tr>`;
-  nccs.forEach(n=>nh+=`<tr><td class="tb">${n.name}</td><td><span class="badge bc">${n.vt}</span></td><td>${n.sdt||'—'}</td><td class="c"><button class="btn btr bic" onclick="delNCC(${n.id})">✕</button></td></tr>`);
+  nccs.forEach(n=>nh+=`<tr><td class="tb">${n.name}</td><td><span class="badge bc">${n.vt}</span></td><td>${n.sdt||'—'}</td><td class="c"><button class="btn btb bic" onclick="editNCC(${n.id})">✏️</button> <button class="btn btr bic" onclick="delNCC(${n.id})">✕</button></td></tr>`);
   g_('ncc-tbl').innerHTML=nh;
 }
 function renderXe(){
   let h='';if(!xes.length)h=`<tr><td colspan="5" style="text-align:center;color:var(--n3);padding:10px">Chưa có xe.</td></tr>`;
-  xes.forEach(x=>h+=`<tr><td class="tb">${x.taixe}</td><td><span class="badge bb">${x.so}</span></td><td>${x.sdt||'—'}</td><td>${x.note||'—'}</td><td class="c"><button class="btn btr bic" onclick="delXe(${x.id})">✕</button></td></tr>`);
+  xes.forEach(x=>h+=`<tr><td class="tb">${x.taixe}</td><td><span class="badge bb">${x.so}</span></td><td>${x.sdt||'—'}</td><td>${x.note||'—'}</td><td class="c"><button class="btn btb bic" onclick="editXe(${x.id})">✏️</button> <button class="btn btr bic" onclick="delXe(${x.id})">✕</button></td></tr>`);
   g_('xe-tbl').innerHTML=h;
 }
 
@@ -1671,7 +1756,7 @@ async function saveGY(){
   if(!r){return;}
   const gyRows=items.map(it=>({gy_id:gyId,sp_code:it.spCode,qty:it.qty,kho:it.kho||null,dai:it.dai||null,dm:it.dm||0,total_tam:it.totalTam||0,bu_hao_tam:it.buHaoTam||0}));
   if(gyRows.length)await sbInsert('gy_items',gyRows);
-  gys.push(gyObj);logAct('Thêm','KH giấy',(gyObj.dhCode||'')+' '+fd(date));renderGY();updateSels();clearGY();toast('✅ Lưu KH giấy');
+  gys.push(gyObj);logAct('Thêm','KH giấy',(gyObj.dhCode||'')+' '+fd(date));renderAll();clearGY();toast('✅ Lưu KH giấy');
 }
 function clearGY(){set('gy-date',todayISO());set('gy-ncc','');set('gy-giao','');set('gy-dh','');set('gy-note','');set('gy-pog','ĐĐT-'+todayISO().replace(/-/g,'').slice(2)+'-'+String(myGYs().length+1).padStart(2,'0'));document.querySelectorAll('#gy-rows .mr-item').forEach(e=>e.remove());gyRc=0;}
 function addGYDel(gyId){
@@ -1724,7 +1809,7 @@ function renderGY(){
       const diff=del-tot;const _poDh=myDHs().find(d=>d.code===gy.dhCode);const _poIt=_poDh?(_poDh.items||[]).find(i=>i.spCode===it.spCode):null;const _poQty=_poIt?_poIt.totalQty:0;return `<tr><td style="padding:4px 9px;font-size:10px"><b>${it.spCode}</b></td><td style="padding:4px 9px;font-size:10px;color:var(--n3)">${sp.name||'—'}</td><td style="padding:4px 9px;font-size:10px">${it.kho||'—'}</td><td style="padding:4px 9px;font-size:10px">${it.dai||'—'}</td><td style="padding:4px 9px;text-align:right;font-size:10px">${f(it.qty)}</td><td style="padding:4px 9px;text-align:right;font-size:10px;font-weight:700;color:${_poQty&&_poQty!==it.qty?'var(--r2)':'var(--n3)'}">${_poQty?f(_poQty):'—'}</td><td style="padding:4px 9px;text-align:right;font-size:10px">${it.dm}</td><td style="padding:4px 9px;text-align:right;font-size:10px;color:var(--y2)">${f(it.buHaoTam)}</td><td style="padding:4px 9px;text-align:right;font-weight:700;font-size:10px">${f(tot)}</td><td style="padding:4px 9px;text-align:right;font-size:10px;color:var(--b2)">${f(del)}</td><td style="padding:4px 9px;text-align:right;font-size:10px;font-weight:700;color:${diff>=0?'var(--g3)':'var(--r2)'}">${diff>=0?'+'+f(diff)+' (dư)':f(Math.abs(diff))+' (thiếu)'}</td></tr>`;
     }).join('');
     h+=`<div class="card" style="margin-bottom:8px;padding:10px 13px" id="gycard-${gy.id}"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:7px">
-      <div><span style="font-size:12px;font-weight:800;color:var(--g2)">📄 ${fd(gy.date)}</span> <span class="badge bc">${ncc.vt}</span>${gy.dhCode?` <span class="badge bb">PO: ${gy.dhCode}</span>`:''}${gy.poGiay?` <span class="badge bp">ĐĐT NCC: ${gy.poGiay}</span>`:''} <span style="font-size:10px;color:var(--n3);margin-left:4px">${gy.giao?'Giao: '+fd(gy.giao):''}${gy.note?' 📝 '+gy.note:''}</span></div>
+      <div><span style="font-size:12px;font-weight:800;color:var(--g2)">📄 ${fd(gy.date)}</span> <span class="badge bc">${ncc.vt}</span>${gy.dhCode?` <span class="badge bb">PO: ${gy.dhCode}</span>`:''}${gy.poGiay?` <span class="badge bp">ĐĐT NCC: ${gy.poGiay}</span>`:''}${gy.done?` <span class="badge bg">✅ Đủ NVL đi SX${(gyReceivedTam(gy)-gyOrderedTam(gy))>0?' (dư '+f(gyReceivedTam(gy)-gyOrderedTam(gy))+')':(gyReceivedTam(gy)-gyOrderedTam(gy))<0?' (thiếu '+f(gyOrderedTam(gy)-gyReceivedTam(gy))+')':''}</span>`:''} <span style="font-size:10px;color:var(--n3);margin-left:4px">${gy.giao?'Giao: '+fd(gy.giao):''}${gy.note?' 📝 '+gy.note:''}</span></div>
       <div style="display:flex;gap:5px;align-items:center"><span class="badge bg">Cần: ${f(totTam)} tấm</span><span class="badge ${totDel>=totTam?'bg':'by'}">NCC: ${f(totDel)} (${pct}%)</span><button class="btn btb bsm" onclick="addGYDel(${gy.id})">+NCC giao</button><button class="btn btr bsm" onclick="delGY(${gy.id})">✕</button></div>
     </div><table style="width:100%;border-collapse:collapse;background:var(--g5);border-radius:6px;overflow:hidden"><thead><tr style="background:var(--g2);color:#fff"><th style="padding:5px 9px;font-size:10px;text-align:left">Mã SP</th><th style="padding:5px 9px;font-size:10px;text-align:left">Tên</th><th style="padding:5px 9px;font-size:10px">Khổ</th><th style="padding:5px 9px;font-size:10px">Dài</th><th style="padding:5px 9px;font-size:10px;text-align:right">SL thùng</th><th style="padding:5px 9px;font-size:10px;text-align:right">SL đặt PO</th><th style="padding:5px 9px;font-size:10px;text-align:right">ĐM</th><th style="padding:5px 9px;font-size:10px;text-align:right">Bù hao(tấm)</th><th style="padding:5px 9px;font-size:10px;text-align:right">Cần(tấm)</th><th style="padding:5px 9px;font-size:10px;text-align:right">NCC đã giao</th><th style="padding:5px 9px;font-size:10px;text-align:right;color:${totDel>=totTam?'#16a34a':'#dc2626'}">Thiếu/Dư</th></tr></thead><tbody>${rows}</tbody></table>
     ${(gy.deliveries||[]).length>0?`
@@ -1814,7 +1899,7 @@ async function saveLSX(){
   const r=EDIT.lsx?await sbPatch('lsxs',_pl,'?id=eq.'+lsxId):await sbInsert('lsxs',_pl);
   if(!r){return;}
   if(EDIT.lsx){const _i=lsxs.findIndex(x=>x.id===lsxId);if(_i>=0)lsxs[_i]=lsxObj;EDIT.lsx=null;logAct('Sửa','Lệnh SX',no);}else{lsxs.push(lsxObj);logAct('Thêm','Lệnh SX',no);}
-  renderLSX();updateSels();clearLSX();toast(`✅ Đã lưu lệnh SX ${no}`);
+  renderAll();clearLSX();toast(`✅ Đã lưu lệnh SX ${no}`);
 }
 function clearLSX(){set('lsx-po','');set('lsx-sp','');set('lsx-date',todayISO());set('lsx-due','');set('lsx-qty','');set('lsx-note','');set('lsx-ptr','');set('lsx-no',lsxNo('',''));['lsx-m-in','lsx-m-can','lsx-m-be','lsx-m-kim'].forEach(id=>set(id,''));['lsx-ptr-in','lsx-ptr-can','lsx-ptr-be','lsx-ptr-kim','lsx-ptr-kho'].forEach(id=>set(id,''));set('lsx-ord','');set('lsx-bh','');set('lsx-total','');lsxPtrFill(true);lsxNvlCheck();}
 async function delLSX(id){if(!confirm('Xóa lệnh SX?'))return;await sbDel('lsxs',id);logAct('Xóa','Lệnh SX','');lsxs=lsxs.filter(l=>l.id!==id);renderLSX();}
@@ -1847,6 +1932,7 @@ function renderLSX(){
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px">
         <div><span style="font-size:11px;font-weight:700">${lsx.spCode}</span> <span style="font-size:10px;color:var(--n3)">${sp.name||''} ${sp.size||''}</span></div>
         <div style="font-size:10px;color:var(--n3)">SL lệnh: <b>${f(lsx.qty)}</b> thùng</div>
+        <div style="font-size:10px;color:var(--c1)">📄 Giấy NCC giao (PO ${lsx.poCode}): <b>${f(nvlNccGiaoPO(lsx.poCode,lsx.spCode))}</b> tấm</div>
         ${lsx.ptr?`<div style="font-size:10px;color:var(--n3)">PT: ${lsx.ptr}</div>`:''}
       </div>
       <div class="cd-flow">${cdFlow}<div class="cd-arrow">▶</div><div class="cd-step ${nkQty>=lsx.qty?'done':nkQty>0?'active':'pending'}">✅ NK<span class="cd-qty">${f(nkQty)}/${f(lsx.qty)}</span></div></div>
@@ -1884,14 +1970,14 @@ function calcLSNS(){
   set('ls-ns-calc',ns?f(ns)+' th/h • '+(ns/60).toFixed(1)+' th/ph ('+mins+'ph)':'—');
 }
 async function saveLS(){
-  const lsxNo2=v('ls-lsx'),cd=v('ls-cd'),qty=parseInt(v('ls-qty'))||0,date=v('ls-date');
-  if(!lsxNo2||!cd||!qty||!date){toast('Nhập đủ thông tin!');return;}
+  const lsxNo2=v('ls-lsx'),cd=v('ls-cd'),qty=parseInt(v('ls-qty'))||0,lsHu=parseInt(v('ls-hu'))||0,date=v('ls-date');
+  if(!lsxNo2||!cd||(!qty&&!lsHu)||!date){toast('Nhập đủ thông tin (SL đạt hoặc hư)!');return;}
   const lsx=myLSXs().find(l=>l.no===lsxNo2);if(!lsx){toast('Không tìm thấy LSX!');return;}
   const lsStart=v('ls-start'),lsEnd=v('ls-end');
   let lsMins=0;if(lsStart&&lsEnd){const[sh,sm]=lsStart.split(':').map(Number);const[eh,em]=lsEnd.split(':').map(Number);lsMins=(eh*60+em)-(sh*60+sm);if(lsMins<=0)lsMins+=24*60;}
   const lsNs=lsMins>0?Math.round(qty/(lsMins/60)):0;
-  const lsId=EDIT.ls||Date.now();const lsObj={id:lsId,lsxNo:lsxNo2,spCode:lsx.spCode,poCode:lsx.poCode,date,ca:v('ls-ca'),cd,may:v('ls-may'),nguoi:v('ls-nguoi').trim(),qty,ns:lsNs,mins:lsMins,start:lsStart,end:lsEnd,note:v('ls-note').trim()};
-  lsObj.khId=curKhId;const _pl={id:lsId,lsx_no:lsxNo2,sp_code:lsx.spCode,po_code:lsx.poCode,date:date||null,ca:lsObj.ca,cd,may:lsObj.may,nguoi:lsObj.nguoi,qty,ns:lsNs,mins:lsMins,start_time:lsStart||null,end_time:lsEnd||null,note:lsObj.note,kh_id:curKhId};
+  const lsId=EDIT.ls||Date.now();const lsObj={id:lsId,lsxNo:lsxNo2,spCode:lsx.spCode,poCode:lsx.poCode,date,ca:v('ls-ca'),cd,may:v('ls-may'),nguoi:v('ls-nguoi').trim(),qty,hu:lsHu,ns:lsNs,mins:lsMins,start:lsStart,end:lsEnd,note:v('ls-note').trim()};
+  lsObj.khId=curKhId;const _pl={id:lsId,lsx_no:lsxNo2,sp_code:lsx.spCode,po_code:lsx.poCode,date:date||null,ca:lsObj.ca,cd,may:lsObj.may,nguoi:lsObj.nguoi,qty,hu:lsHu,ns:lsNs,mins:lsMins,start_time:lsStart||null,end_time:lsEnd||null,note:lsObj.note,kh_id:curKhId};
   const r=EDIT.ls?await sbPatch('lss',_pl,'?id=eq.'+lsId):await sbInsert('lss',_pl);
   if(!r){return;}
   let autoNkMsg='';
@@ -1906,9 +1992,9 @@ async function saveLS(){
       if(_r2){nks.push(_nkObj);nkN[_key]=(nkN[_key]||1)+1;autoNkMsg=' → đã tự nhập kho TP '+_ref;renderNKHist();renderTon();renderNXT();}
     }
   }
-  renderLS();renderLSX();clearLS();toast(`✅ Đã lưu ${CD_LBL[cd]||cd}: ${f(qty)} thùng${autoNkMsg}`);
+  renderAll();clearLS();toast(`✅ Đã lưu ${CD_LBL[cd]||cd}: ${f(qty)} thùng${autoNkMsg}`);
 }
-function clearLS(){set('ls-date',todayISO());set('ls-qty','');set('ls-ns-calc','—');set('ls-nguoi','');set('ls-note','');}
+function clearLS(){set('ls-date',todayISO());set('ls-qty','');set('ls-hu','0');set('ls-ns-calc','—');set('ls-nguoi','');set('ls-note','');}
 async function delLS(id){if(!confirm('Xóa?'))return;await sbDel('lss',id);logAct('Xóa','Lịch SX','');lss=lss.filter(l=>l.id!==id);renderLS();renderLSX();}
 function renderLS(){
   const today=todayISO();const todayLS=myLSs().filter(l=>l.date===today);
@@ -1955,7 +2041,7 @@ function renderLSHist(){
   } else { const el=g_('ls-tab-summary');if(el)el.innerHTML=''; }
 
   rows.slice(0,60).forEach(r=>{const sp=sps.find(s=>s.code===r.spCode)||{};
-    h+=`<tr><td style="font-size:10px">${r.lsxNo||'—'}</td><td>${fd(r.date)}</td><td><span class="badge bn">${r.ca||'—'}</span></td><td><span class="badge by">${CD_LBL[r.cd]||r.cd}</span></td><td class="tb">${r.may||'—'}</td><td style="font-size:10px">${r.spCode} <span style="color:var(--n3)">${sp.name||''}</span></td><td>${r.nguoi||'—'}</td><td class="r cb">${f(r.qty)}</td><td class="r" style="color:var(--n3)">${r.mins||'—'}</td><td class="r cg">${r.ns?f(r.ns):'—'}</td><td class="r" style="color:var(--c2);font-weight:700">${r.ns?(r.ns/60).toFixed(1):'—'}</td><td style="font-size:10px;color:var(--n3)">${r.start||'—'}</td><td style="font-size:10px;color:var(--n3)">${r.end||'—'}</td><td style="font-size:10px;color:var(--n3)">${r.note||'—'}</td><td class="c"><button class="btn btb bic" onclick="editLS(${r.id})">✏️</button> <button class="btn btr bic" onclick="delLS(${r.id})">✕</button></td></tr>`;
+    h+=`<tr><td style="font-size:10px">${r.lsxNo||'—'}</td><td>${fd(r.date)}</td><td><span class="badge bn">${r.ca||'—'}</span></td><td><span class="badge by">${CD_LBL[r.cd]||r.cd}</span></td><td class="tb">${r.may||'—'}</td><td style="font-size:10px">${r.spCode} <span style="color:var(--n3)">${sp.name||''}</span></td><td>${r.nguoi||'—'}</td><td class="r cb">${f(r.qty)}</td><td class="r" style="color:${r.hu?'var(--r2)':'var(--n3)'};font-weight:${r.hu?700:400}">${r.hu?f(r.hu):'—'}</td><td class="r" style="color:var(--n3)">${r.mins||'—'}</td><td class="r cg">${r.ns?f(r.ns):'—'}</td><td class="r" style="color:var(--c2);font-weight:700">${r.ns?(r.ns/60).toFixed(1):'—'}</td><td style="font-size:10px;color:var(--n3)">${r.start||'—'}</td><td style="font-size:10px;color:var(--n3)">${r.end||'—'}</td><td style="font-size:10px;color:var(--n3)">${r.note||'—'}</td><td class="c"><button class="btn btb bic" onclick="editLS(${r.id})">✏️</button> <button class="btn btr bic" onclick="delLS(${r.id})">✕</button></td></tr>`;
   });
   g_('ls-hist').innerHTML=h;
   // update selects
@@ -2011,7 +2097,7 @@ async function saveNK(){
   if(!r){return;}
   if(EDIT.nk){const _i=nks.findIndex(x=>x.id===nkId);if(_i>=0)nks[_i]=nkObj;EDIT.nk=null;logAct('Sửa','Nhập kho TP',ref);}
   else{nks.push(nkObj);const key=`${poCode}_${spCode}`;nkN[key]=(nkN[key]||1)+1;logAct('Thêm','Nhập kho TP',ref);}
-  renderNKHist();renderGHHist();renderTon();renderNXT();clearNK();toast(`✅ Đã lưu nhập kho ${f(qty)} thùng – ${ref}`);
+  renderAll();clearNK();toast(`✅ Đã lưu nhập kho ${f(qty)} thùng – ${ref}`);
 }
 function clearNK(){set('nk-po','');set('nk-sp','');set('nk-date',todayISO());set('nk-time','08:00');set('nk-qty','');set('nk-ref','');set('nk-dbh','');set('nk-qc','');set('nk-sl-ord','');set('nk-sl-prev','');set('nk-ncc','');set('nk-tam-ordered','');set('nk-tam-used','');set('nk-nguoi','');set('nk-note2','');g_('nk-warn').innerHTML='';}
 async function delNK(id){if(!confirm('Xóa?'))return;await sbDel('nks',id);logAct('Xóa','Nhập kho TP','');nks=nks.filter(n=>n.id!==id);renderNKHist();renderGHHist();renderTon();renderNXT();}
@@ -2087,6 +2173,55 @@ function renderGHHist(){
 // SỔ NXT
 // ══════════════════════════
 function clearNXTF(){set('nxt-sp','');set('nxt-from','');set('nxt-to','');set('nxt-dd','');set('nxt-type','');renderNXT();}
+function poStageStats(poCode,spCode){
+  const dat={},hu={};CD_ORDER.forEach(c=>{dat[c]=0;hu[c]=0;});
+  myLSs().filter(l=>l.poCode===poCode&&l.spCode===spCode).forEach(l=>{if(dat[l.cd]!==undefined){dat[l.cd]+=l.qty||0;hu[l.cd]+=l.hu||0;}});
+  let totHu=0,totDat=0;CD_ORDER.forEach(c=>{totHu+=hu[c];totDat+=dat[c];});
+  return {dat,hu,totHu,totDat};
+}
+function poAging(poCode,spCode){
+  const nkList=myNKs().filter(n=>n.poCode===poCode&&n.spCode===spCode).slice().sort((a,b)=>(a.datetime||'').localeCompare(b.datetime||''));
+  const nk=nkList.reduce((t,n)=>t+(n.qty||0),0);
+  const giao=myGHs().reduce((t,g)=>g.poCode!==poCode?t:t+(g.items||[]).filter(it=>it.spCode===spCode).reduce((u,it)=>u+(it.qty||0),0),0);
+  const ton=nk-giao;
+  let consumed=giao,oldestDT=null;
+  for(const n of nkList){const q=n.qty||0;if(consumed>=q){consumed-=q;continue;}oldestDT=n.datetime;break;}
+  let ageDays=0;
+  if(ton>0&&oldestDT){const d=new Date(String(oldestDT).slice(0,10));const now=new Date(todayISO());ageDays=Math.max(0,Math.round((now-d)/86400000));}
+  return {nk,giao,ton:Math.max(0,ton),oldestDT,ageDays};
+}
+async function poClose(dhId){
+  const dh=dhs.find(d=>d.id===dhId);if(!dh)return;
+  const willClose=!dh.closed;
+  if(willClose&&!confirm('Kết thúc PO '+dh.code+'?\nPhần còn THIẾU sẽ KHÔNG được mang vào sản xuất lại.'))return;
+  if(!willClose&&!confirm('Mở lại PO '+dh.code+'?'))return;
+  const closedAt=willClose?new Date().toISOString():null;
+  const r=await sbPatch('dhs',{closed:willClose,closed_at:closedAt},'?id=eq.'+dhId);
+  if(!r){return;}
+  dh.closed=willClose;dh.closedAt=closedAt;
+  logAct(willClose?'Kết thúc':'Mở lại','PO',dh.code);
+  toast(willClose?('🔒 Đã kết thúc PO '+dh.code):('🔓 Đã mở lại PO '+dh.code));
+  renderAll();
+}
+function renderNXTPO(){
+  const el=g_('nxt-po-tbl');if(!el)return;
+  const fSP=v('nxt-sp');let h='',any=false;
+  myDHs().forEach(dh=>{
+    let items=(dh.items||[]);if(fSP)items=items.filter(it=>it.spCode===fSP);
+    if(!items.length)return;any=true;
+    items.forEach((it,idx)=>{
+      const ag=poAging(dh.code,it.spCode);const ord=it.ordQty||0;const diff=ag.giao-ord;
+      const diffTxt=ag.giao===0?'<span style="color:var(--n3)">chưa giao</span>':(diff===0?'<span class="badge bg">đủ</span>':diff>0?('<span style="color:var(--g3);font-weight:700">+'+f(diff)+' dư</span>'):('<span style="color:var(--r2);font-weight:700">'+f(Math.abs(diff))+' thiếu</span>'));
+      let ageTxt='—',ageColor='var(--n3)';
+      if(ag.ton>0){const a=ag.ageDays;ageColor=a<=7?'var(--g3)':a<=30?'var(--y2)':a<=60?'var(--o2)':'var(--r2)';ageTxt=a+' ngày';}
+      const stB=dh.closed?'<span class="badge bg">🔒 Đã kết thúc</span>':((ag.giao>=ord&&ord>0)?'<span class="badge bg">✅ Hoàn tất</span>':'<span class="badge by">⏳ Theo dõi</span>');
+      const btn=idx===0?`<button class="btn ${dh.closed?'btn_':'btr'} bsm" onclick="poClose(${dh.id})">${dh.closed?'🔓 Mở lại':'🔒 Kết thúc'}</button>`:'';
+      h+=`<tr${dh.closed?' style="opacity:.6"':''}><td class="tb">${idx===0?dh.code:''}</td><td class="tb">${it.spCode}</td><td style="font-size:10px;color:var(--n3)">${dh.due?fd(dh.due):'—'}</td><td class="r">${f(ord)}</td><td class="r cg">${f(ag.nk)}</td><td class="r cb">${f(ag.giao)}</td><td class="r tb">${f(ag.ton)}</td><td class="r">${diffTxt}</td><td class="c" style="color:${ageColor};font-weight:700">${ageTxt}</td><td class="c">${stB}</td><td class="c">${btn}</td></tr>`;
+    });
+  });
+  if(!any)h='<tr><td colspan="11" style="text-align:center;color:var(--n3);padding:14px">Chưa có PO.</td></tr>';
+  el.innerHTML=h;
+}
 function renderNXT(){
   const fSP=v('nxt-sp'),fFrom=v('nxt-from'),fTo=v('nxt-to'),fDD=v('nxt-dd'),fType=v('nxt-type');
   let rows=[];
@@ -2111,6 +2246,7 @@ function renderNXT(){
   g_('nxt-tbl').innerHTML=h;
   const ss=g_('nxt-sp');const cs=ss.value;ss.innerHTML='<option value="">Tất cả SP</option>';mySPs().forEach(s=>ss.innerHTML+=`<option value="${s.code}">${s.code} – ${s.name||''}</option>`);ss.value=cs;
   const sd=g_('nxt-dd');const cd=sd.value;sd.innerHTML='<option value="">Tất cả ĐĐ</option>';dds.forEach(d=>sd.innerHTML+=`<option value="${d.id}">${d.name}</option>`);sd.value=cd;
+  renderNXTPO();
 }
 
 // ══════════════════════════
@@ -2227,6 +2363,34 @@ function renderTon(){
 // ══════════════════════════
 // BÁO CÁO
 // ══════════════════════════
+function bcSXToggle(id){const e=g_('bcsx-d-'+id);if(!e)return;const open=e.style.display==='none';e.style.display=open?'':'none';const a=g_('bcsx-a-'+id);if(a)a.textContent=open?'▼':'▶';}
+function bcSXDetailHTML(po,sp){
+  const spObj=sps.find(s=>s.code===sp)||{};const dm=spObj.dm||0;
+  const nvlList=myNVLs().filter(n=>n.spCode===sp&&(gys.find(g=>g.id===n.gyId)||{}).dhCode===po);
+  const nvlRows=nvlList.map(n=>{const g=gys.find(x=>x.id===n.gyId)||{};const ncc=nccs.find(c=>c.id===n.nccId)||{};return '<tr><td>'+fdtt(n.datetime)+'</td><td>'+(ncc.vt||ncc.name||'—')+'</td><td>'+(n.kho||'—')+'×'+(n.dai||'—')+'</td><td class="r cb">'+f(n.qty)+'</td><td style="font-size:9px;color:var(--n3)">'+(g.poGiay||'—')+'</td><td style="font-size:9px;color:var(--n3)">'+(n.ref||'—')+'</td></tr>';}).join('')||'<tr><td colspan="6" style="color:var(--n3)">Chưa nhập NVL</td></tr>';
+  let ordTam=0;gys.filter(g=>g.dhCode===po).forEach(g=>(g.items||[]).filter(i=>i.spCode===sp).forEach(i=>ordTam+=(i.totalTam||0)+(i.buHaoTam||0)));
+  const recvTam=nvlNccGiaoPO(po,sp);const ss=poStageStats(po,sp);const nkNet=(ss.dat.NHAP_KHO||0)-(ss.hu.NHAP_KHO||0);
+  const usedTam=(nkNet+ss.totHu)*dm;const conTam=recvTam-usedTam;
+  const lsxList=myLSXs().filter(l=>l.poCode===po&&l.spCode===sp);
+  const lsxRows=lsxList.map(l=>{const nt=lsxNet(l.no);const nsArr=myLSs().filter(x=>x.lsxNo===l.no&&x.ns).map(x=>x.ns);const avgNs=nsArr.length?Math.round(nsArr.reduce((a,b)=>a+b,0)/nsArr.length):0;
+    const cell=c=>{const b=nt.byStage[c];return b.hu?(f(b.net)+'<sup style="color:var(--r2);font-size:8px">−'+f(b.hu)+'</sup>'):f(b.dat);};
+    const dgNet=nt.byStage.KIM.net+nt.byStage.DAN.net,dgHu=nt.byStage.KIM.hu+nt.byStage.DAN.hu,dgDat=nt.byStage.KIM.dat+nt.byStage.DAN.dat;
+    const dgCell=dgHu?(f(dgNet)+'<sup style="color:var(--r2);font-size:8px">−'+f(dgHu)+'</sup>'):f(dgDat);
+    return '<tr><td class="tb">'+l.no+'</td><td class="r">'+f(l.qty)+'</td><td class="r cb">'+cell('IN')+'</td><td class="r cp">'+cell('CAN')+'</td><td class="r cy">'+cell('BE')+'</td><td class="r" style="color:var(--o2)">'+dgCell+'</td><td class="r cg">'+cell('NHAP_KHO')+'</td><td class="r">'+(avgNs?f(avgNs):'—')+'</td></tr>';}).join('')||'<tr><td colspan="8" style="color:var(--n3)">Chưa có lệnh SX</td></tr>';
+  const ghArr=[];myGHs().filter(g=>g.poCode===po).forEach(g=>{(g.items||[]).filter(i=>i.spCode===sp).forEach(i=>{const dd=dds.find(d=>d.id===g.ddId)||{};ghArr.push('<tr><td>'+fdtt(g.datetime)+'</td><td>'+(dd.name||'—')+'</td><td class="r cb">'+f(i.qty)+'</td><td style="font-size:9px;color:var(--n3)">'+(g.pxk||'—')+'</td></tr>');});});
+  const ghRows=ghArr.join('')||'<tr><td colspan="4" style="color:var(--n3)">Chưa giao</td></tr>';
+  return '<div style="padding:8px;background:var(--g6);border-radius:6px">'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'
+    +'<div><div class="sh" style="font-size:11px;margin:0 0 3px">📥 NVL NCC giao (giấy tấm)</div>'
+    +'<div style="overflow:auto"><table style="font-size:10px;width:100%"><thead><tr><th>Ngày</th><th>NCC</th><th>Khổ×Dài</th><th class="r">Tấm</th><th>PO đặt tấm</th><th>Phiếu</th></tr></thead><tbody>'+nvlRows+'</tbody></table></div>'
+    +'<div style="font-size:10px;margin-top:3px">Đặt tấm: <b>'+f(ordTam)+'</b> · NCC giao: <b class="cb">'+f(recvTam)+'</b> · Đã dùng (TP+hư)×ĐM: <b>'+f(usedTam)+'</b> · <b style="color:'+(conTam<0?'var(--r2)':'var(--g2)')+'">Còn/thất thoát: '+f(conTam)+' tấm</b></div></div>'
+    +'<div><div class="sh" style="font-size:11px;margin:0 0 3px">🚚 Giao hàng</div>'
+    +'<div style="overflow:auto"><table style="font-size:10px;width:100%"><thead><tr><th>Ngày</th><th>Địa điểm</th><th class="r">SL</th><th>PXK</th></tr></thead><tbody>'+ghRows+'</tbody></table></div></div>'
+    +'</div>'
+    +'<div class="sh" style="font-size:11px;margin:8px 0 3px">🏭 Công đoạn SX theo từng Lệnh (số = còn lại đạt, <span style="color:var(--r2)">−đỏ = hư</span>)</div>'
+    +'<div style="overflow:auto"><table style="font-size:10px;width:100%"><thead><tr><th>Lệnh SX</th><th class="r">SL lệnh</th><th class="r">🖨 In</th><th class="r">⚙️ Cán</th><th class="r">✂️ Bế</th><th class="r">📎 Đóng/Dán</th><th class="r">✅ NK</th><th class="r">NS(th/h)</th></tr></thead><tbody>'+lsxRows+'</tbody></table></div>'
+    +'</div>';
+}
 function renderBaoCao(){
   const st=spStats();let totOrd=0,totNK=0,totOut=0,totTon=0,totDang=0;
   Object.values(st).forEach(d=>{totOrd+=d.ordQty;totNK+=d.nk;totOut+=d.out;totTon+=Math.max(0,d.ton);totDang+=d.dang;});
@@ -2264,6 +2428,25 @@ function renderBaoCao(){
   // dd
   let hd='';myDDs().forEach(d=>{const dl=myGHs().filter(g=>g.ddId===d.id);const tot=dl.reduce((s,g)=>(g.items||[]).reduce((ss,it)=>ss+it.qty,0)+s,0);const last=dl.sort((a,b)=>b.datetime.localeCompare(a.datetime))[0];hd+=`<tr><td class="tb">${d.name}</td><td>${d.addr}</td><td class="r">${dl.length} lần</td><td class="r cb">${f(tot)}</td><td>${last?fdtt(last.datetime):'—'}</td></tr>`;});
   g_('bc-dd-tbl').innerHTML=hd||`<tr><td colspan="5" style="text-align:center;color:var(--n3);padding:12px">Chưa có dữ liệu.</td></tr>`;
+  // ===== Báo cáo sản xuất: NVL NCC + công đoạn + tồn kho (y chang Sổ NXT) =====
+  let hsx='',kNvl=0,kNK=0,kHu=0,kTon=0,kNet=0;
+  myDHs().forEach(dh=>{
+    if(_fpo&&dh.code!==_fpo)return;
+    (dh.items||[]).forEach((it,idx)=>{
+      const ss=poStageStats(dh.code,it.spCode);const ag=poAging(dh.code,it.spCode);
+      const nccTam=nvlNccGiaoPO(dh.code,it.spCode);
+      const nvlCnt=myNVLs().filter(n=>n.spCode===it.spCode&&(gys.find(g=>g.id===n.gyId)||{}).dhCode===dh.code).length;
+      const nkNet=(ss.dat.NHAP_KHO||0)-(ss.hu.NHAP_KHO||0);
+      const rate=(nkNet+ss.totHu)>0?(ss.totHu/(nkNet+ss.totHu)*100):0;
+      const dongDat=(ss.dat.KIM||0)+(ss.dat.DAN||0),dongHu=(ss.hu.KIM||0)+(ss.hu.DAN||0);
+      kNvl+=nccTam;kNK+=ag.nk;kHu+=ss.totHu;kTon+=ag.ton;kNet+=nkNet;
+      const rid=dh.id+'_'+it.spCode;
+      hsx+=`<tr${dh.closed?' style="opacity:.6"':''}><td class="tb"><span id="bcsx-a-${rid}" style="cursor:pointer;user-select:none;color:var(--b2)" onclick="bcSXToggle('${rid}')">▶</span> ${dh.code}${dh.closed?' 🔒':''}</td><td class="tb">${it.spCode}</td><td class="r cb" style="font-weight:700">${f(nccTam)}<br><span style="font-size:9px;color:var(--n3)">${nvlCnt} phiếu</span></td>${stCell(ss.dat.IN,ss.hu.IN,'cb')}${stCell(ss.dat.CAN,ss.hu.CAN,'cp')}${stCell(ss.dat.BE,ss.hu.BE,'cy')}${stCell(dongDat,dongHu,'','color:var(--o2);font-weight:700')}${stCell(ss.dat.NHAP_KHO,ss.hu.NHAP_KHO,'cg')}<td class="r" style="color:${ss.totHu?'var(--r2)':'var(--n3)'};font-weight:${ss.totHu?700:400}">${ss.totHu?f(ss.totHu):'—'}</td><td class="r" style="color:${rate>5?'var(--r2)':'var(--n3)'};font-weight:700">${rate?rate.toFixed(1)+'%':'—'}</td><td class="r cg">${f(ag.nk)}</td><td class="r cb">${f(ag.giao)}</td><td class="r tb" style="color:${ag.ton>0?'var(--g3)':'var(--n3)'};font-weight:700">${f(ag.ton)}</td><td class="c" style="color:${ag.ton>0?(ag.ageDays<=7?'var(--g3)':ag.ageDays<=30?'var(--y2)':ag.ageDays<=60?'var(--o2)':'var(--r2)'):'var(--n3)'};font-weight:700">${ag.ton>0?ag.ageDays+' ngày':'—'}</td><td class="c">${idx===0?'<button class="btn '+(dh.closed?'btn_':'btr')+' bsm" onclick="poClose('+dh.id+')">'+(dh.closed?'🔓 Mở lại':'🔒 Kết thúc')+'</button>':''}</td></tr><tr id="bcsx-d-${rid}" style="display:none"><td colspan="15" style="padding:0 6px 8px">${bcSXDetailHTML(dh.code,it.spCode)}</td></tr>`;
+    });
+  });
+  const _bsx=g_('bc-sx-tbl');if(_bsx)_bsx.innerHTML=hsx||`<tr><td colspan="15" style="text-align:center;color:var(--n3);padding:12px">Chưa có dữ liệu.</td></tr>`;
+  const kRate=(kNet+kHu)>0?(kHu/(kNet+kHu)*100):0;
+  const _ksx=g_('bc-sx-kpi');if(_ksx)_ksx.innerHTML=`<div class="kc c"><div class="kl">Giấy NCC giao</div><div class="kv">${f(kNvl)}</div><div class="ks">tấm</div></div><div class="kc b"><div class="kl">Nhập kho TP</div><div class="kv">${f(kNK)}</div><div class="ks">thùng</div></div><div class="kc r"><div class="kl">Tổng hư hao</div><div class="kv">${f(kHu)}</div><div class="ks">thùng</div></div><div class="kc y"><div class="kl">Tỉ lệ hư</div><div class="kv">${kRate.toFixed(1)}%</div></div><div class="kc g"><div class="kl">Tồn kho TP</div><div class="kv">${f(kTon)}</div><div class="ks">thùng</div></div>`;
 }
 
 // ══════════════════════════
@@ -2277,7 +2460,7 @@ function renderKHSX(){
   // --- KPI tổng quan ---
   const st=spStats();
   let totOrd=0,totSXXong=0,totDang=0,totCho=0,totGiao=0,lsxDone=0,lsxTotal=myLSXs().length;
-  myDHs().forEach(dh=>(dh.items||[]).forEach(it=>{totOrd+=it.totalQty||0;}));
+  myDHs().forEach(dh=>{if(dh.closed)return;(dh.items||[]).forEach(it=>{totOrd+=it.totalQty||0;});});
   Object.values(st).forEach(d=>{totSXXong+=d.nk||0;totDang+=d.dang||0;totGiao+=d.out||0;});
   totCho=Math.max(0,totOrd-totSXXong-totDang);
   lsxDone=myLSXs().filter(l=>{const prog=lsxStats(l.no);return(prog.NHAP_KHO||0)>=l.qty;}).length;
@@ -2297,23 +2480,26 @@ function renderKHSX(){
   // Build map: ls per SP (từ lss)
   const lsMap={};// lsMap[spCode][cd] = qty
   myLSs().forEach(l=>{if(!lsMap[l.spCode])lsMap[l.spCode]={};if(!lsMap[l.spCode][l.cd])lsMap[l.spCode][l.cd]=0;lsMap[l.spCode][l.cd]+=l.qty;});
+  const huMap={};
+  myLSs().forEach(l=>{if(!huMap[l.spCode])huMap[l.spCode]={};if(!huMap[l.spCode][l.cd])huMap[l.spCode][l.cd]=0;huMap[l.spCode][l.cd]+=(l.hu||0);});
 
   let rows=[];
   myDHs().forEach(dh=>{
     (dh.items||[]).forEach(it=>{
       const sp=sps.find(s=>s.code===it.spCode)||{};
       const nkQty=nkMap[`${dh.code}__${it.spCode}`]||st[it.spCode]?.nk||0;
-      const kmap=lsMap[it.spCode]||{};
+      const kmap=lsMap[it.spCode]||{};const hmap=huMap[it.spCode]||{};
       const inQty=kmap.IN||0,canQty=kmap.CAN||0,beQty=kmap.BE||0;
       const dongQty=(kmap.KIM||0)+(kmap.DAN||0);
+      const huIn=hmap.IN||0,huCan=hmap.CAN||0,huBe=hmap.BE||0,huDong=(hmap.KIM||0)+(hmap.DAN||0),huNk=hmap.NHAP_KHO||0,totHu=(hmap.IN||0)+(hmap.CAN||0)+(hmap.BE||0)+(hmap.KIM||0)+(hmap.DAN||0)+(hmap.NHAP_KHO||0);
       const rem=Math.max(0,it.totalQty-nkQty);
       const pct=it.totalQty>0?Math.min(100,Math.round(nkQty/it.totalQty*100)):0;
       // status
       let status='cho';
       if(nkQty>=it.totalQty)status='xong';
       else if(inQty>0||canQty>0||beQty>0||dongQty>0||nkQty>0)status='sx';
-      const _nvl=nvlTonForSP(it.spCode);const nvlTon=_nvl.ton;const nccGiao=nvlNccGiaoPO(dh.code,it.spCode);
-      rows.push({dh,it,sp,nkQty,inQty,canQty,beQty,dongQty,rem,pct,status,nvlTon,nccGiao});
+      const nccGiao=nvlNccGiaoPO(dh.code,it.spCode);const _capPO=myLSXs().filter(l=>l.poCode===dh.code&&l.spCode===it.spCode).reduce((t,l)=>t+(l.qty||0),0);const _dmPO=(sps.find(s=>s.code===it.spCode)||{}).dm||0;const nvlTon=nccGiao-_capPO*_dmPO;
+      rows.push({dh,it,sp,nkQty,inQty,canQty,beQty,dongQty,rem,pct,status,nvlTon,nccGiao,huIn,huCan,huBe,huDong,huNk,totHu,closed:!!dh.closed});
     });
   });
 
@@ -2323,10 +2509,12 @@ function renderKHSX(){
   if(fST)rows=rows.filter(r=>r.status===fST);
 
   let h='';
-  if(!rows.length)h=`<tr><td colspan="19" style="text-align:center;color:var(--n3);padding:16px">Không có dữ liệu.</td></tr>`;
-  rows.forEach(r=>{
-    const stBadge=r.status==='xong'?'<span class="badge bg">✅ Xong</span>':r.status==='sx'?'<span class="badge by">🏭 Đang SX</span>':'<span class="badge bn">⏳ Chưa SX</span>';
+  if(!rows.length)h=`<tr><td colspan="20" style="text-align:center;color:var(--n3);padding:16px">Không có dữ liệu.</td></tr>`;
+  rows.forEach((r,idx)=>{
+    const stBadge=r.closed?'<span class="badge bg">🔒 Đã kết thúc</span>':(r.status==='xong'?'<span class="badge bg">✅ Xong</span>':r.status==='sx'?'<span class="badge by">🏭 Đang SX</span>':'<span class="badge bn">⏳ Chưa SX</span>');
     const remCls=r.rem===0?'cg':r.rem>0&&r.status==='cho'?'cr':'cy';
+    const _gyEx=myGYs().some(g=>g.dhCode===r.dh.code);let _ordPO=0;myGYs().filter(g=>g.dhCode===r.dh.code).forEach(g=>(g.items||[]).filter(i=>i.spCode===r.it.spCode).forEach(i=>_ordPO+=(i.totalTam||0)+(i.buHaoTam||0)));
+    const _stt=!_gyEx?'<span class="badge bn">Chưa đặt giấy</span>':(_ordPO>0&&r.nccGiao>=_ordPO?'<span class="badge bg">✅ Đủ NVL</span>':`<span class="badge by">NVL ${f(r.nccGiao)}/${f(_ordPO)}</span>`);
     h+=`<tr>
       <td class="tb">${r.dh.code}</td>
       <td><span class="badge bb">${r.dh.khVt||kh.vt||'KH'}</span></td>
@@ -2337,14 +2525,14 @@ function renderKHSX(){
       <td class="r">${f(r.it.ordQty)}</td>
       <td class="r cy">${f(r.it.buHaoQty)}</td>
       <td class="r tb">${f(r.it.totalQty)}</td>
-      <td class="r cb">${f(r.inQty)}</td>
-      <td class="r cp">${f(r.canQty)}</td>
-      <td class="r cy">${f(r.beQty)}</td>
-      <td class="r" style="color:var(--o2);font-weight:700">${f(r.dongQty)}</td>
-      <td class="r cg">${f(r.nkQty)}</td>
+      ${stCell(r.inQty,r.huIn,'cb')}
+      ${stCell(r.canQty,r.huCan,'cp')}
+      ${stCell(r.beQty,r.huBe,'cy')}
+      ${stCell(r.dongQty,r.huDong,'','color:var(--o2);font-weight:700')}
+      ${stCell(r.nkQty,r.huNk,'cg')}
       <td class="r" style="color:var(--c2);font-weight:700">${f(r.nccGiao)}</td>
       <td class="r" style="color:var(--p2);font-weight:700">${f(r.nvlTon<0?0:r.nvlTon)}</td>
-      <td class="r ${remCls}">${f(r.rem)}</td>
+      <td class="r ${remCls}">${r.closed?'<span style="color:var(--n3)">🔒</span>':f(r.rem)}</td>
       <td>
         <div style="display:flex;align-items:center;gap:4px">
           <div class="pb" style="flex:1;min-width:50px"><div class="pf" style="width:${r.pct}%"></div></div>
@@ -2352,6 +2540,15 @@ function renderKHSX(){
         </div>
       </td>
       <td class="c">${stBadge}</td>
+      <td><div style="display:flex;flex-direction:column;gap:3px;min-width:150px">${_stt}
+        <div style="display:flex;gap:2px;align-items:center">
+          <input type="number" id="khsx-nvl-${idx}" placeholder="tấm" style="width:54px;font-size:10px;padding:2px 4px;border:1px solid var(--n4);border-radius:4px;text-align:right">
+          <button class="btn btg bic" title="Nhập nhanh NVL cho PO này" onclick="nvlInlineAdd('${r.dh.code}','${r.it.spCode}','khsx-nvl-${idx}')">＋</button>
+          <button class="btn btb bic" title="Mở Đặt giấy điền sẵn PO" onclick="gyQuickFromKHSX('${r.dh.code}')">📄</button>
+          <button class="btn btn_ bic" title="Mở form Nhập NVL điền sẵn" onclick="nvlQuickFromKHSX('${r.dh.code}','${r.it.spCode}')">📦</button>
+        </div>
+        <button class="btn btg bsm" title="Tạo nhanh Lệnh SX + phân công máy theo từng khâu" onclick="lsxQuickPanel('${r.dh.code}','${r.it.spCode}')">📝 Lệnh SX + máy</button>
+      </div></td>
     </tr>`;
   });
   g_('khsx-main-tbl').innerHTML=h;
@@ -2369,10 +2566,10 @@ function renderKHSX(){
     });
   }
   let hl='';
-  if(!lsxList.length)hl=`<tr><td colspan="15" style="text-align:center;color:var(--n3);padding:14px">Không có lệnh SX.</td></tr>`;
+  if(!lsxList.length)hl=`<tr><td colspan="17" style="text-align:center;color:var(--n3);padding:14px">Không có lệnh SX.</td></tr>`;
   lsxList.forEach(lsx=>{
     const sp=sps.find(s=>s.code===lsx.spCode)||{};
-    const prog=lsxStats(lsx.no);
+    const prog=lsxStats(lsx.no);const huS=lsxHu(lsx.no);
     const nkQ=prog.NHAP_KHO||0;const inQ=prog.IN||0;const canQ=prog.CAN||0;const beQ=prog.BE||0;const dQ=(prog.KIM||0)+(prog.DAN||0);
     const rem=Math.max(0,lsx.qty-nkQ);const pct=lsx.qty>0?Math.min(100,Math.round(nkQ/lsx.qty*100)):0;
     let stBadge;
@@ -2386,9 +2583,10 @@ function renderKHSX(){
       <td style="color:var(--n3);font-size:10px">${lsx.poCode}</td>
       <td>${lsx.spCode}<br><span style="font-size:9px;color:var(--n3)">${sp.size||''}</span></td>
       <td class="r tb">${f(lsx.qty)}</td>
-      <td class="r cb">${f(inQ)}</td><td class="r cp">${f(canQ)}</td><td class="r cy">${f(beQ)}</td>
-      <td class="r" style="color:var(--o2);font-weight:700">${f(dQ)}</td>
-      <td class="r cg">${f(nkQ)}</td>
+      ${stCell(inQ,huS.IN,'cb')}${stCell(canQ,huS.CAN,'cp')}${stCell(beQ,huS.BE,'cy')}
+      ${stCell(dQ,(huS.KIM||0)+(huS.DAN||0),'','color:var(--o2);font-weight:700')}
+      ${stCell(nkQ,huS.NHAP_KHO,'cg')}
+      <td class="r" style="color:${huS.TOTAL?'var(--r2)':'var(--n3)'};font-weight:${huS.TOTAL?700:400}">${huS.TOTAL?f(huS.TOTAL):'—'}</td>
       <td class="r ${rem===0?'cg':'cr'}">${f(rem)}</td>
       <td style="font-size:9px">${mInfo||'—'}</td>
       <td style="font-size:10px;color:var(--n3)">${fd(lsx.date)}</td>
@@ -2400,6 +2598,7 @@ function renderKHSX(){
         </div>
       </td>
       <td class="c">${stBadge}</td>
+      <td class="c"><button class="btn btg bic" title="Ghi sản lượng đạt/hư theo công đoạn" onclick="lsRecordPanel('${lsx.no}')">📋</button></td>
     </tr>`;
   });
   g_('khsx-lsx-tbl').innerHTML=hl;
@@ -2455,16 +2654,38 @@ function showLoading(on){
 // NVL – SAVE/DELETE
 // ══════════════════════════
 function spOpts2(){return'<option value="">— Chọn SP —</option>'+mySPs().map(s=>`<option value="${s.code}">${s.code} – ${s.size||s.name||''}</option>`).join('');}
-function gyOpts(){return'<option value="">— Chọn KH giấy —</option>'+myGYs().filter(g=>{const o=gyOrderedTam(g);return o<=0||gyReceivedTam(g)<o;}).map(g=>`<option value="${g.id}">${fd(g.date)} – ${nccs.find(n=>n.id===g.nccId)?.vt||'?'} ${g.dhCode?'['+g.dhCode+']':''}</option>`).join('');}
+function gyOpts(){return'<option value="">— Chọn KH giấy —</option>'+myGYs().filter(g=>!g.done).map(g=>`<option value="${g.id}">${fd(g.date)} – ${nccs.find(n=>n.id===g.nccId)?.vt||'?'} ${g.dhCode?'['+g.dhCode+']':''}</option>`).join('');}
 function nvlCalc(){const spCode=v('nvl-sp');const qty=parseInt(v('nvl-qty'))||0;const sp=sps.find(s=>s.code===spCode);const dm=sp?sp.dm||0:0;set('nvl-equiv',dm&&qty?f(Math.floor(qty/dm))+' thùng':'—');}
 function nvlLoadGy(){
   const gyId=parseInt(v('nvl-gy'))||0;const g=gyId?gys.find(x=>x.id===gyId):null;
-  if(g){let spCode=v('nvl-sp');
-    if(!spCode&&(g.items||[]).length===1){spCode=g.items[0].spCode;set('nvl-sp',spCode);}
+  const box=g_('nvl-gy-info');const spSel=g_('nvl-sp');
+  if(g){
+    if(spSel){const cur=spSel.value;
+      spSel.innerHTML='<option value="">— Chọn SP —</option>'+(g.items||[]).map(it=>{const sp=sps.find(s=>s.code===it.spCode)||{};return `<option value="${it.spCode}">${it.spCode}${sp.size?' – '+sp.size:''}</option>`;}).join('');
+      if(cur&&(g.items||[]).some(it=>it.spCode===cur))spSel.value=cur;else if((g.items||[]).length)spSel.value=g.items[0].spCode;
+    }
+    const spCode=v('nvl-sp');
     const it=(g.items||[]).find(i=>i.spCode===spCode);
     if(it){if(it.kho)set('nvl-kho',it.kho);if(it.dai)set('nvl-dai',it.dai);}
+    if(box){
+      const ord=gyOrderedTam(g);const recv=gyReceivedTam(g);const diff=recv-ord;
+      const diffTxt=diff>0?`NCC giao DƯ <b style="color:var(--g2)">${f(diff)}</b> tấm`:(diff<0?`NCC giao THIẾU <b style="color:var(--r2)">${f(-diff)}</b> tấm`:`<b style="color:var(--g2)">ĐỦ đúng số đặt</b>`);
+      box.innerHTML=`<div class="al ${g.done?'al-ok':(diff<0?'al-w':'al-ok')}" style="margin-bottom:0">📦 KH giấy ${g.dhCode?'[PO '+g.dhCode+']':''}${g.poGiay?' (ĐĐT '+g.poGiay+')':''} — SL đặt + bù hao: <b>${f(ord)}</b> tấm · Đã nhập: <b>${f(recv)}</b> tấm · ${diffTxt} so với đặt.${g.done?' <span class="badge bg" style="margin-left:8px">✅ Đã xác nhận đủ NVL đi SX</span>':` <button class="btn btg bsm" style="margin-left:8px" onclick="gyMarkDone(${g.id})">✅ Hoàn thành nhập kho NVL (đủ đi SX)</button>`}</div>`;
+    }
+  } else {
+    if(spSel){const cur=spSel.value;spSel.innerHTML=spOpts2();spSel.value=cur;}
+    if(box)box.innerHTML='';
   }
   nvlCalc();
+}
+async function gyMarkDone(gyId){
+  const g=gys.find(x=>x.id===gyId);if(!g)return;
+  const ord=gyOrderedTam(g);const recv=gyReceivedTam(g);const diff=recv-ord;
+  const msg=diff<0?('NCC giao còn THIẾU '+f(-diff)+' tấm so với đặt ('+f(recv)+'/'+f(ord)+').\nVẫn xác nhận ĐỦ nguyên vật liệu để đi sản xuất?'):('NCC giao '+(diff>0?'DƯ '+f(diff)+' tấm':'ĐỦ')+' ('+f(recv)+'/'+f(ord)+').\nXác nhận đủ nguyên vật liệu để đi sản xuất?');
+  if(!confirm(msg))return;
+  await sbPatch('gys',{done:true},'?id=eq.'+gyId);
+  g.done=true;logAct('Sửa','KH giấy','Xác nhận đủ NVL đi SX '+(g.dhCode||g.poGiay||'')+(diff<0?' (thiếu '+f(-diff)+')':diff>0?' (dư '+f(diff)+')':''));
+  renderAll();nvlLoadGy();toast('✅ Đã xác nhận đủ NVL để đi sản xuất');
 }
 async function saveNVL(){
   const date=v('nvl-date'),time=v('nvl-time')||'08:00';
@@ -2482,7 +2703,7 @@ async function saveNVL(){
   const r=EDIT.nvl?await sbPatch('nvls',_pl,'?id=eq.'+nvlId):await sbInsert('nvls',_pl);
   if(!r){return;}
   if(EDIT.nvl){const _i=nvls.findIndex(x=>x.id===nvlId);if(_i>=0)nvls[_i]=nvlObj;EDIT.nvl=null;logAct('Sửa','Nhập NVL giấy',spCode+' '+f(qty)+' tấm');}else{nvls.push(nvlObj);logAct('Thêm','Nhập NVL giấy',spCode+' '+f(qty)+' tấm');}
-  renderNVLHist();renderNVLTon();clearNVL();toast(`✅ Đã lưu nhập NVL: ${f(qty)} tấm`);
+  renderAll();clearNVL();toast(`✅ Đã lưu nhập NVL: ${f(qty)} tấm`);
 }
 function clearNVL(){set('nvl-date',todayISO());set('nvl-time','08:00');set('nvl-ncc','');set('nvl-sp','');set('nvl-qty','');set('nvl-kho','');set('nvl-dai','');set('nvl-ref','');set('nvl-xe','');set('nvl-nguoi','');set('nvl-note','');set('nvl-gy','');set('nvl-equiv','');}
 async function delNVL(id){if(!confirm('Xóa?'))return;await sbDel('nvls',id);logAct('Xóa','Nhập NVL giấy','');nvls=nvls.filter(n=>n.id!==id);renderNVLHist();renderNVLTon();}
@@ -2493,15 +2714,18 @@ function renderNVLHist(){
   });const el=g_('nvl-tbl');if(el)el.innerHTML=h;
 }
 function renderNVLTon(){
-  let h='';mySPs().forEach(s=>{
-    const khDat=myGYs().reduce((tot,gy)=>tot+(gy.items||[]).filter(it=>it.spCode===s.code).reduce((t,it)=>t+(it.totalTam||0)+(it.buHaoTam||0),0),0);
-    const nccGiao=myNVLs().filter(n=>n.spCode===s.code).reduce((t,n)=>t+n.qty,0);
-    const daNK_qty=myNKs().filter(n=>n.spCode===s.code).reduce((t,n)=>t+n.qty,0);
-    const tonNVL=nccGiao-(s.dm?daNK_qty*s.dm:0);const diff=nccGiao-khDat;
-    const badge=khDat===0?'<span class="badge bn">Chưa đặt</span>':nccGiao>=khDat?`<span class="badge bg">✅ Đủ${diff>0?' (dư '+f(diff)+'tấm)':''}</span>`:`<span class="badge br">⚠️ Thiếu ${f(khDat-nccGiao)} tấm</span>`;
-    h+=`<tr><td class="tb">${s.code}</td><td style="font-size:10px">${s.name||'—'}</td><td class="r">${khDat?f(khDat):'—'}</td><td class="r cg">${f(nccGiao)}</td><td class="r cy">${s.dm?f(daNK_qty*s.dm):'—'}</td><td class="r tb" style="color:${tonNVL<0?'var(--r2)':tonNVL>0?'var(--g3)':'var(--n3)'}">${f(tonNVL<0?0:tonNVL)}</td><td class="r" style="color:${diff>=0?'var(--g3)':'var(--r2)'};font-weight:700">${diff>=0?'+'+f(diff)+' (dư)':f(Math.abs(diff))+' (thiếu)'}</td><td class="c">${badge}</td></tr>`;
+  const m={};
+  myGYs().filter(gy=>gy.dhCode).forEach(gy=>{(gy.items||[]).forEach(it=>{const k=gy.dhCode+'|'+it.spCode;if(!m[k])m[k]={po:gy.dhCode,spCode:it.spCode,khDat:0};m[k].khDat+=(it.totalTam||0)+(it.buHaoTam||0);});});
+  let h='';
+  Object.values(m).sort((a,b)=>String(a.po).localeCompare(String(b.po))||a.spCode.localeCompare(b.spCode)).forEach(r=>{
+    const sp=sps.find(s=>s.code===r.spCode)||{};
+    const nccGiao=nvlNccGiaoPO(r.po,r.spCode);
+    const daNK=sp.dm?nkDoneForPOSP(r.po,r.spCode)*sp.dm:0;
+    const tonNVL=nccGiao-daNK;const diff=nccGiao-r.khDat;
+    const badge=r.khDat===0?'<span class="badge bn">Chưa đặt</span>':nccGiao>=r.khDat?`<span class="badge bg">✅ Đủ${diff>0?' (dư '+f(diff)+')':''}</span>`:`<span class="badge br">⚠️ Thiếu ${f(r.khDat-nccGiao)}</span>`;
+    h+=`<tr><td class="tb">${r.po}</td><td class="tb">${r.spCode}</td><td style="font-size:10px">${sp.name||'—'}</td><td class="r">${f(r.khDat)}</td><td class="r cg">${f(nccGiao)}</td><td class="r cy">${sp.dm?f(daNK):'—'}</td><td class="r tb" style="color:${tonNVL<0?'var(--r2)':tonNVL>0?'var(--g3)':'var(--n3)'}">${f(tonNVL<0?0:tonNVL)}</td><td class="r" style="color:${diff>=0?'var(--g3)':'var(--r2)'};font-weight:700">${diff>=0?'+'+f(diff)+' (dư)':f(Math.abs(diff))+' (thiếu)'}</td><td class="c">${badge}</td></tr>`;
   });
-  const el=g_('nvl-ton-tbl');if(el)el.innerHTML=h||`<tr><td colspan="8" style="text-align:center;color:var(--n3);padding:12px">Chưa có dữ liệu.</td></tr>`;
+  const el=g_('nvl-ton-tbl');if(el)el.innerHTML=h||`<tr><td colspan="9" style="text-align:center;color:var(--n3);padding:12px">Chưa có dữ liệu — cần KH giấy gắn PO và nhập NVL theo KH giấy.</td></tr>`;
   let hn='';nccs.forEach(ncc=>{const list=myNVLs().filter(n=>n.nccId===ncc.id);const tot=list.reduce((s,n)=>s+n.qty,0);const last=[...list].sort((a,b)=>b.datetime.localeCompare(a.datetime))[0];const spList=[...new Set(list.map(n=>n.spCode))].join(', ');hn+=`<tr><td class="tb">${ncc.name} <span class="badge bc">${ncc.vt}</span></td><td class="r">${list.length} lần</td><td class="r cg">${f(tot)} tấm</td><td>${last?fdtt(last.datetime):'—'}</td><td style="font-size:10px;color:var(--n3)">${spList||'—'}</td></tr>`;});
   const el2=g_('nvl-ncc-tbl');if(el2)el2.innerHTML=hn||`<tr><td colspan="5" style="text-align:center;color:var(--n3);padding:12px">Chưa có NCC nào.</td></tr>`;
 }
@@ -2516,15 +2740,15 @@ const CD_LBL2={IN:'🖨 In',CAN:'⚙️ Cán',BE:'✂️ Bế',KIM:'📎 Đóng 
 async function saveNS(loai){
   const name=v(`ns-${loai}-name`).trim();
   if(!name){toast('Nhập họ và tên!');return;}
-  const id=Date.now();
+  const id=EDIT.ns||Date.now();
   const obj={
     id,loai,name,
     code:v(`ns-${loai}-code`).trim(),
     sdt:v(`ns-${loai}-sdt`).trim(),
     status:v(`ns-${loai}-status`)||'active',
     note:v(`ns-${loai}-note`).trim(),
-    khau:loai==='sx'?v('ns-sx-khau'):null,
-    may:loai==='sx'?v('ns-sx-may'):null,
+    khau:loai==='sx'?[...document.querySelectorAll('.ns-sx-khau-cb:checked')].map(c=>c.value).join(','):null,
+    may:loai==='sx'?[...document.querySelectorAll('.ns-sx-may-cb:checked')].map(c=>c.value).join(','):null,
     ca:loai==='sx'?v('ns-sx-ca'):(loai==='kho'?v('ns-kho-ca'):null),
     vitri:loai==='kho'?v('ns-kho-vitri'):null,
     kvuc:loai==='kho'?v('ns-kho-kvuc').trim():null,
@@ -2538,18 +2762,18 @@ async function saveNS(loai){
     vitri:obj.vitri||null,kvuc:obj.kvuc||null,
     chucvu:obj.chucvu||null,bophan:obj.bophan||null
   };
-  const r=await sbInsert('nss',dbRow);
+  const r=EDIT.ns?await sbPatch('nss',dbRow,'?id=eq.'+id):await sbInsert('nss',dbRow);
   if(!r){return;}
-  nss.push(obj);logAct('Thêm','Nhân sự',name);
+  if(EDIT.ns){const _i=nss.findIndex(x=>x.id===id);if(_i>=0)nss[_i]=obj;EDIT.ns=null;logAct('Sửa','Nhân sự',name);}else{nss.push(obj);logAct('Thêm','Nhân sự',name);}
   renderNS();
   clearNS(loai);
-  toast(`✅ Đã thêm: ${name}`);
+  toast(`✅ Đã lưu: ${name}`);
 }
 
 function clearNS(loai){
   [`ns-${loai}-name`,`ns-${loai}-code`,`ns-${loai}-sdt`,`ns-${loai}-note`].forEach(id=>set(id,''));
   const statusEl=document.getElementById(`ns-${loai}-status`);if(statusEl)statusEl.value='active';
-  if(loai==='sx'){set('ns-sx-khau','');set('ns-sx-may','');set('ns-sx-ca','');}
+  if(loai==='sx'){document.querySelectorAll('.ns-sx-khau-cb,.ns-sx-may-cb').forEach(c=>c.checked=false);set('ns-sx-ca','');}
   if(loai==='kho'){set('ns-kho-vitri','');set('ns-kho-kvuc','');set('ns-kho-ca','');}
   if(loai==='ql'){set('ns-ql-chucvu','');set('ns-ql-bophan','');}
 }
@@ -2577,13 +2801,13 @@ function renderNS(){
   sxList.forEach(n=>hsx+=`<tr>
     <td class="tb">${n.name}</td>
     <td style="font-size:10px;color:var(--n3)">${n.code||'—'}</td>
-    <td>${n.khau?`<span class="badge by">${CD_LBL2[n.khau]||n.khau}</span>`:'—'}</td>
+    <td>${n.khau?(n.khau).split(',').map(k=>`<span class="badge by" style="margin:1px">${CD_LBL2[k]||k}</span>`).join(' '):'—'}</td>
     <td style="font-size:10px">${n.may||'—'}</td>
     <td style="font-size:10px">${NS_CA[n.ca]||n.ca||'—'}</td>
     <td>${n.sdt||'—'}</td>
     <td>${stBadge(n.status)}</td>
     <td style="font-size:10px;color:var(--n3)">${n.note||'—'}</td>
-    <td class="c"><button class="btn btr bic" onclick="delNS(${n.id})">✕</button></td>
+    <td class="c"><button class="btn btb bic" onclick="editNS(${n.id})">✏️</button> <button class="btn btr bic" onclick="delNS(${n.id})">✕</button></td>
   </tr>`);
   const tblSx=document.getElementById('ns-sx-tbl');
   if(tblSx)tblSx.innerHTML=hsx;
@@ -2603,7 +2827,7 @@ function renderNS(){
     <td>${n.sdt||'—'}</td>
     <td>${stBadge(n.status)}</td>
     <td style="font-size:10px;color:var(--n3)">${n.note||'—'}</td>
-    <td class="c"><button class="btn btr bic" onclick="delNS(${n.id})">✕</button></td>
+    <td class="c"><button class="btn btb bic" onclick="editNS(${n.id})">✏️</button> <button class="btn btr bic" onclick="delNS(${n.id})">✕</button></td>
   </tr>`);
   const tblKho=document.getElementById('ns-kho-tbl');
   if(tblKho)tblKho.innerHTML=hkho;
@@ -2622,7 +2846,7 @@ function renderNS(){
     <td>${n.sdt||'—'}</td>
     <td>${stBadge(n.status)}</td>
     <td style="font-size:10px;color:var(--n3)">${n.note||'—'}</td>
-    <td class="c"><button class="btn btr bic" onclick="delNS(${n.id})">✕</button></td>
+    <td class="c"><button class="btn btb bic" onclick="editNS(${n.id})">✏️</button> <button class="btn btr bic" onclick="delNS(${n.id})">✕</button></td>
   </tr>`);
   const tblQl=document.getElementById('ns-ql-tbl');
   if(tblQl)tblQl.innerHTML=hql;
@@ -2643,13 +2867,13 @@ function lsxPtrFill(useDefault){
 }
 function nsOpts(loai,khau){
   let list=nss.filter(n=>n.loai===loai&&n.status==='active');
-  if(khau)list=list.filter(n=>!n.khau||n.khau===khau);
+  if(khau)list=list.filter(n=>!n.khau||(n.khau||'').split(',').includes(khau));
   return'<option value="">— Chọn nhân viên —</option>'+list.map(n=>`<option value="${n.name}">${n.name}${n.may?' ('+n.may+')':''}</option>`).join('');
 }
 
 function updateNSDatalist(){
   const khauMap={IN:'IN',CAN:'CAN',BE:'BE',KIM:'KIM'};
-  Object.keys(khauMap).forEach(k=>{const el=document.getElementById(`ns-list-${k}`);if(el)el.innerHTML=nss.filter(n=>n.loai==='sx'&&n.status==='active'&&(!n.khau||n.khau===k)).map(n=>`<option value="${n.name}">`).join('');});
+  Object.keys(khauMap).forEach(k=>{const el=document.getElementById(`ns-list-${k}`);if(el)el.innerHTML=nss.filter(n=>n.loai==='sx'&&n.status==='active'&&(!n.khau||(n.khau||'').split(',').includes(k))).map(n=>`<option value="${n.name}">`).join('');});
   const elKho=document.getElementById('ns-list-kho');if(elKho)elKho.innerHTML=nss.filter(n=>n.loai==='kho'&&n.status==='active').map(n=>`<option value="${n.name}">`).join('');
   const elQl=document.getElementById('ns-list-ql');if(elQl)elQl.innerHTML=nss.filter(n=>(n.loai==='ql'||n.loai==='sx')&&n.status==='active').map(n=>`<option value="${n.name}">`).join('');
   const elAll=document.getElementById('ns-list-all');if(elAll)elAll.innerHTML=nss.filter(n=>n.status==='active').map(n=>`<option value="${n.name}">`).join('');
@@ -2865,10 +3089,58 @@ async function renderLogs(){
 // ══════════════════════════
 function editNK(id){const n=nks.find(x=>x.id===id);if(!n)return;const b=document.querySelector('.sbb[onclick*="\'tp\'"]');if(b)sw('tp',b);const t=document.querySelector('#pane-tp .ptb');if(t)swPT('tp-nk',t);set('nk-po',n.poCode);nkLoadPO();set('nk-sp',n.spCode);nkLoadSP();const p=(n.datetime||'').split('T');set('nk-date',p[0]||'');set('nk-time',(p[1]||'').slice(0,5)||'08:00');set('nk-qty',n.qty);set('nk-ref',n.ref||'');set('nk-nguoi',n.nguoi||'');set('nk-note2',n.note||'');EDIT.nk=id;toast('✏️ Đang sửa phiếu nhập kho — bấm Nhập kho để lưu lại');}
 function editNVL(id){const n=nvls.find(x=>x.id===id);if(!n)return;const b=document.querySelector('.sbb[onclick*="\'nvl\'"]');if(b)sw('nvl',b);set('nvl-ncc',String(n.nccId||''));set('nvl-gy',String(n.gyId||''));set('nvl-sp',n.spCode);const p=(n.datetime||'').split('T');set('nvl-date',p[0]||'');set('nvl-time',(p[1]||'').slice(0,5)||'08:00');set('nvl-kho',n.kho||'');set('nvl-dai',n.dai||'');set('nvl-qty',n.qty);set('nvl-ref',n.ref||'');set('nvl-xe',n.xe||'');set('nvl-nguoi',n.nguoi||'');set('nvl-note',n.note||'');nvlCalc();EDIT.nvl=id;toast('✏️ Đang sửa phiếu nhập NVL — bấm Lưu để cập nhật');}
-function editLS(id){const l=lss.find(x=>x.id===id);if(!l)return;const b=document.querySelector('.sbb[onclick*="\'ls\'"]');if(b)sw('ls',b);set('ls-lsx',l.lsxNo);lsLoadLSX();set('ls-cd',l.cd);lsUpdateMay();set('ls-may',l.may||'');set('ls-date',l.date);set('ls-ca',l.ca||'S');set('ls-qty',l.qty);set('ls-start',l.start||'');set('ls-end',l.end||'');set('ls-nguoi',l.nguoi||'');set('ls-note',l.note||'');calcLSNS();EDIT.ls=id;toast('✏️ Đang sửa ghi nhận SX — bấm Ghi nhận để lưu lại (lưu ý: phiếu nhập kho tự động cũ không đổi theo)');}
+function editLS(id){const l=lss.find(x=>x.id===id);if(!l)return;const b=document.querySelector('.sbb[onclick*="\'ls\'"]');if(b)sw('ls',b);set('ls-lsx',l.lsxNo);lsLoadLSX();set('ls-cd',l.cd);lsUpdateMay();set('ls-may',l.may||'');set('ls-date',l.date);set('ls-ca',l.ca||'S');set('ls-qty',l.qty);set('ls-hu',l.hu||0);set('ls-start',l.start||'');set('ls-end',l.end||'');set('ls-nguoi',l.nguoi||'');set('ls-note',l.note||'');calcLSNS();EDIT.ls=id;toast('✏️ Đang sửa ghi nhận SX — bấm Ghi nhận để lưu lại (lưu ý: phiếu nhập kho tự động cũ không đổi theo)');}
 function editLSX(id){const l=lsxs.find(x=>x.id===id);if(!l)return;const b=document.querySelector('.sbb[onclick*="\'lsx\'"]');if(b)sw('lsx',b);set('lsx-po',l.poCode);lsxLoadPO();set('lsx-sp',l.spCode);lsxLoadSP();set('lsx-date',l.date);set('lsx-due',l.due||'');set('lsx-qty',l.qty);set('lsx-note',l.note||'');lsxPtrFill(false);const pt=l.ptrs||{};setSelVal('lsx-ptr',l.ptr||'');setSelVal('lsx-ptr-in',pt.IN||'');setSelVal('lsx-ptr-can',pt.CAN||'');setSelVal('lsx-ptr-be',pt.BE||'');setSelVal('lsx-ptr-kim',pt.KIM||'');setSelVal('lsx-ptr-kho',pt.KHO||'');const mc=l.machines||{};set('lsx-m-in',mc.IN||'');set('lsx-m-can',mc.CAN||'');set('lsx-m-be',mc.BE||'');set('lsx-m-kim',mc.KIM||'');lsxNvlCheck();EDIT.lsx=id;toast('✏️ Đang sửa lệnh SX — bấm Tạo lệnh SX để lưu lại');}
 function editDH(id){const dh=dhs.find(d=>d.id===id);if(!dh)return;const b=document.querySelector('.sbb[onclick*="\'dh\'"]');if(b)sw('dh',b);set('dh-code',dh.code);set('dh-date',dh.date);set('dh-due',dh.due||'');set('dh-note',dh.note||'');document.querySelectorAll('#dh-rows .mr-item').forEach(e=>e.remove());dhRc=0;(dh.items||[]).forEach(it=>{addDHRow();const rid=`dhr-${dhRc}`;set(`${rid}-sp`,it.spCode);const sel=g_(`${rid}-sp`);if(sel&&sel.onchange)sel.onchange();set(`${rid}-ord`,it.ordQty);set(`${rid}-bh`,it.buHaoQty);calcBH2(rid);});EDIT.dh=id;toast('✏️ Đang sửa PO — chỉnh xong bấm Lưu PO');}
 function editGH(id){const gh=ghs.find(g=>g.id===id);if(!gh)return;const b=document.querySelector('.sbb[onclick*="\'tp\'"]');if(b)sw('tp',b);const t=document.querySelectorAll('#pane-tp .ptb')[1];if(t)swPT('tp-gh',t);const p=(gh.datetime||'').split('T');set('gh-date',p[0]||'');set('gh-time',(p[1]||'').slice(0,5)||'08:00');set('gh-xong',gh.timexong||'');set('gh-dd',String(gh.ddId||''));set('gh-xe',String(gh.xeId||''));set('gh-po',gh.poCode||'');set('gh-nguoi-xk',gh.nguoiXK||'');set('gh-note',gh.note||'');document.querySelectorAll('#gh-rows .mr-item').forEach(e=>e.remove());ghRc=0;(gh.items||[]).forEach(it=>{addGHRow();const rid=`ghr-${ghRc}`;set(`${rid}-sp`,it.spCode);const sel=g_(`${rid}-sp`);if(sel&&sel.onchange)sel.onchange();set(`${rid}-bh`,it.buHao||0);set(`${rid}-qty`,it.qty);calcLuyCe(rid);});EDIT.gh=id;toast('✏️ Đang sửa phiếu giao — chỉnh xong bấm Lưu');}
+function gyQuickFromKHSX(poCode){const b=document.querySelector('.sbb[onclick*="\'gy\'"]');if(b)sw('gy',b);clearGY();set('gy-dh',poCode);gyLoadPO();toast('📄 Đã mở Đặt giấy cho PO '+poCode+' — kiểm tra số lượng rồi Lưu');}
+function lsxQuickOpen(poCode,spCode){const b=document.querySelector('.sbb[onclick*="\'lsx\'"]');if(b)sw('lsx',b);clearLSX();set('lsx-po',poCode);lsxLoadPO();set('lsx-sp',spCode);lsxLoadSP();set('lsx-date',todayISO());lsxPtrFill(true);toast('🔧 Đã mở form Lệnh SX cho PO '+poCode+' — nhập SL & phân công máy/người rồi Tạo lệnh');}
+async function lsxQuickCreate(poCode,spCode,inputId){const qty=parseInt(v(inputId))||0;if(!qty){toast('Nhập số lượng thùng cần SX!');return;}clearLSX();set('lsx-po',poCode);lsxLoadPO();set('lsx-sp',spCode);lsxLoadSP();set('lsx-date',todayISO());set('lsx-qty',qty);lsxPtrFill(true);await saveLSX();}
+function lsxQuickPanel(poCode,spCode){
+  const el=g_('khsx-quick-panel');if(!el)return;
+  const sp=sps.find(s=>s.code===spCode)||{};const po=myDHs().find(d=>d.code===poCode)||{};const it=(po.items||[]).find(i=>i.spCode===spCode)||{};
+  const opt=arr=>'<option value="">— Chưa phân —</option>'+(arr||[]).map(m=>`<option>${m}</option>`).join('');
+  el.innerHTML=`<div class="card" style="border:2px solid var(--g3)">
+    <div class="ct">📝 Tạo nhanh Lệnh SX + phân công máy theo khâu — PO ${poCode} · ${spCode} ${sp.size||''}</div>
+    <div class="fg f5">
+      <div class="fg-g"><label class="fl">SL lệnh (thùng) <span>*</span></label><input type="number" class="fi" id="qsx-qty" value="${it.totalQty||''}" placeholder="VD: 10000"></div>
+      <div class="fg-g"><label class="fl">🖨 Máy In</label><select class="fs" id="qsx-m-in">${opt(MACHINES.IN)}</select></div>
+      <div class="fg-g"><label class="fl">⚙️ Máy Cán</label><select class="fs" id="qsx-m-can">${opt(MACHINES.CAN)}</select></div>
+      <div class="fg-g"><label class="fl">✂️ Máy Bế</label><select class="fs" id="qsx-m-be">${opt(MACHINES.BE)}</select></div>
+      <div class="fg-g"><label class="fl">📎 Máy Đóng/Dán</label><select class="fs" id="qsx-m-kim">${opt(MACHINES.KIM)}</select></div>
+    </div>
+    <div class="fg f4">
+      <div class="fg-g"><label class="fl">Người khâu IN</label><select class="fs" id="qsx-p-in">${nsOpts('sx','IN')}</select></div>
+      <div class="fg-g"><label class="fl">Người khâu CÁN</label><select class="fs" id="qsx-p-can">${nsOpts('sx','CAN')}</select></div>
+      <div class="fg-g"><label class="fl">Người khâu BẾ</label><select class="fs" id="qsx-p-be">${nsOpts('sx','BE')}</select></div>
+      <div class="fg-g"><label class="fl">Người khâu ĐÓNG/DÁN</label><select class="fs" id="qsx-p-kim">${nsOpts('sx','KIM')}</select></div>
+    </div>
+    <div class="br_"><button class="btn btg" onclick="lsxQuickSave('${poCode}','${spCode}')">✅ Tạo lệnh SX</button><button class="btn btn_" onclick="g_('khsx-quick-panel').innerHTML=''">✕ Đóng</button></div>
+  </div>`;
+  if(el.scrollIntoView)el.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+async function lsxQuickSave(poCode,spCode){
+  const qty=parseInt(v('qsx-qty'))||0;if(!qty){toast('Nhập SL lệnh!');return;}
+  clearLSX();set('lsx-po',poCode);lsxLoadPO();set('lsx-sp',spCode);lsxLoadSP();set('lsx-date',todayISO());set('lsx-qty',qty);lsxPtrFill(true);
+  set('lsx-m-in',v('qsx-m-in'));set('lsx-m-can',v('qsx-m-can'));set('lsx-m-be',v('qsx-m-be'));set('lsx-m-kim',v('qsx-m-kim'));
+  const pin=v('qsx-p-in');if(pin)setSelVal('lsx-ptr-in',pin);const pc=v('qsx-p-can');if(pc)setSelVal('lsx-ptr-can',pc);const pb=v('qsx-p-be');if(pb)setSelVal('lsx-ptr-be',pb);const pk=v('qsx-p-kim');if(pk)setSelVal('lsx-ptr-kim',pk);
+  await saveLSX();
+  const el=g_('khsx-quick-panel');if(el)el.innerHTML='';
+}
+function nvlQuickFromKHSX(poCode,spCode){const b=document.querySelector('.sbb[onclick*="\'nvl\'"]');if(b)sw('nvl',b);const gy=myGYs().find(g=>g.dhCode===poCode&&!g.done)||myGYs().find(g=>g.dhCode===poCode);clearNVL();updateSels();if(!gy){toast('Chưa có KH giấy cho PO '+poCode+' — hãy Đặt giấy trước');return;}set('nvl-gy',String(gy.id));set('nvl-sp',spCode);nvlLoadGy();toast('📦 Đã mở Nhập NVL cho PO '+poCode);}
+async function nvlInlineAdd(poCode,spCode,inputId){
+  const qty=parseInt(v(inputId))||0;if(!qty){toast('Nhập số tấm!');return;}
+  const gy=myGYs().find(g=>g.dhCode===poCode&&!g.done)||myGYs().find(g=>g.dhCode===poCode);
+  if(!gy){toast('Chưa có KH giấy cho PO '+poCode+' — bấm 📄 Đặt giấy trước');return;}
+  const it=(gy.items||[]).find(i=>i.spCode===spCode);const ord=it?((it.totalTam||0)+(it.buHaoTam||0)):0;
+  if(ord>0){const recv=myNVLs().filter(n=>n.gyId===gy.id&&n.spCode===spCode).reduce((t,n)=>t+(n.qty||0),0);const cap=Math.floor(ord*1.1);if(recv+qty>cap){toast(`❌ Vượt 110% đặt (${f(cap)}), đã nhập ${f(recv)} tấm`);return;}}
+  const sp=sps.find(s=>s.code===spCode)||{};const dm=sp.dm||0;const id=Date.now();
+  const obj={id,datetime:todayISO()+'T08:00',nccId:gy.nccId||0,gyId:gy.id,spCode,kho:(it&&it.kho)||sp.kho||'',dai:(it&&it.dai)||sp.dai||'',qty,equiv:dm?Math.floor(qty/dm):0,ref:'',xe:'',nguoi:'',note:'Nhập nhanh từ KH SX Tổng',khId:curKhId};
+  const r=await sbInsert('nvls',{id,datetime:obj.datetime,ncc_id:gy.nccId||null,gy_id:gy.id,sp_code:spCode,kho:obj.kho||null,dai:obj.dai||null,qty,equiv:obj.equiv,ref:null,xe:null,nguoi:null,note:obj.note,kh_id:curKhId});
+  if(!r)return;
+  nvls.push(obj);logAct('Thêm','Nhập NVL giấy',spCode+' '+f(qty)+' tấm (PO '+poCode+')');
+  renderAll();toast(`✅ Đã nhập ${f(qty)} tấm cho PO ${poCode}`);
+}
 async function startApp(){
   ['nk-date','gh-date','ls-date','dh-date','gy-date','lsx-date','nvl-date'].forEach(id=>set(id,todayISO()));
   {const _hd=g_('hdr-date');if(_hd)_hd.textContent=todayDisp();}
