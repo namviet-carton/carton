@@ -2,7 +2,14 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#166534">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Nam Việt SX">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
 <title>Quản Lý SX Thùng Carton Chanh v3</title>
 <style>
 :root{
@@ -106,7 +113,33 @@ td{padding:6px 9px;font-size:11px;vertical-align:middle;}
 .fs2.a0{background:#e2e8f0;color:#475569;border-color:#cbd5e1;}.fs2.a1{background:var(--b3);color:var(--b1);border-color:#93c5fd;}
 .fs2.a2{background:var(--y3);color:var(--y1);border-color:#fcd34d;}.fs2.a3{background:var(--p3);color:var(--p1);border-color:#c4b5fd;}
 .fs2.a4{background:var(--g4);color:var(--g2);border-color:#86efac;}.fs2.a5{background:var(--c3);color:var(--c1);border-color:#67e8f9;}
-@media(max-width:900px){.sidebar{width:42px;}.sbb span,.sbs{display:none;}.k5,.k6{grid-template-columns:repeat(2,1fr);}.k4{grid-template-columns:repeat(2,1fr);}.f4,.f5,.f6{grid-template-columns:1fr 1fr;}}
+.hamb{display:none;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:7px;padding:4px 11px;font-size:18px;line-height:1;cursor:pointer;margin-right:8px;}
+.sb-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9998;}
+.sb-backdrop.open{display:block;}
+@media(max-width:820px){
+  .hamb{display:inline-flex;align-items:center;}
+  .topbar{flex-wrap:wrap;padding:8px 10px;gap:6px;}
+  .topbar h1{font-size:12px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  #hdr-sub{font-size:9px;}
+  .tl{flex:1;min-width:0;}
+  .layout{flex-direction:column;height:auto;}
+  .sidebar{position:fixed;top:0;left:0;height:100vh;width:248px;min-width:248px;z-index:9999;transform:translateX(-100%);transition:transform .22s ease;box-shadow:2px 0 18px rgba(0,0,0,.4);}
+  .sidebar.open{transform:translateX(0);}
+  .sbs{display:block;}
+  .sbb span{display:inline;}
+  .sbb{padding:11px 15px;font-size:13px;}
+  .si{font-size:15px;width:20px;}
+  .content{padding:10px;width:100%;overflow-x:hidden;}
+  .k4,.k5,.k6{grid-template-columns:repeat(2,1fr);}
+  .f3,.f4,.f5,.f6{grid-template-columns:1fr 1fr;}
+  .btn{padding:8px 12px;}
+  .pane{padding-bottom:env(safe-area-inset-bottom,10px);}
+  .tw{-webkit-overflow-scrolling:touch;}
+}
+@media(max-width:480px){
+  .topbar h1{font-size:11px;}
+  .f3,.f4,.f5,.f6{grid-template-columns:1fr;}
+}
 @media print{.sidebar,.topbar,.btn,.br_{display:none!important;}.pane{display:block!important;}.layout{height:auto;}}
 body.role-staff .admin-only{display:none!important;}
 body.role-staff .btr{display:none!important;}
@@ -125,6 +158,7 @@ body.role-staff .btr{display:none!important;}
   </div>
 </div>
 <div class="topbar">
+  <button class="hamb" onclick="toggleSidebar()" aria-label="Menu">☰</button>
   <div class="tl"><span style="font-size:24px">🍋</span>
     <div><h1>HỆ THỐNG QUẢN LÝ SẢN XUẤT & GIAO HÀNG – THÙNG CARTON CHANH XUẤT KHẨU v3</h1>
     <p id="hdr-sub">Khách hàng: — &nbsp;|&nbsp; Cập nhật: <span id="hdr-date"></span></p></div>
@@ -140,6 +174,7 @@ body.role-staff .btr{display:none!important;}
 </div>
 </div>
 <div class="layout">
+<div class="sb-backdrop" id="sb-backdrop" onclick="closeSidebar()"></div>
 <div class="sidebar">
   <div class="sbs">TỔNG QUAN</div>
   <button class="sbb active" onclick="sw('db',this)"><span class="si">📊</span><span>Dashboard</span></button>
@@ -511,7 +546,7 @@ body.role-staff .btr{display:none!important;}
 <div class="pane" id="pane-dh">
   <div class="card">
     <div class="ct">📋 Tạo đơn hàng bán (PO)</div>
-    <div class="al al-i" style="margin-bottom:10px;font-size:10px">💡 Mỗi lần khách đặt hàng = 1 PO. Hệ thống dùng PO để tự động tính số phiếu nhập kho, theo dõi tiến độ SX và giao hàng. <b>Bù hao</b> là số thùng dự phòng tính bằng thùng thực tế.</div>
+    <div class="al al-i" style="margin-bottom:10px;font-size:10px">💡 Mỗi lần khách đặt hàng = 1 PO. Hệ thống dùng PO để tự động tính số phiếu nhập kho, theo dõi tiến độ SX và giao hàng. <b>Bù hao</b> nay được nhập ở mục <b>KH Giấy tấm</b> (theo tấm), không nhập ở PO nữa.</div>
     <div class="fg f5">
       <div class="fg-g"><label class="fl">Mã PO <span>*</span></label><input class="fi" id="dh-code" placeholder="PO-2025-001"></div>
       <div class="fg-g"><label class="fl">Khách hàng <span>*</span></label><select class="fs" id="dh-kh" onchange="dhKhChange()"></select><div class="hint">Chọn khách hàng cho đơn hàng này — mặc định là KH đang xem ở góc trên</div></div>
@@ -520,8 +555,8 @@ body.role-staff .btr{display:none!important;}
       <div class="fg-g"><label class="fl">Ghi chú đơn hàng </label><input class="fi" id="dh-note" placeholder="VD: Ưu tiên giao trước 15/6, khách lấy nhiều đợt"><div class="hint">Lưu ý đặc biệt cho đơn hàng này — hiển thị trên bảng tổng hợp SX</div></div>
     </div>
     <div class="mr-wrap">
-      <div class="mr-hd" style="display:grid;grid-template-columns:110px 1fr 75px 75px 75px 75px 30px;gap:3px">
-        <span title="Chọn sản phẩm trong đơn hàng này">Mã SP</span><span title="Quy cách kích thước tự động hiển thị">Quy cách SP</span><span class="r" title="Số thùng khách hàng yêu cầu giao thực tế">SL đặt (thùng)</span><span class="r" title="Số thùng dự phòng hao hụt SX — tính bằng thùng, không phải %">Bù hao (thùng)</span><span class="r" title="= SL bù hao (tự tính)">SL bù hao</span><span class="r" title="= SL đặt + Bù hao — đây là số thùng thực tế cần sản xuất">Tổng cần SX</span><span></span>
+      <div class="mr-hd" style="display:grid;grid-template-columns:110px 1fr 95px 95px 30px;gap:3px">
+        <span title="Chọn sản phẩm trong đơn hàng này">Mã SP</span><span title="Quy cách kích thước tự động hiển thị">Quy cách SP</span><span class="r" title="Số thùng khách hàng yêu cầu giao thực tế">SL đặt (thùng)</span><span class="r" title="Số thùng cần sản xuất (bù hao chuyển sang KH Giấy tấm)">Tổng cần SX</span><span></span>
       </div>
       <div id="dh-rows"></div>
     </div>
@@ -563,11 +598,12 @@ body.role-staff .btr{display:none!important;}
   <div class="card">
     <div class="ct">📝 Tạo lệnh sản xuất (LSX) mới</div>
     <div class="al al-i" style="margin-bottom:10px;font-size:10px">💡 Chọn PO → chọn SP → số lượng lệnh này. Một PO có thể chia thành <b>nhiều lệnh SX</b> (VD: PO 30.000 thùng → 3 lệnh × 10.000). Phân công máy ngay khi tạo lệnh để bộ phận SX biết cần dùng máy nào.</div>
-    <div class="fg f5">
+    <div class="fg f6">
       <div class="fg-g"><label class="fl">Số LSX (tự động)</label><input class="fi" id="lsx-no" readonly></div>
       <div class="fg-g"><label class="fl">Gắn PO <span>*</span></label><select class="fs" id="lsx-po" onchange="lsxLoadPO()"></select></div>
       <div class="fg-g"><label class="fl">Sản phẩm <span>*</span></label><select class="fs" id="lsx-sp" onchange="lsxLoadSP()"></select></div>
       <div class="fg-g"><label class="fl">Ngày lệnh <span>*</span></label><input type="date" class="fi" id="lsx-date" onchange="updateLSXNo()"></div>
+      <div class="fg-g"><label class="fl">Giờ ra lệnh</label><input type="time" class="fi" id="lsx-time"></div>
       <div class="fg-g"><label class="fl">Ngày hoàn thành dự kiến</label><input type="date" class="fi" id="lsx-due"></div>
     </div>
     <div class="fg f5">
@@ -640,10 +676,10 @@ body.role-staff .btr{display:none!important;}
     <thead><tr>
       <th>Mã PO</th><th>KH</th><th>Ngày giao</th>
       <th>Mã SP</th><th>Tên SP / Quy cách</th><th class="c">Lớp</th>
-      <th class="r">SL đặt</th><th class="r">Bù hao</th><th class="r">Tổng SX</th>
+      <th class="r">SL đặt</th><th class="r">Bù hao</th><th class="r" title="Tổng số tấm đặt NCC = (đặt + bù hao) × ĐM">Tổng SL Tấm Đặt NCC</th><th class="r" title="Tổng SX = số tấm NCC đã giao">Tổng SX (NCC giao)</th>
       <th class="r">🖨 In</th><th class="r">⚙️ Cán</th><th class="r">✂️ Bế</th>
       <th class="r">📎 Đóng/Dán</th><th class="r">✅ Nhập kho</th><th class="r">🚚 NCC giao</th><th class="r">📄 Tồn NVL</th>
-      <th class="r">Còn SX</th><th style="min-width:90px">Tiến độ</th><th class="c">TT</th><th>📦 Liên kết nhanh (NVL · Lệnh SX)</th>
+      <th class="r" title="= Giấy NCC đã giao (quy thùng) − TP đã nhập kho">Còn SX</th><th style="min-width:90px">Tiến độ</th><th class="c">TT</th><th>📦 Liên kết nhanh (NVL · Lệnh SX)</th>
     </tr></thead>
     <tbody id="khsx-main-tbl"></tbody>
   </table></div>
@@ -657,7 +693,7 @@ body.role-staff .btr{display:none!important;}
       <th class="r">🖨 In</th><th class="r">⚙️ Cán</th><th class="r">✂️ Bế</th>
       <th class="r">📎 Đóng/Dán</th><th class="r">✅ Nhập kho</th>
       <th class="r">⚠️ Hư</th><th class="r">Còn lại</th><th>Máy phân công</th>
-      <th>Ngày lệnh</th><th>Ngày KH xong</th><th class="c">Tiến độ</th><th class="c">TT</th><th class="c">Ghi SL</th>
+      <th>Ngày lệnh</th><th>Ngày KH xong</th><th class="c">Tiến độ</th><th class="c">TT</th><th class="c">Ghi SL</th><th class="c">Sửa</th>
     </tr></thead>
     <tbody id="khsx-lsx-tbl"></tbody>
   </table></div>
@@ -929,7 +965,7 @@ body.role-staff .btr{display:none!important;}
       </div>
       <div class="fg f3">
         <div class="fg-g"><label class="fl">Số xe NCC / Biển số</label><input class="fi" id="nvl-xe" placeholder="VD: 51C-88888"><div class="hint">Biển số xe NCC giao hàng — dùng đối chiếu khi có vấn đề chất lượng</div></div>
-        <div class="fg-g"><label class="fl">Người nhận tại kho</label><input class="fi" id="nvl-nguoi" placeholder="VD: Anh Khoa – Thủ kho"><div class="hint">Tên thủ kho hoặc người kiểm nhận NVL</div></div>
+        <div class="fg-g"><label class="fl">Nhân viên nhập kho</label><select class="fs" id="nvl-nguoi"><option value="">— Chọn nhân viên —</option></select><div class="hint">Tên thủ kho hoặc người kiểm nhận NVL</div></div>
         <div class="fg-g"><label class="fl">Ghi chú chất lượng</label><input class="fi" id="nvl-note" placeholder="VD: Giấy đạt chuẩn, ẩm 12%, không ẩm mốc"><div class="hint">Ghi nhận tình trạng chất lượng giấy khi nhận — nếu bị ẩm, rách, thiếu ghi rõ</div></div>
       </div>
       <div id="nvl-gy-info" style="margin-bottom:9px"></div>
@@ -940,7 +976,7 @@ body.role-staff .btr{display:none!important;}
       <thead><tr>
         <th>Ngày giờ</th><th>Phiếu NVL</th><th>NCC</th><th>KH Giấy</th><th>PO</th><th>Mã SP</th>
         <th>Khổ(mm)</th><th>Dài(mm)</th><th class="r">Số tấm</th><th class="r">≈ Thùng</th>
-        <th>Xe NCC</th><th>Người nhận</th><th>Ghi chú CL</th><th class="c">Xóa</th>
+        <th>Xe NCC</th><th>NV nhập kho</th><th>Ghi chú CL</th><th class="c">Xóa</th>
       </tr></thead>
       <tbody id="nvl-tbl"></tbody>
     </table></div>
@@ -1027,7 +1063,7 @@ body.role-staff .btr{display:none!important;}
     <div class="krow k6" id="bc-kpi"></div>
     <div class="fg f3" style="margin-bottom:9px"><div class="fg-g"><label class="fl">Lọc theo PO</label><select class="fs" id="bc-f-po" onchange="renderBaoCao()"><option value="">Tất cả PO</option></select><div class="hint">Chọn 1 PO để xem số liệu (đặt, nhập kho, giao) theo riêng đơn hàng đó</div></div></div>
     <div class="tw"><table>
-      <thead><tr><th>PO</th><th>Mã SP</th><th>Tên</th><th class="r">Đặt hàng</th><th class="r">Đang SX</th><th class="r">SX xong(NK)</th><th class="r">Tồn kho</th><th class="r">Đã giao</th><th class="r">Còn giao</th><th class="c">%GH</th><th class="c">TT</th></tr></thead>
+      <thead><tr><th>PO</th><th>Mã SP</th><th>Tên</th><th class="r">Đặt hàng</th><th class="r">Tấm NCC giao</th><th class="r" title="= NCC giao (quy thùng) − Đã nhập kho TP">Đang SX</th><th class="r">SX xong(NK)</th><th class="r">Tồn kho</th><th class="r">Đã giao</th><th class="r">Còn giao</th><th class="c">%GH</th><th class="c">TT</th></tr></thead>
       <tbody id="bc-tong-tbl"></tbody>
     </table></div>
     <div class="br_"><button class="btn btg" onclick="window.print()">🖨️ In</button><button class="btn btb" onclick="exportCSV()">📊 Xuất CSV</button></div>
@@ -1214,9 +1250,9 @@ async function ld(){
     const dhMap={};(rDhIt||[]).forEach(it=>{if(!dhMap[it.dh_id])dhMap[it.dh_id]=[];dhMap[it.dh_id].push({spCode:it.sp_code,ordQty:it.ord_qty,buHaoQty:it.bu_hao_qty,totalQty:it.total_qty});});
     dhs=(rDhs||[]).map(d=>({id:d.id,code:d.code,khVt:d.kh_vt,date:d.date,due:d.due,note:d.note,khId:d.kh_id,closed:d.closed,closedAt:d.closed_at,items:dhMap[d.id]||[]}));
     const gyItMap={};(rGyIt||[]).forEach(it=>{if(!gyItMap[it.gy_id])gyItMap[it.gy_id]=[];gyItMap[it.gy_id].push({spCode:it.sp_code,qty:it.qty,kho:it.kho,dai:it.dai,dm:it.dm,totalTam:it.total_tam,buHaoTam:it.bu_hao_tam});});
-    const gyDelMap={};(rGyDel||[]).forEach(d=>{if(!gyDelMap[d.gy_id])gyDelMap[d.gy_id]=[];gyDelMap[d.gy_id].push({id:d.id,sp:d.sp,qty:d.qty,date:d.date,ref:d.ref});});
+    const gyDelMap={};(rGyDel||[]).forEach(d=>{if(!gyDelMap[d.gy_id])gyDelMap[d.gy_id]=[];gyDelMap[d.gy_id].push({id:d.id,sp:d.sp,qty:d.qty,date:d.date,ref:d.ref,timeStart:d.time_start,timeEnd:d.time_end,xe:d.xe,nguoi:d.nguoi,qc:d.qc,nvlId:d.nvl_id});});
     gys=(rGys||[]).map(g=>({id:g.id,date:g.date,nccId:g.ncc_id,giao:g.giao,dhCode:g.dh_code,poGiay:g.po_giay,done:g.done,note:g.note,khId:g.kh_id,items:gyItMap[g.id]||[],deliveries:gyDelMap[g.id]||[]}));
-    lsxs=(rLsxs||[]).map(l=>({id:l.id,no:l.no,poCode:l.po_code,spCode:l.sp_code,date:l.date,due:l.due,qty:l.qty,note:l.note,ptr:l.ptr,ptrs:{IN:l.ptr_in,CAN:l.ptr_can,BE:l.ptr_be,KIM:l.ptr_kim,KHO:l.ptr_kho},machines:{IN:l.may_in,CAN:l.may_can,BE:l.may_be,KIM:l.may_kim},status:l.status,khId:l.kh_id}));
+    lsxs=(rLsxs||[]).map(l=>({id:l.id,no:l.no,poCode:l.po_code,spCode:l.sp_code,date:l.date,due:l.due,qty:l.qty,note:l.note,ptr:l.ptr,ptrs:{IN:l.ptr_in,CAN:l.ptr_can,BE:l.ptr_be,KIM:l.ptr_kim,KHO:l.ptr_kho},machines:{IN:l.may_in,CAN:l.may_can,BE:l.may_be,KIM:l.may_kim},otime:l.o_time,status:l.status,khId:l.kh_id}));
     lss=(rLss||[]).map(l=>{return{id:l.id,lsxNo:l.lsx_no,spCode:l.sp_code,poCode:l.po_code,date:l.date,ca:l.ca,cd:l.cd,may:l.may,nguoi:l.nguoi,qty:l.qty,ns:l.ns,mins:l.mins,start:l.start_time,end:l.end_time,note:l.note,hu:l.hu}});
     nks=(rNks||[]).map(n=>({id:n.id,datetime:n.datetime,spCode:n.sp_code,poCode:n.po_code,qty:n.qty,ref:n.ref,dbh:n.dbh,qc:n.qc,nccId:n.ncc_id,nguoi:n.nguoi,note:n.note,khId:n.kh_id}));
     const ghItMap={};(rGhIt||[]).forEach(it=>{if(!ghItMap[it.gh_id])ghItMap[it.gh_id]=[];ghItMap[it.gh_id].push({spCode:it.sp_code,qty:it.qty,buHao:it.bu_hao});});
@@ -1291,12 +1327,14 @@ function lsRecordPanel(lsxNo){
   const ttCls=tamConLai<0?'var(--r2)':'var(--g2)';
   el.innerHTML=`<div class="card" style="border:2px solid var(--g3);background:var(--g6)">
     <div class="sh" style="margin-top:0">📋 Ghi sản lượng đạt/hư — ${lsxNo} · ${lsx.spCode} ${sp.size||''} <span style="color:var(--n3);font-weight:400">(SL lệnh ${f(lsx.qty)})</span></div>
-    <div class="fg f5">
+    <div class="fg" style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px">
       <div class="fg-g"><label class="fl">Công đoạn <span>*</span></label><select class="fs" id="lsr-cd" onchange="lsrMay('${lsxNo}')">${cdOpt}</select></div>
       <div class="fg-g"><label class="fl">Máy</label><select class="fs" id="lsr-may"></select></div>
       <div class="fg-g"><label class="fl">SL đạt (thùng) <span>*</span></label><input type="number" class="fi" id="lsr-qty" min="0" placeholder="VD: 2500"></div>
       <div class="fg-g"><label class="fl">SL hư (hỏng)</label><input type="number" class="fi" id="lsr-hu" min="0" value="0"></div>
       <div class="fg-g"><label class="fl">Người thực hiện</label><input class="fi" id="lsr-nguoi" list="ns-list-all"></div>
+      <div class="fg-g"><label class="fl">Giờ bắt đầu</label><input type="time" class="fi" id="lsr-start" value="08:00"></div>
+      <div class="fg-g"><label class="fl">Giờ kết thúc</label><input type="time" class="fi" id="lsr-end"></div>
     </div>
     <div class="br_"><button class="btn btg" onclick="lsRecordSave('${lsxNo}')">✅ Ghi sản lượng</button><button class="btn btn_" onclick="g_('khsx-lsrec-panel').innerHTML=''">✕ Đóng</button></div>
     <div class="hint" style="margin-top:6px">Ghi nhận tự đồng bộ sang “Lịch SX & Máy”. Chọn “✅ Nhập kho” sẽ tự tạo phiếu nhập kho thành phẩm.</div>
@@ -1335,7 +1373,9 @@ async function lsRecordSave(lsxNo){
   clearLS();set('ls-lsx',lsxNo);lsLoadLSX();set('ls-cd',cd);lsUpdateMay();
   const mv=v('lsr-may');if(mv)set('ls-may',mv);
   set('ls-date',todayISO());set('ls-qty',qty||0);set('ls-hu',huv);
+  const t1=v('lsr-start'),t2=v('lsr-end');if(t1)set('ls-start',t1);if(t2)set('ls-end',t2);
   const ng=v('lsr-nguoi');if(ng)set('ls-nguoi',ng);
+  if(t1&&t2)calcLSNS();
   await saveLS();
   g_('khsx-lsrec-panel').innerHTML='';
 }
@@ -1364,6 +1404,9 @@ function nvlTonForSP(spCode){
   const used=dm?capLSX*dm:0;
   const ton=recv-used;
   return {recv,used,capLSX,ton,dm,canBoxes:dm?Math.floor(ton/dm):0};
+}
+function gyBuHaoForPOSP(poCode,spCode){
+  let t=0;gys.filter(g=>g.dhCode===poCode).forEach(g=>(g.items||[]).filter(i=>i.spCode===spCode).forEach(i=>t+=(i.buHaoTam||0)));return t;
 }
 function nvlNccGiaoPO(poCode,spCode){
   if(!poCode)return 0;
@@ -1663,18 +1706,16 @@ function renderSP(){
 // ĐƠN HÀNG
 // ══════════════════════════
 let dhRc=0;
-function addDHRow(){dhRc++;const id=`dhr-${dhRc}`;const div=document.createElement('div');div.id=id;div.className='mr-item';div.style.cssText='grid-template-columns:110px 1fr 75px 75px 75px 75px 30px;gap:3px';
+function addDHRow(){dhRc++;const id=`dhr-${dhRc}`;const div=document.createElement('div');div.id=id;div.className='mr-item';div.style.cssText='grid-template-columns:110px 1fr 95px 95px 30px;gap:3px';
   div.innerHTML=`<select class="fs" style="font-size:10px;padding:4px 7px" id="${id}-sp">${spOpts()}</select>
     <span id="${id}-qc" style="font-size:10px;color:var(--n3)">—</span>
     <input type="number" class="fi" style="font-size:10px;padding:4px 7px;text-align:right" id="${id}-ord" min="1" placeholder="0" oninput="calcBH2('${id}')">
-    <input type="number" class="fi" style="font-size:10px;padding:4px 7px;text-align:right" id="${id}-bh" min="0" value="0" oninput="calcBH2('${id}')">
-    <span id="${id}-bhq" style="font-size:10px;font-weight:700;color:var(--y2);text-align:right;padding-right:3px">0</span>
     <span id="${id}-tot" style="font-size:10px;font-weight:700;color:var(--g2);text-align:right;padding-right:3px">0</span>
     <button class="btn btr bic" onclick="document.getElementById('${id}').remove()">✕</button>`;
   g_('dh-rows').appendChild(div);
   g_(`${id}-sp`).onchange=function(){const s=sps.find(x=>x.code===this.value);g_(`${id}-qc`).textContent=s?(((s.name||'')+(s.size?' ('+s.size+')':''))||'—'):'—';};g_(`${id}-sp`).dispatchEvent(new Event('change'));
 }
-function calcBH2(id){const ord=parseInt(v(`${id}-ord`))||0,bh=parseInt(v(`${id}-bh`))||0;g_(`${id}-bhq`).textContent=f(bh);g_(`${id}-tot`).textContent=f(ord+bh);}
+function calcBH2(id){const ord=parseInt(v(`${id}-ord`))||0;const t=g_(`${id}-tot`);if(t)t.textContent=f(ord);}
 function dhKhChange(){
   const khId=parseInt(v('dh-kh'))||curKhId;
   if(khId&&khId!==curKhId){
@@ -1684,8 +1725,8 @@ function dhKhChange(){
 async function saveDH(){
   const code=v('dh-code').trim(),date=v('dh-date');if(!code||!date){toast('Nhập mã PO và ngày!');return;}
   const items=[];document.querySelectorAll('#dh-rows .mr-item').forEach(el=>{
-    const id=el.id,spCode=g_(`${id}-sp`)?.value;const ordQty=parseInt(v(`${id}-ord`))||0,buHaoQty=parseInt(v(`${id}-bh`))||0;
-    if(spCode&&ordQty>0)items.push({spCode,ordQty,buHaoQty,totalQty:ordQty+buHaoQty});
+    const id=el.id,spCode=g_(`${id}-sp`)?.value;const ordQty=parseInt(v(`${id}-ord`))||0,buHaoQty=0;
+    if(spCode&&ordQty>0)items.push({spCode,ordQty,buHaoQty,totalQty:ordQty});
   });
   if(!items.length){toast('Thêm ít nhất 1 SP!');return;}
   if(!EDIT.dh&&dhs.find(d=>d.code===code)){toast('Mã PO đã tồn tại!');return;}
@@ -1706,7 +1747,7 @@ function renderDH(){
   [..._dhs].sort((a,b)=>b.date.localeCompare(a.date)).forEach(dh=>{
     const tot=dh.items.reduce((s,i)=>s+i.ordQty,0),totSX=dh.items.reduce((s,i)=>s+i.totalQty,0);
     const rows=dh.items.map(it=>{const sp=sps.find(s=>s.code===it.spCode)||{};
-      return `<tr><td style="padding:4px 9px;font-size:10px"><b>${it.spCode}</b></td><td style="padding:4px 9px;font-size:10px;color:var(--n3)">${sp.name||'—'} ${sp.size||''}</td><td style="padding:4px 9px;text-align:right;font-weight:700">${f(it.ordQty)}</td><td style="padding:4px 9px;text-align:right;color:var(--y2)">${f(it.buHaoQty)}</td><td style="padding:4px 9px;text-align:right;font-weight:700;color:var(--g2)">${f(it.totalQty)}</td></tr>`;
+      return `<tr><td style="padding:4px 9px;font-size:10px"><b>${it.spCode}</b></td><td style="padding:4px 9px;font-size:10px;color:var(--n3)">${sp.name||'—'} ${sp.size||''}</td><td style="padding:4px 9px;text-align:right;font-weight:700">${f(it.ordQty)}</td><td style="padding:4px 9px;text-align:right;font-weight:700;color:var(--g2)">${f(it.totalQty)}</td></tr>`;
     }).join('');
     h+=`<div class="card" style="margin-bottom:8px;padding:10px 13px" id="dhcard-${dh.id}"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:7px">
       <div><span style="font-size:12px;font-weight:800;color:var(--g2)">📋 ${dh.code}</span> <span class="badge bb">${dh.khVt||kh.vt||'KH'}</span> <span style="font-size:11px;font-weight:600;color:var(--n2)">${(khs.find(k=>String(k.id)===String(dh.khId))||{}).name||''}</span>
@@ -1714,7 +1755,7 @@ function renderDH(){
       <div style="display:flex;gap:5px"><span class="badge bg">Đặt: ${f(tot)}</span><span class="badge by">Tổng SX: ${f(totSX)}</span><button class="btn btb bsm" onclick="editDH(${dh.id})">✏️</button> <button class="btn btr bsm" onclick="delDH(${dh.id})">✕</button></div>
     </div>${dh.note?`<div style="font-size:10px;color:var(--n3);margin-bottom:6px">📝 ${dh.note}</div>`:''}
     <table style="width:100%;border-collapse:collapse;background:var(--g5);border-radius:6px;overflow:hidden">
-      <thead><tr style="background:var(--g2);color:#fff"><th style="padding:5px 9px;font-size:10px;text-align:left">Mã SP</th><th style="padding:5px 9px;font-size:10px;text-align:left">Tên/Quy cách</th><th style="padding:5px 9px;font-size:10px;text-align:right">SL đặt</th><th style="padding:5px 9px;font-size:10px;text-align:right">Bù hao(th)</th><th style="padding:5px 9px;font-size:10px;text-align:right">Tổng SX</th></tr></thead>
+      <thead><tr style="background:var(--g2);color:#fff"><th style="padding:5px 9px;font-size:10px;text-align:left">Mã SP</th><th style="padding:5px 9px;font-size:10px;text-align:left">Tên/Quy cách</th><th style="padding:5px 9px;font-size:10px;text-align:right">SL đặt</th><th style="padding:5px 9px;font-size:10px;text-align:right">Tổng cần SX</th></tr></thead>
       <tbody>${rows}</tbody></table></div>`;
   });
   g_('dh-list').innerHTML=h;
@@ -1767,16 +1808,21 @@ function addGYDel(gyId){
   const spOpts=(gy.items||[]).map(it=>`<option value="${it.spCode}">${it.spCode}</option>`).join('');
   const div=document.createElement('div');div.id=formId;
   div.style.cssText='background:var(--y3);border:1px solid #fcd34d;border-radius:8px;padding:12px 14px;margin-top:8px';
-  div.innerHTML=`<div style="font-size:11px;font-weight:700;color:var(--y1);margin-bottom:9px">📦 Ghi nhận NCC giao giấy tấm – KH ${fd(gy.date)}</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:8px;align-items:flex-end">
-      <div class="fg-g"><label class="fl">Mã SP <span>*</span></label><select class="fs" id="gyd-sp-${gyId}">${spOpts}</select><div class="hint">Chọn SP NCC giao giấy cho</div></div>
-      <div class="fg-g"><label class="fl">Số tấm NCC giao <span>*</span></label><input type="number" class="fi" id="gyd-qty-${gyId}" min="1" placeholder="VD: 5000"><div class="hint">Số tấm thực tế NCC giao lần này</div></div>
-      <div class="fg-g"><label class="fl">Ngày NCC giao <span>*</span></label><input type="date" class="fi" id="gyd-date-${gyId}" value="${todayISO()}"></div>
-      <div class="fg-g"><label class="fl">Số phiếu / Xe NCC</label><input class="fi" id="gyd-ref-${gyId}" placeholder="VD: PG-001, 51C-xxxxx"><div class="hint">Số phiếu giao hàng hoặc biển số xe của NCC</div></div>
-      <div style="padding-bottom:3px;display:flex;gap:6px">
-        <button class="btn btg" onclick="saveGYDel(${gyId})">✅ Lưu</button>
-        <button class="btn btn_" onclick="document.getElementById('${formId}').remove()">✕</button>
-      </div>
+  div.innerHTML=`<div style="font-size:11px;font-weight:700;color:var(--y1);margin-bottom:9px">📦 Ghi nhận NCC giao giấy tấm – tách theo TỪNG PHIẾU nhập NVL</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+      <div class="fg-g"><label class="fl">Mã SP <span>*</span></label><select class="fs" id="gyd-sp-${gyId}">${spOpts}</select></div>
+      <div class="fg-g"><label class="fl">Số tấm NCC giao <span>*</span></label><input type="number" class="fi" id="gyd-qty-${gyId}" min="1" placeholder="VD: 5000"></div>
+      <div class="fg-g"><label class="fl">Số phiếu nhập NVL</label><input class="fi" id="gyd-ref-${gyId}" placeholder="VD: PNV-001"></div>
+      <div class="fg-g"><label class="fl">Ngày nhập NVL <span>*</span></label><input type="date" class="fi" id="gyd-date-${gyId}" value="${todayISO()}"></div>
+      <div class="fg-g"><label class="fl">Giờ vô</label><input type="time" class="fi" id="gyd-t1-${gyId}" value="08:00"></div>
+      <div class="fg-g"><label class="fl">Giờ kết thúc</label><input type="time" class="fi" id="gyd-t2-${gyId}" value="09:00"></div>
+      <div class="fg-g"><label class="fl">Số xe NCC / Biển số</label><input class="fi" id="gyd-xe-${gyId}" placeholder="VD: 51C-88888"></div>
+      <div class="fg-g"><label class="fl">Nhân viên nhập kho</label><select class="fs" id="gyd-nguoi-${gyId}">${nsOpts('kho')}</select></div>
+      <div class="fg-g"><label class="fl">Ghi chú chất lượng</label><input class="fi" id="gyd-qc-${gyId}" placeholder="VD: Đạt, ẩm 12%, không mốc"></div>
+    </div>
+    <div style="display:flex;gap:6px;margin-top:9px">
+      <button class="btn btg" onclick="saveGYDel(${gyId})">✅ Lưu phiếu nhập</button>
+      <button class="btn btn_" onclick="document.getElementById('${formId}').remove()">✕ Hủy</button>
     </div>`;
   const card=document.getElementById('gycard-'+gyId);
   if(card)card.appendChild(div);
@@ -1784,19 +1830,28 @@ function addGYDel(gyId){
 async function saveGYDel(gyId){
   const gy=gys.find(g=>g.id===gyId)||gys.find(g=>g.id===parseInt(gyId));if(!gy)return;
   const sp=v('gyd-sp-'+gyId);const qty=parseInt(v('gyd-qty-'+gyId))||0;const date=v('gyd-date-'+gyId);const ref=v('gyd-ref-'+gyId).trim();
+  const t1=v('gyd-t1-'+gyId);const t2=v('gyd-t2-'+gyId);const xe=v('gyd-xe-'+gyId).trim();const nguoi=v('gyd-nguoi-'+gyId).trim();const qc=v('gyd-qc-'+gyId).trim();
   if(!sp||!qty||!date){toast('Nhập đủ thông tin!');return;}
-  const delId=Date.now();const delObj={sp,qty,date,ref,id:delId};
-  const r=await sbInsert('gy_deliveries',{id:delId,gy_id:gyId,sp,qty,date:date||null,ref:ref||null});
+  const delId=Date.now();const _nvlId=delId+1;const delObj={sp,qty,date,ref,timeStart:t1,timeEnd:t2,xe,nguoi,qc,nvlId:_nvlId,id:delId};
+  const r=await sbInsert('gy_deliveries',{id:delId,gy_id:gyId,sp,qty,date:date||null,ref:ref||null,time_start:t1||null,time_end:t2||null,xe:xe||null,nguoi:nguoi||null,qc:qc||null,nvl_id:_nvlId});
   if(!r){return;}
-  gy.deliveries=(gy.deliveries||[]);gy.deliveries.push(delObj);logAct('Thêm','NCC giao giấy',sp+' '+f(qty)+' tấm');
-  renderGY();toast(`✅ Ghi nhận: ${f(qty)} tấm từ NCC`);
+  // 🔗 Tự liên kết sang Kho NVL Giấy Tấm: tạo phiếu nhập NVL tương ứng
+  const _it=(gy.items||[]).find(i=>i.spCode===sp)||{};const _sp=sps.find(x=>x.code===sp)||{};const _dm=_it.dm||_sp.dm||0;
+  const _ndt=`${date}T${t1||'08:00'}`;
+  const _nvlObj={id:_nvlId,datetime:_ndt,nccId:gy.nccId||0,gyId:gyId,spCode:sp,kho:_it.kho||_sp.kho||'',dai:_it.dai||_sp.dai||'',qty,equiv:_dm?Math.floor(qty/_dm):0,ref,xe,nguoi,note:qc,khId:curKhId};
+  const _r2=await sbInsert('nvls',{id:_nvlId,datetime:_ndt,ncc_id:gy.nccId||null,gy_id:gyId,sp_code:sp,kho:_nvlObj.kho||null,dai:_nvlObj.dai||null,qty,equiv:_nvlObj.equiv,ref:ref||null,xe:xe||null,nguoi:nguoi||null,note:qc||null,kh_id:curKhId});
+  if(_r2){nvls.push(_nvlObj);}
+  gy.deliveries=(gy.deliveries||[]);gy.deliveries.push(delObj);logAct('Thêm','NCC giao giấy',sp+' '+f(qty)+' tấm'+(ref?' ['+ref+']':''));
+  renderAll();toast(`✅ Đã lưu phiếu nhập + tự cập nhật Kho NVL: ${f(qty)} tấm`);
   const form=document.getElementById('gy-del-form-'+gyId);if(form)form.remove();
 }
 async function delGYDel(gyId,delId){
-  if(!confirm('Xóa lần giao này?'))return;
-  await sbDel('gy_deliveries',delId);logAct('Xóa','NCC giao giấy','');
+  if(!confirm('Xóa lần giao này? (sẽ xóa cả phiếu Kho NVL liên kết)'))return;
   const gy=gys.find(g=>g.id===gyId);
-  if(gy){gy.deliveries=(gy.deliveries||[]).filter(d=>d.id!==delId);renderGY();toast('✅ Đã xóa');}
+  const d0=gy?(gy.deliveries||[]).find(d=>d.id===delId):null;
+  await sbDel('gy_deliveries',delId);logAct('Xóa','NCC giao giấy','');
+  if(d0&&d0.nvlId){await sbDel('nvls',d0.nvlId);nvls=nvls.filter(n=>n.id!==d0.nvlId);}
+  if(gy){gy.deliveries=(gy.deliveries||[]).filter(d=>d.id!==delId);renderAll();toast('✅ Đã xóa');}
 }
 async function delGY(id){if(!confirm('Xóa?'))return;await sbDel('gys',id);logAct('Xóa','KH giấy','');gys=gys.filter(g=>g.id!==id);renderGY();}
 function renderGY(){
@@ -1810,30 +1865,38 @@ function renderGY(){
     }).join('');
     h+=`<div class="card" style="margin-bottom:8px;padding:10px 13px" id="gycard-${gy.id}"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:7px">
       <div><span style="font-size:12px;font-weight:800;color:var(--g2)">📄 ${fd(gy.date)}</span> <span class="badge bc">${ncc.vt}</span>${gy.dhCode?` <span class="badge bb">PO: ${gy.dhCode}</span>`:''}${gy.poGiay?` <span class="badge bp">ĐĐT NCC: ${gy.poGiay}</span>`:''}${gy.done?` <span class="badge bg">✅ Đủ NVL đi SX${(gyReceivedTam(gy)-gyOrderedTam(gy))>0?' (dư '+f(gyReceivedTam(gy)-gyOrderedTam(gy))+')':(gyReceivedTam(gy)-gyOrderedTam(gy))<0?' (thiếu '+f(gyOrderedTam(gy)-gyReceivedTam(gy))+')':''}</span>`:''} <span style="font-size:10px;color:var(--n3);margin-left:4px">${gy.giao?'Giao: '+fd(gy.giao):''}${gy.note?' 📝 '+gy.note:''}</span></div>
-      <div style="display:flex;gap:5px;align-items:center"><span class="badge bg">Cần: ${f(totTam)} tấm</span><span class="badge ${totDel>=totTam?'bg':'by'}">NCC: ${f(totDel)} (${pct}%)</span><button class="btn btb bsm" onclick="addGYDel(${gy.id})">+NCC giao</button><button class="btn btr bsm" onclick="delGY(${gy.id})">✕</button></div>
+      <div style="display:flex;gap:5px;align-items:center"><span class="badge bg">Cần: ${f(totTam)} tấm</span><span class="badge ${totDel>=totTam?'bg':'by'}">NCC: ${f(totDel)} (${pct}%)</span><button class="btn btb bsm" onclick="addGYDel(${gy.id})">+NCC giao</button>${gy.done?`<button class="btn btn_ bsm" title="Mở lại để chỉnh sửa số lượng giấy" onclick="gyUnmarkDone(${gy.id})">✏️ Sửa</button>`:`<button class="btn btg bsm" title="Ghi nhận đủ giấy tấm đi sản xuất" onclick="gyMarkDone(${gy.id})">✅ Đủ giấy đi SX</button>`}<button class="btn btr bsm" onclick="delGY(${gy.id})">✕</button></div>
     </div><table style="width:100%;border-collapse:collapse;background:var(--g5);border-radius:6px;overflow:hidden"><thead><tr style="background:var(--g2);color:#fff"><th style="padding:5px 9px;font-size:10px;text-align:left">Mã SP</th><th style="padding:5px 9px;font-size:10px;text-align:left">Tên</th><th style="padding:5px 9px;font-size:10px">Khổ</th><th style="padding:5px 9px;font-size:10px">Dài</th><th style="padding:5px 9px;font-size:10px;text-align:right">SL thùng</th><th style="padding:5px 9px;font-size:10px;text-align:right">SL đặt PO</th><th style="padding:5px 9px;font-size:10px;text-align:right">ĐM</th><th style="padding:5px 9px;font-size:10px;text-align:right">Bù hao(tấm)</th><th style="padding:5px 9px;font-size:10px;text-align:right">Cần(tấm)</th><th style="padding:5px 9px;font-size:10px;text-align:right">NCC đã giao</th><th style="padding:5px 9px;font-size:10px;text-align:right;color:${totDel>=totTam?'#16a34a':'#dc2626'}">Thiếu/Dư</th></tr></thead><tbody>${rows}</tbody></table>
     ${(gy.deliveries||[]).length>0?`
     <div style="margin-top:10px">
       <div style="font-size:11px;font-weight:700;color:var(--n2);margin-bottom:6px">📋 Chi tiết lần NCC giao (${(gy.deliveries||[]).length} lần)</div>
       <table style="width:100%;border-collapse:collapse;background:var(--b3);border-radius:6px;overflow:hidden">
         <thead><tr style="background:var(--b1);color:#fff">
-          <th style="padding:5px 9px;font-size:10px;text-align:left">Ngày NCC giao</th>
+          <th style="padding:5px 9px;font-size:10px;text-align:left">Ngày nhập NVL</th>
+          <th style="padding:5px 9px;font-size:10px;text-align:left">Giờ (vô–KT)</th>
           <th style="padding:5px 9px;font-size:10px;text-align:left">Mã SP</th>
           <th style="padding:5px 9px;font-size:10px;text-align:right">Số tấm giao</th>
-          <th style="padding:5px 9px;font-size:10px">Phiếu/Xe NCC</th>
+          <th style="padding:5px 9px;font-size:10px">Phiếu NVL</th>
+          <th style="padding:5px 9px;font-size:10px">Xe NCC</th>
+          <th style="padding:5px 9px;font-size:10px">NV nhập kho</th>
+          <th style="padding:5px 9px;font-size:10px">Chất lượng</th>
           <th style="padding:5px 9px;font-size:10px;text-align:center">Xóa</th>
         </tr></thead>
-        <tbody>${(gy.deliveries||[]).sort((a,b)=>a.date.localeCompare(b.date)).map(d=>
+        <tbody>${(gy.deliveries||[]).sort((a,b)=>(a.date||'').localeCompare(b.date||'')).map(d=>
           `<tr><td style="padding:4px 9px;font-size:10px">${fd(d.date)}</td>
+           <td style="padding:4px 9px;font-size:10px;color:var(--n3)">${d.timeStart||'—'}${d.timeEnd?'–'+d.timeEnd:''}</td>
            <td style="padding:4px 9px;font-size:10px;font-weight:700">${d.sp}</td>
            <td style="padding:4px 9px;text-align:right;font-weight:700;font-size:11px;color:var(--b2)">${f(d.qty)} tấm</td>
            <td style="padding:4px 9px;font-size:10px;color:var(--n3)">${d.ref||'—'}</td>
+           <td style="padding:4px 9px;font-size:10px;color:var(--n3)">${d.xe||'—'}</td>
+           <td style="padding:4px 9px;font-size:10px">${d.nguoi||'—'}</td>
+           <td style="padding:4px 9px;font-size:10px;color:var(--n3)">${d.qc||'—'}</td>
            <td style="padding:4px 9px;text-align:center"><button class="btn btr bic" onclick="delGYDel(${gy.id},${d.id})">✕</button></td></tr>`
         ).join('')}</tbody>
         <tfoot><tr style="background:var(--b3)">
-          <td colspan="2" style="padding:5px 9px;font-size:10px;font-weight:700">TỔNG ${(gy.deliveries||[]).length} LẦN GIAO</td>
+          <td colspan="3" style="padding:5px 9px;font-size:10px;font-weight:700">TỔNG ${(gy.deliveries||[]).length} PHIẾU NHẬP</td>
           <td style="padding:5px 9px;text-align:right;font-size:12px;font-weight:800;color:var(--b2)">${f(totDel)} tấm</td>
-          <td colspan="2" style="padding:5px 9px;font-size:10px;color:${totDel>=totTam?'var(--g2)':'var(--r2)'};font-weight:700">
+          <td colspan="5" style="padding:5px 9px;font-size:10px;color:${totDel>=totTam?'var(--g2)':'var(--r2)'};font-weight:700">
             ${totDel>=totTam?`✅ Đã giao đủ (dư ${f(totDel-totTam)} tấm)`:`⚠️ Còn thiếu ${f(totTam-totDel)} tấm`}
           </td>
         </tr></tfoot>
@@ -1879,8 +1942,7 @@ function lsxNvlCheck(){
   let cls='al-i';
   let msg=`📄 <b>${spCode}</b> · Đặt tấm: <b>${f(ord)}</b> · NCC giao PO: <b>${f(giao)}</b> · Tồn kho NVL: <b>${f(tonShow)}</b> tấm (đủ làm <b>${f(t.canBoxes<0?0:t.canBoxes)}</b> thùng`+(t.dm?`, ĐM ${t.dm} tấm/thùng)`:`<b style="color:var(--r2)"> — chưa khai báo ĐM giấy</b>)`);
   if(qty>0&&t.dm){
-    if(need>t.ton){cls='al-e';msg+=`<br>⛔ <b>Không thể tạo lệnh:</b> cần ${f(need)} tấm > tồn kho ${f(tonShow)} tấm (thiếu ${f(need-t.ton)}). Nhập thêm giấy vào kho NVL trước.`;}
-    else if(ord>0&&need>ord){cls='al-e';msg+=`<br>⛔ <b>Không thể tạo lệnh:</b> cần ${f(need)} tấm > số đặt tấm ${f(ord)} tấm.`;}
+    if(need>t.ton){cls='al-w';msg+=`<br>⚠️ <b>Lưu ý:</b> cần ${f(need)} tấm > tồn kho ${f(tonShow)} tấm (thiếu ${f(need-t.ton)}) — vẫn tạo được lệnh.`;}
     else{cls='al-ok';msg+=`<br>✅ Đủ giấy: cần ${f(need)} tấm, tồn ${f(t.ton)} tấm (dư ${f(t.ton-need)}).`;}
   }
   box.innerHTML=`<div class="al ${cls}" style="margin-bottom:0">${msg}</div>`;
@@ -1888,20 +1950,18 @@ function lsxNvlCheck(){
 async function saveLSX(){
   const poCode=v('lsx-po'),spCode=v('lsx-sp'),date=v('lsx-date'),qty=parseInt(v('lsx-qty'))||0;
   if(!poCode||!spCode||!date||!qty){toast('Nhập đủ thông tin!');return;}
-  {const _t=nvlTonForSP(spCode);const _need=qty*_t.dm;const _ord=tamOrderedForSP(spCode);
-   if(_t.dm>0){
-     if(_need>_t.ton){toast(`❌ Vượt giấy tồn kho: lệnh cần ${f(_need)} tấm > tồn kho NVL ${f(_t.ton<0?0:_t.ton)} tấm. Nhập thêm giấy vào kho trước.`);return;}
-     if(_ord>0&&_need>_ord){toast(`❌ Vượt số đặt tấm: lệnh cần ${f(_need)} tấm > tổng đặt tấm ${f(_ord)} tấm.`);return;}
-   }}
+  // Cảnh báo số lượng (KHÔNG ràng buộc/chặn — chỉ nhắc):
+  {const _t=nvlTonForSP(spCode);const _need=qty*_t.dm;
+   if(_t.dm>0&&_need>_t.ton){toast(`⚠️ Lưu ý: lệnh cần ${f(_need)} tấm > tồn kho NVL ${f(_t.ton<0?0:_t.ton)} tấm — vẫn cho tạo lệnh.`);}}
   const no=EDIT.lsx?(((lsxs.find(x=>x.id===EDIT.lsx)||{}).no)||(lsxNo(spCode,date)+'_'+Date.now().toString().slice(-4))):(lsxNo(spCode,date)+'_'+Date.now().toString().slice(-4));
-  const lsxId=EDIT.lsx||Date.now();const lsxObj={id:lsxId,no,poCode,spCode,date,due:v('lsx-due'),qty,note:v('lsx-note').trim(),ptr:v('lsx-ptr').trim(),ptrs:{IN:v('lsx-ptr-in').trim(),CAN:v('lsx-ptr-can').trim(),BE:v('lsx-ptr-be').trim(),KIM:v('lsx-ptr-kim').trim(),KHO:v('lsx-ptr-kho').trim()},machines:{IN:v('lsx-m-in'),CAN:v('lsx-m-can'),BE:v('lsx-m-be'),KIM:v('lsx-m-kim')},status:'cho'};
-  lsxObj.khId=curKhId;const _pl={id:lsxId,no,po_code:poCode,sp_code:spCode,date:date||null,due:lsxObj.due||null,qty,note:lsxObj.note,ptr:lsxObj.ptr,ptr_in:lsxObj.ptrs.IN||null,ptr_can:lsxObj.ptrs.CAN||null,ptr_be:lsxObj.ptrs.BE||null,ptr_kim:lsxObj.ptrs.KIM||null,ptr_kho:lsxObj.ptrs.KHO||null,may_in:lsxObj.machines.IN||null,may_can:lsxObj.machines.CAN||null,may_be:lsxObj.machines.BE||null,may_kim:lsxObj.machines.KIM||null,status:'cho',kh_id:curKhId};
+  const lsxId=EDIT.lsx||Date.now();const lsxObj={id:lsxId,no,poCode,spCode,date,due:v('lsx-due'),qty,note:v('lsx-note').trim(),ptr:v('lsx-ptr').trim(),ptrs:{IN:v('lsx-ptr-in').trim(),CAN:v('lsx-ptr-can').trim(),BE:v('lsx-ptr-be').trim(),KIM:v('lsx-ptr-kim').trim(),KHO:v('lsx-ptr-kho').trim()},machines:{IN:v('lsx-m-in'),CAN:v('lsx-m-can'),BE:v('lsx-m-be'),KIM:v('lsx-m-kim')},otime:v('lsx-time'),status:'cho'};
+  lsxObj.khId=curKhId;const _pl={id:lsxId,no,po_code:poCode,sp_code:spCode,date:date||null,due:lsxObj.due||null,qty,note:lsxObj.note,ptr:lsxObj.ptr,ptr_in:lsxObj.ptrs.IN||null,ptr_can:lsxObj.ptrs.CAN||null,ptr_be:lsxObj.ptrs.BE||null,ptr_kim:lsxObj.ptrs.KIM||null,ptr_kho:lsxObj.ptrs.KHO||null,may_in:lsxObj.machines.IN||null,may_can:lsxObj.machines.CAN||null,may_be:lsxObj.machines.BE||null,may_kim:lsxObj.machines.KIM||null,o_time:lsxObj.otime||null,status:'cho',kh_id:curKhId};
   const r=EDIT.lsx?await sbPatch('lsxs',_pl,'?id=eq.'+lsxId):await sbInsert('lsxs',_pl);
   if(!r){return;}
   if(EDIT.lsx){const _i=lsxs.findIndex(x=>x.id===lsxId);if(_i>=0)lsxs[_i]=lsxObj;EDIT.lsx=null;logAct('Sửa','Lệnh SX',no);}else{lsxs.push(lsxObj);logAct('Thêm','Lệnh SX',no);}
   renderAll();clearLSX();toast(`✅ Đã lưu lệnh SX ${no}`);
 }
-function clearLSX(){set('lsx-po','');set('lsx-sp','');set('lsx-date',todayISO());set('lsx-due','');set('lsx-qty','');set('lsx-note','');set('lsx-ptr','');set('lsx-no',lsxNo('',''));['lsx-m-in','lsx-m-can','lsx-m-be','lsx-m-kim'].forEach(id=>set(id,''));['lsx-ptr-in','lsx-ptr-can','lsx-ptr-be','lsx-ptr-kim','lsx-ptr-kho'].forEach(id=>set(id,''));set('lsx-ord','');set('lsx-bh','');set('lsx-total','');lsxPtrFill(true);lsxNvlCheck();}
+function clearLSX(){set('lsx-po','');set('lsx-sp','');set('lsx-date',todayISO());set('lsx-time',new Date().toTimeString().slice(0,5));set('lsx-due','');set('lsx-qty','');set('lsx-note','');set('lsx-ptr','');set('lsx-no',lsxNo('',''));['lsx-m-in','lsx-m-can','lsx-m-be','lsx-m-kim'].forEach(id=>set(id,''));['lsx-ptr-in','lsx-ptr-can','lsx-ptr-be','lsx-ptr-kim','lsx-ptr-kho'].forEach(id=>set(id,''));set('lsx-ord','');set('lsx-bh','');set('lsx-total','');lsxPtrFill(true);lsxNvlCheck();}
 async function delLSX(id){if(!confirm('Xóa lệnh SX?'))return;await sbDel('lsxs',id);logAct('Xóa','Lệnh SX','');lsxs=lsxs.filter(l=>l.id!==id);renderLSX();}
 function filterLSX(st){lsxFilter=st;renderLSX();}
 function lsxStatusLabel(st){const m={cho:'⏳ Chờ SX',sx:'🏭 Đang SX',xong:'✅ Hoàn thành'};return m[st]||st;}
@@ -1952,14 +2012,18 @@ function renderLSX(){
 function lsUpdateMay(){
   const cd=v('ls-cd');const may=g_('ls-may');const list=MACHINES[cd]||['Thủ công'];
   may.innerHTML=list.map(m=>`<option value="${m}">${m}</option>`).join('');
+  // Liên kết theo Lệnh SX đã chọn (giống panel Ghi sản lượng ở KH SX Tổng)
+  const lsx=myLSXs().find(l=>l.no===v('ls-lsx'));const mc=(lsx&&lsx.machines)||{};
+  if(mc[cd]&&list.indexOf(mc[cd])>=0)may.value=mc[cd];
+  const ptrs=(lsx&&lsx.ptrs)||{};const pk=cd==='NHAP_KHO'?'KHO':cd;const ng=g_('ls-nguoi');
+  if(ng&&!ng.value&&ptrs[pk])ng.value=ptrs[pk];
 }
 function lsLoadLSX(){
   const lsx=myLSXs().find(l=>l.no===v('ls-lsx'));
   if(!lsx){set('ls-sp-info','');return;}
   const sp=sps.find(s=>s.code===lsx.spCode)||{};
   set('ls-sp-info',`${lsx.spCode} – ${sp.name||''} ${sp.size||''} (SL lệnh: ${f(lsx.qty)} thùng)`);
-  // pre-select machine from lsx
-  const cd=v('ls-cd');if(lsx.machines&&lsx.machines[cd])set('ls-may',lsx.machines[cd]);
+  lsUpdateMay();
 }
 function calcLSNS(){
   const start=v('ls-start'),end=v('ls-end'),qty=parseInt(v('ls-qty'))||0;
@@ -2392,28 +2456,29 @@ function bcSXDetailHTML(po,sp){
     +'</div>';
 }
 function renderBaoCao(){
-  const st=spStats();let totOrd=0,totNK=0,totOut=0,totTon=0,totDang=0;
-  Object.values(st).forEach(d=>{totOrd+=d.ordQty;totNK+=d.nk;totOut+=d.out;totTon+=Math.max(0,d.ton);totDang+=d.dang;});
+  const st=spStats();let totOrd=0,totNK=0,totOut=0,totTon=0,totDang=0,totNccTam=0;
+  Object.values(st).forEach(d=>{totOrd+=d.ordQty;totNK+=d.nk;totOut+=d.out;totTon+=Math.max(0,d.ton);});
+  mySPs().forEach(s=>{const d=st[s.code]||{nk:0};const recv=nvlTonForSP(s.code).recv;const dm=s.dm||0;totNccTam+=recv;totDang+=dm>0?Math.max(0,Math.floor(recv/dm)-(d.nk||0)):0;});
   const pct=totOrd>0?Math.min(100,Math.round(totOut/totOrd*100)):0;
-  g_('bc-kpi').innerHTML=`<div class="kc g"><div class="kl">Tổng đặt hàng</div><div class="kv">${f(totOrd)}</div></div><div class="kc y"><div class="kl">Đang SX</div><div class="kv">${f(totDang)}</div></div><div class="kc b"><div class="kl">Đã NK TP</div><div class="kv">${f(totNK)}</div></div><div class="kc g"><div class="kl">Tồn kho</div><div class="kv">${f(totTon)}</div></div><div class="kc c"><div class="kl">Đã giao</div><div class="kv">${f(totOut)}</div><div class="ks">${pct}%</div></div><div class="kc r"><div class="kl">Còn giao</div><div class="kv">${f(Math.max(0,totOrd-totOut))}</div></div>`;
+  g_('bc-kpi').innerHTML=`<div class="kc g"><div class="kl">Tổng đặt hàng</div><div class="kv">${f(totOrd)}</div></div><div class="kc y"><div class="kl">Đang SX</div><div class="kv">${f(totDang)}</div><div class="ks">NCC giao: ${f(totNccTam)} tấm</div></div><div class="kc b"><div class="kl">Đã NK TP</div><div class="kv">${f(totNK)}</div></div><div class="kc g"><div class="kl">Tồn kho</div><div class="kv">${f(totTon)}</div></div><div class="kc c"><div class="kl">Đã giao</div><div class="kv">${f(totOut)}</div><div class="ks">${pct}%</div></div><div class="kc r"><div class="kl">Còn giao</div><div class="kv">${f(Math.max(0,totOrd-totOut))}</div></div>`;
   const _fpo=v('bc-f-po');let h='';
   if(_fpo){
     const _po=myDHs().find(d=>d.code===_fpo);
     (_po?(_po.items||[]):[]).forEach(it=>{const s=sps.find(x=>x.code===it.spCode)||{};
       const nk=nkDoneForPOSP(_fpo,it.spCode);
       const out=myGHs().filter(g=>g.poCode===_fpo).reduce((t,g)=>t+(g.items||[]).filter(i=>i.spCode===it.spCode).reduce((tt,i)=>tt+(i.qty||0),0),0);
-      const ord=it.totalQty||0;const ton=Math.max(0,nk-out);const p2=ord>0?Math.min(100,Math.round(out/ord*100)):0;
+      const ord=it.totalQty||0;const ton=Math.max(0,nk-out);const p2=ord>0?Math.min(100,Math.round(out/ord*100)):0;const nccGiaoPO=nvlNccGiaoPO(_fpo,it.spCode);const dmPO=s.dm||0;const dangPO=dmPO>0?Math.max(0,Math.floor(nccGiaoPO/dmPO)-nk):0;
       const badge=out>=(ord||1)?'<span class="badge bg">✅ Giao đủ</span>':nk>0?'<span class="badge bc">📦 Kho</span>':'<span class="badge bn">⏳ Chờ</span>';
-      h+=`<tr><td class="tb">${_fpo}</td><td class="tb">${it.spCode}</td><td style="font-size:10px">${s.name||'—'}</td><td class="r">${f(ord)}</td><td class="r cy">—</td><td class="r cb">${f(nk)}</td><td class="r" style="color:${ton===0?'var(--r2)':'var(--g3)'};font-weight:700">${f(ton)}</td><td class="r cb">${f(out)}</td><td class="r cr">${f(Math.max(0,ord-out))}</td><td class="c"><span style="font-size:10px;font-weight:700;color:${p2>=100?'var(--g3)':'var(--y2)'}">${p2}%</span></td><td class="c">${badge}</td></tr>`;
+      h+=`<tr><td class="tb">${_fpo}</td><td class="tb">${it.spCode}</td><td style="font-size:10px">${s.name||'—'}</td><td class="r">${f(ord)}</td><td class="r" style="color:var(--c2);font-weight:700">${f(nccGiaoPO)} tấm</td><td class="r cy">${f(dangPO)}</td><td class="r cb">${f(nk)}</td><td class="r" style="color:${ton===0?'var(--r2)':'var(--g3)'};font-weight:700">${f(ton)}</td><td class="r cb">${f(out)}</td><td class="r cr">${f(Math.max(0,ord-out))}</td><td class="c"><span style="font-size:10px;font-weight:700;color:${p2>=100?'var(--g3)':'var(--y2)'}">${p2}%</span></td><td class="c">${badge}</td></tr>`;
     });
   } else {
-    mySPs().forEach(s=>{const d=st[s.code]||{ordQty:0,nk:0,out:0,ton:0,dang:0};const ton=Math.max(0,d.ton);const p2=d.ordQty>0?Math.min(100,Math.round(d.out/d.ordQty*100)):0;
+    mySPs().forEach(s=>{const d=st[s.code]||{ordQty:0,nk:0,out:0,ton:0,dang:0};const ton=Math.max(0,d.ton);const p2=d.ordQty>0?Math.min(100,Math.round(d.out/d.ordQty*100)):0;const recvSP=nvlTonForSP(s.code).recv;const dmSP=s.dm||0;const dangSP=dmSP>0?Math.max(0,Math.floor(recvSP/dmSP)-d.nk):0;
       const poList=myDHs().filter(dh=>(dh.items||[]).some(it=>it.spCode===s.code)).map(d2=>d2.code).join(', ')||'—';
       const badge=d.out>=(d.ordQty||1)?'<span class="badge bg">✅ Giao đủ</span>':d.dang>0?'<span class="badge by">🏭 Đang SX</span>':ton>0?'<span class="badge bc">📦 Kho</span>':'<span class="badge bn">⏳ Chờ</span>';
-      h+=`<tr><td style="font-size:9px;color:var(--n3)">${poList}</td><td class="tb">${s.code}</td><td style="font-size:10px">${s.name||'—'}</td><td class="r">${f(d.ordQty)}</td><td class="r cy">${f(d.dang)}</td><td class="r cb">${f(d.nk)}</td><td class="r" style="color:${ton===0?'var(--r2)':'var(--g3)'};font-weight:700">${f(ton)}</td><td class="r cb">${f(d.out)}</td><td class="r cr">${f(Math.max(0,d.ordQty-d.out))}</td><td class="c"><span style="font-size:10px;font-weight:700;color:${p2>=100?'var(--g3)':'var(--y2)'}">${p2}%</span></td><td class="c">${badge}</td></tr>`;
+      h+=`<tr><td style="font-size:9px;color:var(--n3)">${poList}</td><td class="tb">${s.code}</td><td style="font-size:10px">${s.name||'—'}</td><td class="r">${f(d.ordQty)}</td><td class="r" style="color:var(--c2);font-weight:700">${f(recvSP)} tấm</td><td class="r cy">${f(dangSP)}</td><td class="r cb">${f(d.nk)}</td><td class="r" style="color:${ton===0?'var(--r2)':'var(--g3)'};font-weight:700">${f(ton)}</td><td class="r cb">${f(d.out)}</td><td class="r cr">${f(Math.max(0,d.ordQty-d.out))}</td><td class="c"><span style="font-size:10px;font-weight:700;color:${p2>=100?'var(--g3)':'var(--y2)'}">${p2}%</span></td><td class="c">${badge}</td></tr>`;
     });
   }
-  g_('bc-tong-tbl').innerHTML=h||`<tr><td colspan="11" style="text-align:center;color:var(--n3);padding:12px">Chưa có dữ liệu.</td></tr>`;
+  g_('bc-tong-tbl').innerHTML=h||`<tr><td colspan="12" style="text-align:center;color:var(--n3);padding:12px">Chưa có dữ liệu.</td></tr>`;
   {const _s=g_('bc-f-po');if(_s){const _c=_s.value;_s.innerHTML='<option value="">Tất cả PO</option>';myDHs().forEach(d=>_s.innerHTML+=`<option value="${d.code}">${d.code}</option>`);_s.value=_c;}}
   // lsx
   let hl='';[...myLSXs()].sort((a,b)=>b.date.localeCompare(a.date)).forEach(lsx=>{const sp=sps.find(s=>s.code===lsx.spCode)||{};const prog=lsxStats(lsx.no);const nkQty=prog.NHAP_KHO||0;const pct2=lsx.qty>0?Math.min(100,Math.round(nkQty/lsx.qty*100)):0;
@@ -2492,14 +2557,16 @@ function renderKHSX(){
       const inQty=kmap.IN||0,canQty=kmap.CAN||0,beQty=kmap.BE||0;
       const dongQty=(kmap.KIM||0)+(kmap.DAN||0);
       const huIn=hmap.IN||0,huCan=hmap.CAN||0,huBe=hmap.BE||0,huDong=(hmap.KIM||0)+(hmap.DAN||0),huNk=hmap.NHAP_KHO||0,totHu=(hmap.IN||0)+(hmap.CAN||0)+(hmap.BE||0)+(hmap.KIM||0)+(hmap.DAN||0)+(hmap.NHAP_KHO||0);
-      const rem=Math.max(0,it.totalQty-nkQty);
+      const nccGiao=nvlNccGiaoPO(dh.code,it.spCode);const _capPO=myLSXs().filter(l=>l.poCode===dh.code&&l.spCode===it.spCode).reduce((t,l)=>t+(l.qty||0),0);const _dmPO=(sps.find(s=>s.code===it.spCode)||{}).dm||0;const nvlTon=nccGiao-_capPO*_dmPO;
+      const nccThung=_dmPO>0?Math.floor(nccGiao/_dmPO):0;
+      const _bhTam=gyBuHaoForPOSP(dh.code,it.spCode);const buHaoGiay=_dmPO>0?Math.floor(_bhTam/_dmPO):0;
+      // Còn SX = giấy NCC đã giao (quy thùng) − TP đã nhập kho theo PO
+      const rem=Math.max(0,(_dmPO>0?nccThung:it.totalQty)-nkQty);
       const pct=it.totalQty>0?Math.min(100,Math.round(nkQty/it.totalQty*100)):0;
-      // status
       let status='cho';
       if(nkQty>=it.totalQty)status='xong';
       else if(inQty>0||canQty>0||beQty>0||dongQty>0||nkQty>0)status='sx';
-      const nccGiao=nvlNccGiaoPO(dh.code,it.spCode);const _capPO=myLSXs().filter(l=>l.poCode===dh.code&&l.spCode===it.spCode).reduce((t,l)=>t+(l.qty||0),0);const _dmPO=(sps.find(s=>s.code===it.spCode)||{}).dm||0;const nvlTon=nccGiao-_capPO*_dmPO;
-      rows.push({dh,it,sp,nkQty,inQty,canQty,beQty,dongQty,rem,pct,status,nvlTon,nccGiao,huIn,huCan,huBe,huDong,huNk,totHu,closed:!!dh.closed});
+      rows.push({dh,it,sp,nkQty,inQty,canQty,beQty,dongQty,rem,pct,status,nvlTon,nccGiao,buHaoGiay,nccThung,huIn,huCan,huBe,huDong,huNk,totHu,closed:!!dh.closed,paperDone:poPaperDone(dh.code),datTam:tamOrderedForPOSP(dh.code,it.spCode)});
     });
   });
 
@@ -2509,12 +2576,12 @@ function renderKHSX(){
   if(fST)rows=rows.filter(r=>r.status===fST);
 
   let h='';
-  if(!rows.length)h=`<tr><td colspan="20" style="text-align:center;color:var(--n3);padding:16px">Không có dữ liệu.</td></tr>`;
+  if(!rows.length)h=`<tr><td colspan="21" style="text-align:center;color:var(--n3);padding:16px">Không có dữ liệu.</td></tr>`;
   rows.forEach((r,idx)=>{
     const stBadge=r.closed?'<span class="badge bg">🔒 Đã kết thúc</span>':(r.status==='xong'?'<span class="badge bg">✅ Xong</span>':r.status==='sx'?'<span class="badge by">🏭 Đang SX</span>':'<span class="badge bn">⏳ Chưa SX</span>');
     const remCls=r.rem===0?'cg':r.rem>0&&r.status==='cho'?'cr':'cy';
     const _gyEx=myGYs().some(g=>g.dhCode===r.dh.code);let _ordPO=0;myGYs().filter(g=>g.dhCode===r.dh.code).forEach(g=>(g.items||[]).filter(i=>i.spCode===r.it.spCode).forEach(i=>_ordPO+=(i.totalTam||0)+(i.buHaoTam||0)));
-    const _stt=!_gyEx?'<span class="badge bn">Chưa đặt giấy</span>':(_ordPO>0&&r.nccGiao>=_ordPO?'<span class="badge bg">✅ Đủ NVL</span>':`<span class="badge by">NVL ${f(r.nccGiao)}/${f(_ordPO)}</span>`);
+    const _stt=r.paperDone?'<span class="badge bg">🔒 Đủ giấy đi SX</span>':(!_gyEx?'<span class="badge bn">Chưa đặt giấy</span>':(_ordPO>0&&r.nccGiao>=_ordPO?'<span class="badge bg">✅ Đủ NVL</span>':`<span class="badge by">NVL ${f(r.nccGiao)}/${f(_ordPO)}</span>`));
     h+=`<tr>
       <td class="tb">${r.dh.code}</td>
       <td><span class="badge bb">${r.dh.khVt||kh.vt||'KH'}</span></td>
@@ -2523,8 +2590,9 @@ function renderKHSX(){
       <td style="font-size:10px">${r.sp.name||'—'}<br><span style="color:var(--n3)">${r.sp.size||''}</span></td>
       <td class="c">${r.sp.lop||'—'}</td>
       <td class="r">${f(r.it.ordQty)}</td>
-      <td class="r cy">${f(r.it.buHaoQty)}</td>
-      <td class="r tb">${f(r.it.totalQty)}</td>
+      <td class="r cy" title="Bù hao lấy từ KH Giấy tấm (${f(r.buHaoGiay*((r.sp&&r.sp.dm)||0))} tấm)">${f(r.buHaoGiay)}</td>
+      <td class="r" style="color:var(--c2);font-weight:700" title="Tổng số tấm đặt NCC (đặt + bù hao)">${f(r.datTam)}<span style="font-size:8px;color:var(--n3)"> tấm</span></td>
+      <td class="r tb" title="Tổng SX = số tấm NCC đã giao${r.paperDone?' (đã chốt 🔒)':''}">${f(r.nccGiao)}<span style="font-size:8px;color:var(--n3)"> tấm</span>${r.paperDone?'<span style="font-size:8px;color:var(--g3)"> 🔒</span>':''}</td>
       ${stCell(r.inQty,r.huIn,'cb')}
       ${stCell(r.canQty,r.huCan,'cp')}
       ${stCell(r.beQty,r.huBe,'cy')}
@@ -2548,6 +2616,7 @@ function renderKHSX(){
           <button class="btn btn_ bic" title="Mở form Nhập NVL điền sẵn" onclick="nvlQuickFromKHSX('${r.dh.code}','${r.it.spCode}')">📦</button>
         </div>
         <button class="btn btg bsm" title="Tạo nhanh Lệnh SX + phân công máy theo từng khâu" onclick="lsxQuickPanel('${r.dh.code}','${r.it.spCode}')">📝 Lệnh SX + máy</button>
+        ${_gyEx?(r.paperDone?`<button class="btn btn_ bsm" title="Chỉnh sửa số lượng giấy (mở lại)" onclick="gyUnmarkDonePO('${r.dh.code}')">✏️ Sửa giấy</button>`:`<button class="btn btg bsm" title="Ghi nhận đủ giấy tấm đi sản xuất — SX theo giấy đã nhận" onclick="gyMarkDonePO('${r.dh.code}')">✅ Đủ giấy đi SX</button>`):''}
       </div></td>
     </tr>`;
   });
@@ -2566,7 +2635,7 @@ function renderKHSX(){
     });
   }
   let hl='';
-  if(!lsxList.length)hl=`<tr><td colspan="17" style="text-align:center;color:var(--n3);padding:14px">Không có lệnh SX.</td></tr>`;
+  if(!lsxList.length)hl=`<tr><td colspan="18" style="text-align:center;color:var(--n3);padding:14px">Không có lệnh SX.</td></tr>`;
   lsxList.forEach(lsx=>{
     const sp=sps.find(s=>s.code===lsx.spCode)||{};
     const prog=lsxStats(lsx.no);const huS=lsxHu(lsx.no);
@@ -2589,7 +2658,7 @@ function renderKHSX(){
       <td class="r" style="color:${huS.TOTAL?'var(--r2)':'var(--n3)'};font-weight:${huS.TOTAL?700:400}">${huS.TOTAL?f(huS.TOTAL):'—'}</td>
       <td class="r ${rem===0?'cg':'cr'}">${f(rem)}</td>
       <td style="font-size:9px">${mInfo||'—'}</td>
-      <td style="font-size:10px;color:var(--n3)">${fd(lsx.date)}</td>
+      <td style="font-size:10px;color:var(--n3)">${fd(lsx.date)}${lsx.otime?'<br><span style="font-size:9px">⏱ '+lsx.otime+'</span>':''}</td>
       <td style="font-size:10px;color:var(--n3)">${lsx.due?fd(lsx.due):'—'}</td>
       <td class="c">
         <div style="display:flex;align-items:center;gap:3px">
@@ -2599,6 +2668,7 @@ function renderKHSX(){
       </td>
       <td class="c">${stBadge}</td>
       <td class="c"><button class="btn btg bic" title="Ghi sản lượng đạt/hư theo công đoạn" onclick="lsRecordPanel('${lsx.no}')">📋</button></td>
+      <td class="c"><button class="btn btb bic" title="Sửa lệnh SX (mở form chỉnh sửa)" onclick="editLSX(${lsx.id})">✏️</button> <button class="btn btr bic" title="Xóa lệnh SX" onclick="delLSX(${lsx.id})">✕</button></td>
     </tr>`;
   });
   g_('khsx-lsx-tbl').innerHTML=hl;
@@ -2686,6 +2756,30 @@ async function gyMarkDone(gyId){
   await sbPatch('gys',{done:true},'?id=eq.'+gyId);
   g.done=true;logAct('Sửa','KH giấy','Xác nhận đủ NVL đi SX '+(g.dhCode||g.poGiay||'')+(diff<0?' (thiếu '+f(-diff)+')':diff>0?' (dư '+f(diff)+')':''));
   renderAll();nvlLoadGy();toast('✅ Đã xác nhận đủ NVL để đi sản xuất');
+}
+async function gyUnmarkDone(gyId){
+  const g=gys.find(x=>x.id===gyId);if(!g)return;
+  if(!confirm('Mở lại để CHỈNH SỬA số lượng giấy? (bỏ trạng thái đủ giấy đi SX)'))return;
+  await sbPatch('gys',{done:false},'?id=eq.'+gyId);
+  g.done=false;logAct('Sửa','KH giấy','Mở lại chỉnh sửa giấy '+(g.dhCode||g.poGiay||''));
+  renderAll();toast('✏️ Đã mở lại — chỉnh số lượng nhập rồi xác nhận lại');
+}
+function poPaperDone(poCode){const gl=myGYs().filter(g=>g.dhCode===poCode);return gl.length>0&&gl.every(g=>g.done);}
+async function gyMarkDonePO(poCode){
+  const gl=myGYs().filter(g=>g.dhCode===poCode);
+  if(!gl.length){toast('Chưa có KH giấy cho PO '+poCode+' — hãy Đặt giấy trước');return;}
+  let ord=0,recv=0;gl.forEach(g=>{ord+=gyOrderedTam(g);recv+=gyReceivedTam(g);});const diff=recv-ord;
+  if(!confirm('PO '+poCode+': NCC giao '+(diff<0?'THIẾU '+f(-diff):diff>0?'DƯ '+f(diff):'ĐỦ')+' tấm ('+f(recv)+'/'+f(ord)+').\nGhi nhận ĐỦ giấy tấm đi sản xuất?\n(Sản xuất sẽ theo đúng số giấy tấm đã nhập về.)'))return;
+  for(const g of gl){if(!g.done){await sbPatch('gys',{done:true},'?id=eq.'+g.id);g.done=true;}}
+  logAct('Sửa','KH giấy','Ghi nhận đủ giấy đi SX — PO '+poCode);
+  renderAll();toast('✅ Đã ghi nhận đủ giấy đi SX cho PO '+poCode);
+}
+async function gyUnmarkDonePO(poCode){
+  const gl=myGYs().filter(g=>g.dhCode===poCode);
+  if(!confirm('Mở lại để CHỈNH SỬA giấy của PO '+poCode+'?'))return;
+  for(const g of gl){if(g.done){await sbPatch('gys',{done:false},'?id=eq.'+g.id);g.done=false;}}
+  logAct('Sửa','KH giấy','Mở lại chỉnh sửa giấy — PO '+poCode);
+  renderAll();toast('✏️ Đã mở lại PO '+poCode+' — chỉnh số lượng rồi xác nhận lại');
 }
 async function saveNVL(){
   const date=v('nvl-date'),time=v('nvl-time')||'08:00';
@@ -2925,7 +3019,10 @@ function toast(msg){const t=g_('toast');t.textContent=msg;t.classList.add('show'
 // ══════════════════════════
 // TABS
 // ══════════════════════════
+function toggleSidebar(){const sb=document.querySelector('.sidebar');const bd=g_('sb-backdrop');if(!sb)return;const op=sb.classList.toggle('open');if(bd)bd.classList.toggle('open',op);}
+function closeSidebar(){const sb=document.querySelector('.sidebar');const bd=g_('sb-backdrop');if(sb)sb.classList.remove('open');if(bd)bd.classList.remove('open');}
 function sw(id,btn){
+  closeSidebar();
   document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.sbb').forEach(b=>b.classList.remove('active'));
   g_('pane-'+id).classList.add('active');btn.classList.add('active');
@@ -2966,6 +3063,7 @@ function updateSels(){
   upd('nvl-ncc',nccOpts());
   upd('nvl-sp',spOpts2());
   upd('nvl-gy',gyOpts());
+  upd('nvl-nguoi',nsOpts('kho'));
   set('gh-pxk',`PXK_${String(pxkN).padStart(4,'0')}`);set('gh-kh',kh.vt||'');
   // dh-kh: dropdown chọn KH
   const dkh=g_('dh-kh');
@@ -3090,8 +3188,8 @@ async function renderLogs(){
 function editNK(id){const n=nks.find(x=>x.id===id);if(!n)return;const b=document.querySelector('.sbb[onclick*="\'tp\'"]');if(b)sw('tp',b);const t=document.querySelector('#pane-tp .ptb');if(t)swPT('tp-nk',t);set('nk-po',n.poCode);nkLoadPO();set('nk-sp',n.spCode);nkLoadSP();const p=(n.datetime||'').split('T');set('nk-date',p[0]||'');set('nk-time',(p[1]||'').slice(0,5)||'08:00');set('nk-qty',n.qty);set('nk-ref',n.ref||'');set('nk-nguoi',n.nguoi||'');set('nk-note2',n.note||'');EDIT.nk=id;toast('✏️ Đang sửa phiếu nhập kho — bấm Nhập kho để lưu lại');}
 function editNVL(id){const n=nvls.find(x=>x.id===id);if(!n)return;const b=document.querySelector('.sbb[onclick*="\'nvl\'"]');if(b)sw('nvl',b);set('nvl-ncc',String(n.nccId||''));set('nvl-gy',String(n.gyId||''));set('nvl-sp',n.spCode);const p=(n.datetime||'').split('T');set('nvl-date',p[0]||'');set('nvl-time',(p[1]||'').slice(0,5)||'08:00');set('nvl-kho',n.kho||'');set('nvl-dai',n.dai||'');set('nvl-qty',n.qty);set('nvl-ref',n.ref||'');set('nvl-xe',n.xe||'');set('nvl-nguoi',n.nguoi||'');set('nvl-note',n.note||'');nvlCalc();EDIT.nvl=id;toast('✏️ Đang sửa phiếu nhập NVL — bấm Lưu để cập nhật');}
 function editLS(id){const l=lss.find(x=>x.id===id);if(!l)return;const b=document.querySelector('.sbb[onclick*="\'ls\'"]');if(b)sw('ls',b);set('ls-lsx',l.lsxNo);lsLoadLSX();set('ls-cd',l.cd);lsUpdateMay();set('ls-may',l.may||'');set('ls-date',l.date);set('ls-ca',l.ca||'S');set('ls-qty',l.qty);set('ls-hu',l.hu||0);set('ls-start',l.start||'');set('ls-end',l.end||'');set('ls-nguoi',l.nguoi||'');set('ls-note',l.note||'');calcLSNS();EDIT.ls=id;toast('✏️ Đang sửa ghi nhận SX — bấm Ghi nhận để lưu lại (lưu ý: phiếu nhập kho tự động cũ không đổi theo)');}
-function editLSX(id){const l=lsxs.find(x=>x.id===id);if(!l)return;const b=document.querySelector('.sbb[onclick*="\'lsx\'"]');if(b)sw('lsx',b);set('lsx-po',l.poCode);lsxLoadPO();set('lsx-sp',l.spCode);lsxLoadSP();set('lsx-date',l.date);set('lsx-due',l.due||'');set('lsx-qty',l.qty);set('lsx-note',l.note||'');lsxPtrFill(false);const pt=l.ptrs||{};setSelVal('lsx-ptr',l.ptr||'');setSelVal('lsx-ptr-in',pt.IN||'');setSelVal('lsx-ptr-can',pt.CAN||'');setSelVal('lsx-ptr-be',pt.BE||'');setSelVal('lsx-ptr-kim',pt.KIM||'');setSelVal('lsx-ptr-kho',pt.KHO||'');const mc=l.machines||{};set('lsx-m-in',mc.IN||'');set('lsx-m-can',mc.CAN||'');set('lsx-m-be',mc.BE||'');set('lsx-m-kim',mc.KIM||'');lsxNvlCheck();EDIT.lsx=id;toast('✏️ Đang sửa lệnh SX — bấm Tạo lệnh SX để lưu lại');}
-function editDH(id){const dh=dhs.find(d=>d.id===id);if(!dh)return;const b=document.querySelector('.sbb[onclick*="\'dh\'"]');if(b)sw('dh',b);set('dh-code',dh.code);set('dh-date',dh.date);set('dh-due',dh.due||'');set('dh-note',dh.note||'');document.querySelectorAll('#dh-rows .mr-item').forEach(e=>e.remove());dhRc=0;(dh.items||[]).forEach(it=>{addDHRow();const rid=`dhr-${dhRc}`;set(`${rid}-sp`,it.spCode);const sel=g_(`${rid}-sp`);if(sel&&sel.onchange)sel.onchange();set(`${rid}-ord`,it.ordQty);set(`${rid}-bh`,it.buHaoQty);calcBH2(rid);});EDIT.dh=id;toast('✏️ Đang sửa PO — chỉnh xong bấm Lưu PO');}
+function editLSX(id){const l=lsxs.find(x=>x.id===id);if(!l)return;const b=document.querySelector('.sbb[onclick*="\'lsx\'"]');if(b)sw('lsx',b);set('lsx-po',l.poCode);lsxLoadPO();set('lsx-sp',l.spCode);lsxLoadSP();set('lsx-date',l.date);set('lsx-time',l.otime||'');set('lsx-due',l.due||'');set('lsx-qty',l.qty);set('lsx-note',l.note||'');lsxPtrFill(false);const pt=l.ptrs||{};setSelVal('lsx-ptr',l.ptr||'');setSelVal('lsx-ptr-in',pt.IN||'');setSelVal('lsx-ptr-can',pt.CAN||'');setSelVal('lsx-ptr-be',pt.BE||'');setSelVal('lsx-ptr-kim',pt.KIM||'');setSelVal('lsx-ptr-kho',pt.KHO||'');const mc=l.machines||{};set('lsx-m-in',mc.IN||'');set('lsx-m-can',mc.CAN||'');set('lsx-m-be',mc.BE||'');set('lsx-m-kim',mc.KIM||'');lsxNvlCheck();EDIT.lsx=id;toast('✏️ Đang sửa lệnh SX — bấm Tạo lệnh SX để lưu lại');}
+function editDH(id){const dh=dhs.find(d=>d.id===id);if(!dh)return;const b=document.querySelector('.sbb[onclick*="\'dh\'"]');if(b)sw('dh',b);set('dh-code',dh.code);set('dh-date',dh.date);set('dh-due',dh.due||'');set('dh-note',dh.note||'');document.querySelectorAll('#dh-rows .mr-item').forEach(e=>e.remove());dhRc=0;(dh.items||[]).forEach(it=>{addDHRow();const rid=`dhr-${dhRc}`;set(`${rid}-sp`,it.spCode);const sel=g_(`${rid}-sp`);if(sel&&sel.onchange)sel.onchange();set(`${rid}-ord`,it.ordQty);calcBH2(rid);});EDIT.dh=id;toast('✏️ Đang sửa PO — chỉnh xong bấm Lưu PO');}
 function editGH(id){const gh=ghs.find(g=>g.id===id);if(!gh)return;const b=document.querySelector('.sbb[onclick*="\'tp\'"]');if(b)sw('tp',b);const t=document.querySelectorAll('#pane-tp .ptb')[1];if(t)swPT('tp-gh',t);const p=(gh.datetime||'').split('T');set('gh-date',p[0]||'');set('gh-time',(p[1]||'').slice(0,5)||'08:00');set('gh-xong',gh.timexong||'');set('gh-dd',String(gh.ddId||''));set('gh-xe',String(gh.xeId||''));set('gh-po',gh.poCode||'');set('gh-nguoi-xk',gh.nguoiXK||'');set('gh-note',gh.note||'');document.querySelectorAll('#gh-rows .mr-item').forEach(e=>e.remove());ghRc=0;(gh.items||[]).forEach(it=>{addGHRow();const rid=`ghr-${ghRc}`;set(`${rid}-sp`,it.spCode);const sel=g_(`${rid}-sp`);if(sel&&sel.onchange)sel.onchange();set(`${rid}-bh`,it.buHao||0);set(`${rid}-qty`,it.qty);calcLuyCe(rid);});EDIT.gh=id;toast('✏️ Đang sửa phiếu giao — chỉnh xong bấm Lưu');}
 function gyQuickFromKHSX(poCode){const b=document.querySelector('.sbb[onclick*="\'gy\'"]');if(b)sw('gy',b);clearGY();set('gy-dh',poCode);gyLoadPO();toast('📄 Đã mở Đặt giấy cho PO '+poCode+' — kiểm tra số lượng rồi Lưu');}
 function lsxQuickOpen(poCode,spCode){const b=document.querySelector('.sbb[onclick*="\'lsx\'"]');if(b)sw('lsx',b);clearLSX();set('lsx-po',poCode);lsxLoadPO();set('lsx-sp',spCode);lsxLoadSP();set('lsx-date',todayISO());lsxPtrFill(true);toast('🔧 Đã mở form Lệnh SX cho PO '+poCode+' — nhập SL & phân công máy/người rồi Tạo lệnh');}
@@ -3168,5 +3266,6 @@ authBoot();
 <datalist id="ns-list-kho"></datalist>
 <datalist id="ns-list-ql"></datalist>
 <datalist id="ns-list-all"></datalist>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});}</script>
 </body>
 </html>
