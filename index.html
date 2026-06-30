@@ -1283,16 +1283,13 @@ function S(o){return JSON.stringify(o);}
 // STATS
 // ══════════════════════════
 function spStats(){
-  const m={};
-  mySPs().forEach(s=>m[s.code]={ordQty:0,buHao:0,totalSX:0,nk:0,out:0,sxKhau:{}});
-  myDHs().forEach(dh=>(dh.items||[]).forEach(it=>{
-    if(!m[it.spCode])m[it.spCode]={ordQty:0,buHao:0,totalSX:0,nk:0,out:0,sxKhau:{}};
-    m[it.spCode].ordQty+=(it.ordQty||0);m[it.spCode].buHao+=(it.buHaoQty||0);m[it.spCode].totalSX+=(it.totalQty||0);
-  }));
-  myNKs().forEach(n=>{if(!m[n.spCode])m[n.spCode]={ordQty:0,buHao:0,totalSX:0,nk:0,out:0,sxKhau:{}};m[n.spCode].nk+=n.qty;});
-  myGHs().forEach(g=>(g.items||[]).forEach(it=>{if(!m[it.spCode])m[it.spCode]={ordQty:0,buHao:0,totalSX:0,nk:0,out:0,sxKhau:{}};m[it.spCode].out+=it.qty;}));
-  myLSs().forEach(l=>{if(!m[l.spCode])m[l.spCode]={ordQty:0,buHao:0,totalSX:0,nk:0,out:0,sxKhau:{}};if(!m[l.spCode].sxKhau[l.cd])m[l.spCode].sxKhau[l.cd]=0;m[l.spCode].sxKhau[l.cd]+=l.qty;});
-  Object.keys(m).forEach(c=>{const d=m[c];d.ton=d.nk-d.out;d.dang=Math.max(0,(d.sxKhau.IN||0)-(d.nk||0));});
+  const m={};const ini=c=>{if(!m[c])m[c]={ordQty:0,buHao:0,totalSX:0,nk:0,out:0,buHaoGiao:0,sxKhau:{}};return m[c];};
+  mySPs().forEach(s=>ini(s.code));
+  myDHs().forEach(dh=>(dh.items||[]).forEach(it=>{const d=ini(it.spCode);d.ordQty+=(it.ordQty||0);d.buHao+=(it.buHaoQty||0);d.totalSX+=(it.totalQty||0);}));
+  myNKs().forEach(n=>{ini(n.spCode).nk+=n.qty;});
+  myGHs().forEach(g=>(g.items||[]).forEach(it=>{const d=ini(it.spCode);d.out+=(it.qty||0);d.buHaoGiao+=(it.buHao||0);}));
+  myLSs().forEach(l=>{const d=ini(l.spCode);if(!d.sxKhau[l.cd])d.sxKhau[l.cd]=0;d.sxKhau[l.cd]+=l.qty;});
+  Object.keys(m).forEach(c=>{const d=m[c];d.outReal=d.out+d.buHaoGiao;d.ton=d.nk-d.outReal;d.dang=Math.max(0,(d.sxKhau.IN||0)-(d.nk||0));});
   return m;
 }
 function lsxStats(lsxNo){
@@ -2259,12 +2256,13 @@ function poAging(poCode,spCode){
   const nkList=myNKs().filter(n=>n.poCode===poCode&&n.spCode===spCode).slice().sort((a,b)=>(a.datetime||'').localeCompare(b.datetime||''));
   const nk=nkList.reduce((t,n)=>t+(n.qty||0),0);
   const giao=myGHs().reduce((t,g)=>g.poCode!==poCode?t:t+(g.items||[]).filter(it=>it.spCode===spCode).reduce((u,it)=>u+(it.qty||0),0),0);
-  const ton=nk-giao;
-  let consumed=giao,oldestDT=null;
+  const buHaoGiao=myGHs().reduce((t,g)=>g.poCode!==poCode?t:t+(g.items||[]).filter(it=>it.spCode===spCode).reduce((u,it)=>u+(it.buHao||0),0),0);
+  const ton=nk-giao-buHaoGiao;
+  let consumed=giao+buHaoGiao,oldestDT=null;
   for(const n of nkList){const q=n.qty||0;if(consumed>=q){consumed-=q;continue;}oldestDT=n.datetime;break;}
   let ageDays=0;
   if(ton>0&&oldestDT){const d=new Date(String(oldestDT).slice(0,10));const now=new Date(todayISO());ageDays=Math.max(0,Math.round((now-d)/86400000));}
-  return {nk,giao,ton:Math.max(0,ton),oldestDT,ageDays};
+  return {nk,giao,buHaoGiao,ton:Math.max(0,ton),oldestDT,ageDays};
 }
 async function poClose(dhId){
   const dh=dhs.find(d=>d.id===dhId);if(!dh)return;
@@ -2302,7 +2300,7 @@ function renderNXT(){
   const fSP=v('nxt-sp'),fFrom=v('nxt-from'),fTo=v('nxt-to'),fDD=v('nxt-dd'),fType=v('nxt-type');
   let rows=[];
   myNKs().forEach(n=>rows.push({datetime:n.datetime,type:'NK',spCode:n.spCode,poCode:n.poCode,qty:n.qty,ddId:null,nccId:n.nccId,dbh:n.dbh,qc:n.qc,id:n.id}));
-  myGHs().forEach(g=>(g.items||[]).forEach(it=>rows.push({datetime:g.datetime,type:'GH',spCode:it.spCode,poCode:g.poCode,qty:it.qty,ddId:g.ddId,nccId:0,dbh:'',qc:'',id:g.id+it.spCode})));
+  myGHs().forEach(g=>(g.items||[]).forEach(it=>rows.push({datetime:g.datetime,type:'GH',spCode:it.spCode,poCode:g.poCode,qty:(it.qty||0)+(it.buHao||0),ddId:g.ddId,nccId:0,dbh:'',qc:'',id:g.id+it.spCode})));
   rows.sort((a,b)=>a.datetime.localeCompare(b.datetime)||a.spCode.localeCompare(b.spCode));
   const runStk={};rows.forEach(r=>{if(!runStk[r.spCode])runStk[r.spCode]=0;if(r.type==='NK')runStk[r.spCode]+=r.qty;else runStk[r.spCode]-=r.qty;r._stk=runStk[r.spCode];});
   if(fSP)rows=rows.filter(r=>r.spCode===fSP);if(fFrom)rows=rows.filter(r=>r.datetime>=fFrom);if(fTo)rows=rows.filter(r=>r.datetime<=fTo+'T23:59');if(fDD)rows=rows.filter(r=>r.ddId==fDD);if(fType)rows=rows.filter(r=>r.type===fType);
@@ -2479,7 +2477,8 @@ function renderBaoCao(){
     (_po?(_po.items||[]):[]).forEach(it=>{const s=sps.find(x=>x.code===it.spCode)||{};
       const nk=nkDoneForPOSP(_fpo,it.spCode);
       const out=myGHs().filter(g=>g.poCode===_fpo).reduce((t,g)=>t+(g.items||[]).filter(i=>i.spCode===it.spCode).reduce((tt,i)=>tt+(i.qty||0),0),0);
-      const ord=it.totalQty||0;const ton=Math.max(0,nk-out);const p2=ord>0?Math.min(100,Math.round(out/ord*100)):0;const nccGiaoPO=nvlNccGiaoPO(_fpo,it.spCode);const dmPO=s.dm||0;const dangPO=dmPO>0?Math.max(0,Math.floor(nccGiaoPO/dmPO)-nk):0;
+      const outBH=myGHs().filter(g=>g.poCode===_fpo).reduce((t,g)=>t+(g.items||[]).filter(i=>i.spCode===it.spCode).reduce((tt,i)=>tt+(i.qty||0)+(i.buHao||0),0),0);
+      const ord=it.totalQty||0;const ton=Math.max(0,nk-outBH);const p2=ord>0?Math.min(100,Math.round(out/ord*100)):0;const nccGiaoPO=nvlNccGiaoPO(_fpo,it.spCode);const dmPO=s.dm||0;const dangPO=dmPO>0?Math.max(0,Math.floor(nccGiaoPO/dmPO)-nk):0;
       const badge=out>=(ord||1)?'<span class="badge bg">✅ Giao đủ</span>':nk>0?'<span class="badge bc">📦 Kho</span>':'<span class="badge bn">⏳ Chờ</span>';
       h+=`<tr><td class="tb">${_fpo}</td><td class="tb">${it.spCode}</td><td style="font-size:10px">${s.name||'—'}</td><td class="r">${f(ord)}</td><td class="r" style="color:var(--c2);font-weight:700">${f(nccGiaoPO)} tấm</td><td class="r cy">${f(dangPO)}</td><td class="r cb">${f(nk)}</td><td class="r" style="color:${ton===0?'var(--r2)':'var(--g3)'};font-weight:700">${f(ton)}</td><td class="r cb">${f(out)}</td><td class="r cr">${f(Math.max(0,ord-out))}</td><td class="c"><span style="font-size:10px;font-weight:700;color:${p2>=100?'var(--g3)':'var(--y2)'}">${p2}%</span></td><td class="c">${badge}</td></tr>`;
     });
