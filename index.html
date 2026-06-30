@@ -717,11 +717,15 @@ body.role-staff .btr{display:none!important;}
       <div class="fg-g"><label class="fl">Ngày <span>*</span></label><input type="date" class="fi" id="ls-date"></div>
       <div class="fg-g"><label class="fl">Ca</label><select class="fs" id="ls-ca"><option value="S">Ca sáng (6-14h)</option><option value="C">Ca chiều (14-22h)</option><option value="D">Ca đêm (22-6h)</option></select></div>
     </div>
-    <div class="fg f6">
+    <div class="fg f5">
       <div class="fg-g"><label class="fl">SP trong lệnh</label><input class="fi" id="ls-sp-info" readonly></div>
-      <div class="fg-g"><label class="fl">SL đạt (thùng) <span>*</span></label><input type="number" class="fi" id="ls-qty" min="0" placeholder="VD: 2500" oninput="calcLSNS()"><div class="hint">Số thùng/tấm ĐẠT (tốt) ở công đoạn này</div></div>
-      <div class="fg-g"><label class="fl">SL hư (hỏng)</label><input type="number" class="fi" id="ls-hu" min="0" value="0" placeholder="0"><div class="hint">Số thùng/tấm HƯ tại công đoạn này — tính tỉ lệ hao hụt</div></div>
-      <div class="fg-g"><label class="fl">Năng suất (tự tính)</label><input class="fi" id="ls-ns-calc" readonly style="background:var(--g5);color:var(--g2);font-weight:700"><div class="hint">= SL ÷ số phút × 60. Tự tính từ Giờ bắt đầu, Giờ kết thúc và Số lượng</div></div>
+      <div class="fg-g"><label class="fl">SL thực tế SX (thùng) <span>*</span></label><input type="number" class="fi" id="ls-thucte" min="0" placeholder="VD: 2600" oninput="lsCalcDat()"><div class="hint">Tổng số thùng/tấm thực tế đã chạy ở công đoạn này</div></div>
+      <div class="fg-g"><label class="fl">Hư sản xuất</label><input type="number" class="fi" id="ls-husx" min="0" value="0" placeholder="0" oninput="lsCalcDat()"><div class="hint">Hư do lỗi sản xuất (in/bế/dán...)</div></div>
+      <div class="fg-g"><label class="fl">Hư dộp giấy NVL</label><input type="number" class="fi" id="ls-hugiay" min="0" value="0" placeholder="0" oninput="lsCalcDat()"><div class="hint">Hư do giấy NVL bị dộp / lỗi nguyên liệu</div></div>
+      <div class="fg-g"><label class="fl">SL Đạt (tự tính)</label><input class="fi" id="ls-qty" readonly style="background:var(--g5);color:var(--g2);font-weight:700"><div class="hint">= Thực tế SX − (Hư SX + Hư dộp giấy)</div></div>
+    </div>
+    <div class="fg f3">
+      <div class="fg-g"><label class="fl">Năng suất (tự tính)</label><input class="fi" id="ls-ns-calc" readonly style="background:var(--g5);color:var(--g2);font-weight:700"><div class="hint">= SL Đạt ÷ số phút × 60</div></div>
       <div class="fg-g"><label class="fl">Giờ bắt đầu <span>*</span></label><input type="time" class="fi" id="ls-start" value="06:00" oninput="calcLSNS()"><div class="hint">Giờ bắt đầu ca/lần thực hiện</div></div>
       <div class="fg-g"><label class="fl">Giờ kết thúc <span>*</span></label><input type="time" class="fi" id="ls-end" value="14:00" oninput="calcLSNS()"><div class="hint">Giờ kết thúc ca/lần thực hiện</div></div>
     </div>
@@ -1253,7 +1257,7 @@ async function ld(){
     const gyDelMap={};(rGyDel||[]).forEach(d=>{if(!gyDelMap[d.gy_id])gyDelMap[d.gy_id]=[];gyDelMap[d.gy_id].push({id:d.id,sp:d.sp,qty:d.qty,date:d.date,ref:d.ref,timeStart:d.time_start,timeEnd:d.time_end,xe:d.xe,nguoi:d.nguoi,qc:d.qc,nvlId:d.nvl_id});});
     gys=(rGys||[]).map(g=>({id:g.id,date:g.date,nccId:g.ncc_id,giao:g.giao,dhCode:g.dh_code,poGiay:g.po_giay,done:g.done,note:g.note,khId:g.kh_id,items:gyItMap[g.id]||[],deliveries:gyDelMap[g.id]||[]}));
     lsxs=(rLsxs||[]).map(l=>({id:l.id,no:l.no,poCode:l.po_code,spCode:l.sp_code,date:l.date,due:l.due,qty:l.qty,note:l.note,ptr:l.ptr,ptrs:{IN:l.ptr_in,CAN:l.ptr_can,BE:l.ptr_be,KIM:l.ptr_kim,KHO:l.ptr_kho},machines:{IN:l.may_in,CAN:l.may_can,BE:l.may_be,KIM:l.may_kim},otime:l.o_time,status:l.status,khId:l.kh_id}));
-    lss=(rLss||[]).map(l=>{return{id:l.id,lsxNo:l.lsx_no,spCode:l.sp_code,poCode:l.po_code,date:l.date,ca:l.ca,cd:l.cd,may:l.may,nguoi:l.nguoi,qty:l.qty,ns:l.ns,mins:l.mins,start:l.start_time,end:l.end_time,note:l.note,hu:l.hu}});
+    lss=(rLss||[]).map(l=>{return{id:l.id,lsxNo:l.lsx_no,spCode:l.sp_code,poCode:l.po_code,date:l.date,ca:l.ca,cd:l.cd,may:l.may,nguoi:l.nguoi,qty:l.qty,ns:l.ns,mins:l.mins,start:l.start_time,end:l.end_time,note:l.note,hu:l.hu,thucte:l.thuc_te,huSx:l.hu_sx,huGiay:l.hu_giay}});
     nks=(rNks||[]).map(n=>({id:n.id,datetime:n.datetime,spCode:n.sp_code,poCode:n.po_code,qty:n.qty,ref:n.ref,dbh:n.dbh,qc:n.qc,nccId:n.ncc_id,nguoi:n.nguoi,note:n.note,khId:n.kh_id}));
     const ghItMap={};(rGhIt||[]).forEach(it=>{if(!ghItMap[it.gh_id])ghItMap[it.gh_id]=[];ghItMap[it.gh_id].push({spCode:it.sp_code,qty:it.qty,buHao:it.bu_hao});});
     ghs=(rGhs||[]).map(g=>({id:g.id,datetime:g.datetime,timexong:g.timexong,ddId:g.dd_id,xeId:g.xe_id,poCode:g.po_code,pxk:g.pxk,khVt:g.kh_vt,note:g.note,nguoiXK:g.nguoi_xk,items:ghItMap[g.id]||[],khId:g.kh_id}));
@@ -1302,17 +1306,17 @@ function lsxHu(lsxNo){
   return res;
 }
 function lsxNet(lsxNo){
-  const dat={},hu={};CD_ORDER.forEach(c=>{dat[c]=0;hu[c]=0;});
-  myLSs().filter(l=>l.lsxNo===lsxNo).forEach(l=>{if(dat[l.cd]!==undefined){dat[l.cd]+=l.qty||0;hu[l.cd]+=l.hu||0;}});
+  const dat={},hu={},tt={},hsx={},hg={};CD_ORDER.forEach(c=>{dat[c]=0;hu[c]=0;tt[c]=0;hsx[c]=0;hg[c]=0;});
+  myLSs().filter(l=>l.lsxNo===lsxNo).forEach(l=>{if(dat[l.cd]!==undefined){dat[l.cd]+=l.qty||0;hu[l.cd]+=l.hu||0;tt[l.cd]+=(l.thucte!=null?l.thucte:((l.qty||0)+(l.hu||0)));hsx[l.cd]+=(l.huSx!=null?l.huSx:(l.hu||0));hg[l.cd]+=l.huGiay||0;}});
   const byStage={};let totHu=0,totDat=0;
-  CD_ORDER.forEach(c=>{byStage[c]={dat:dat[c],hu:hu[c],net:dat[c]-hu[c]};totHu+=hu[c];totDat+=dat[c];});
-  const nkDat=dat.NHAP_KHO||0,nkHu=hu.NHAP_KHO||0;
-  return {byStage,dat,hu,totHu,totDat,nkDat,nkNet:nkDat-nkHu};
+  CD_ORDER.forEach(c=>{byStage[c]={dat:dat[c],hu:hu[c],net:dat[c],thucte:tt[c],huSx:hsx[c],huGiay:hg[c]};totHu+=hu[c];totDat+=dat[c];});
+  const nkDat=dat.NHAP_KHO||0;
+  return {byStage,dat,hu,totHu,totDat,nkDat,nkNet:nkDat};
 }
 function stCell(dat,hu,cls,style){
-  dat=dat||0;hu=hu||0;const net=dat-hu;const st=style?(' style="'+style+'"'):'';
+  dat=dat||0;hu=hu||0;const st=style?(' style="'+style+'"'):'';
   if(!hu)return `<td class="r ${cls||''}"${st}>${f(dat)}</td>`;
-  return `<td class="r ${cls||''}"${st} title="Đạt ${f(dat)} − Hư ${f(hu)} = Còn lại ${f(net)}">${f(net)}<sup style="color:var(--r2);font-size:8px">−${f(hu)}</sup></td>`;
+  return `<td class="r ${cls||''}"${st} title="SL Đạt ${f(dat)} · Hư ${f(hu)}">${f(dat)}<sup style="color:var(--r2);font-size:8px"> ⚠${f(hu)}</sup></td>`;
 }
 function lsRecordPanel(lsxNo){
   const lsx=myLSXs().find(l=>l.no===lsxNo);if(!lsx){toast('Không tìm thấy lệnh!');return;}
@@ -1320,28 +1324,30 @@ function lsRecordPanel(lsxNo){
   const sp=sps.find(s=>s.code===lsx.spCode)||{};
   const cds=[['IN','🖨 In'],['CAN','⚙️ Cán màng'],['BE','✂️ Bế'],['KIM','📎 Đóng kim'],['DAN','🖇 Dán keo'],['NHAP_KHO','✅ Nhập kho']];
   const prog=lsxStats(lsxNo);const huS=lsxHu(lsxNo);const net=lsxNet(lsxNo);
-  const cdOpt=cds.map(([k,l])=>`<option value="${k}">${l} — đạt ${f(prog[k]||0)}${huS[k]?(' · hư '+f(huS[k])):''} · còn lại ${f(net.byStage[k].net)}</option>`).join('');
-  const bdRows=cds.map(([k,l])=>{const b=net.byStage[k];return `<tr><td>${l}</td><td class="r cb">${f(b.dat)}</td><td class="r" style="color:${b.hu?'var(--r2)':'var(--n3)'};font-weight:${b.hu?700:400}">${b.hu?f(b.hu):'—'}</td><td class="r cg" style="font-weight:700">${f(b.net)}</td></tr>`;}).join('');
+  const cdOpt=cds.map(([k,l])=>`<option value="${k}">${l} — thực tế ${f(net.byStage[k].thucte)} · hư ${f(huS[k]||0)} · đạt ${f(net.byStage[k].dat)}</option>`).join('');
+  const bdRows=cds.map(([k,l])=>{const b=net.byStage[k];return `<tr><td>${l}</td><td class="r cb">${f(b.thucte)}</td><td class="r" style="color:${b.huSx?'var(--r2)':'var(--n3)'};font-weight:${b.huSx?700:400}">${b.huSx?f(b.huSx):'—'}</td><td class="r" style="color:${b.huGiay?'var(--o2)':'var(--n3)'};font-weight:${b.huGiay?700:400}">${b.huGiay?f(b.huGiay):'—'}</td><td class="r cg" style="font-weight:700">${f(b.dat)}</td></tr>`;}).join('');
   const dm=sp.dm||0;const recvTam=nvlNccGiaoPO(lsx.poCode,lsx.spCode);
   const nkNet=net.nkNet,totHu=net.totHu;const tamTP=nkNet*dm,tamHu=totHu*dm,tamConLai=recvTam-tamTP-tamHu;
   const ttCls=tamConLai<0?'var(--r2)':'var(--g2)';
   el.innerHTML=`<div class="card" style="border:2px solid var(--g3);background:var(--g6)">
     <div class="sh" style="margin-top:0">📋 Ghi sản lượng đạt/hư — ${lsxNo} · ${lsx.spCode} ${sp.size||''} <span style="color:var(--n3);font-weight:400">(SL lệnh ${f(lsx.qty)})</span></div>
-    <div class="fg" style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px">
+    <div class="fg" style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px">
       <div class="fg-g"><label class="fl">Công đoạn <span>*</span></label><select class="fs" id="lsr-cd" onchange="lsrMay('${lsxNo}')">${cdOpt}</select></div>
       <div class="fg-g"><label class="fl">Máy</label><select class="fs" id="lsr-may"></select></div>
-      <div class="fg-g"><label class="fl">SL đạt (thùng) <span>*</span></label><input type="number" class="fi" id="lsr-qty" min="0" placeholder="VD: 2500"></div>
-      <div class="fg-g"><label class="fl">SL hư (hỏng)</label><input type="number" class="fi" id="lsr-hu" min="0" value="0"></div>
+      <div class="fg-g"><label class="fl">SL thực tế SX <span>*</span></label><input type="number" class="fi" id="lsr-thucte" min="0" placeholder="VD: 2600"></div>
+      <div class="fg-g"><label class="fl">Hư sản xuất</label><input type="number" class="fi" id="lsr-husx" min="0" value="0"></div>
+      <div class="fg-g"><label class="fl">Hư dộp giấy NVL</label><input type="number" class="fi" id="lsr-hugiay" min="0" value="0"></div>
       <div class="fg-g"><label class="fl">Người thực hiện</label><input class="fi" id="lsr-nguoi" list="ns-list-all"></div>
       <div class="fg-g"><label class="fl">Giờ bắt đầu</label><input type="time" class="fi" id="lsr-start" value="08:00"></div>
       <div class="fg-g"><label class="fl">Giờ kết thúc</label><input type="time" class="fi" id="lsr-end"></div>
+      <div class="fg-g"><label class="fl">Ghi chú công đoạn</label><input class="fi" id="lsr-note" placeholder="VD: kẹt giấy 10h"></div>
     </div>
     <div class="br_"><button class="btn btg" onclick="lsRecordSave('${lsxNo}')">✅ Ghi sản lượng</button><button class="btn btn_" onclick="g_('khsx-lsrec-panel').innerHTML=''">✕ Đóng</button></div>
     <div class="hint" style="margin-top:6px">Ghi nhận tự đồng bộ sang “Lịch SX & Máy”. Chọn “✅ Nhập kho” sẽ tự tạo phiếu nhập kho thành phẩm.</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
       <div>
-        <div class="sh" style="font-size:12px;margin:0 0 4px">📦 Còn lại chuyển khâu sau (đạt − hư)</div>
-        <div class="tw"><table style="font-size:11px"><thead><tr><th>Công đoạn</th><th class="r">SL đạt</th><th class="r">⚠️ Hư</th><th class="r">Còn lại</th></tr></thead><tbody>${bdRows}</tbody></table></div>
+        <div class="sh" style="font-size:12px;margin:0 0 4px">📦 Còn lại chuyển khâu sau (= SL Đạt)</div>
+        <div class="tw"><table style="font-size:11px"><thead><tr><th>Công đoạn</th><th class="r">Thực tế SX</th><th class="r">Hư SX</th><th class="r">Hư dộp giấy</th><th class="r">SL Đạt = Còn lại</th></tr></thead><tbody>${bdRows}</tbody></table></div>
       </div>
       <div>
         <div class="sh" style="font-size:12px;margin:0 0 4px">📊 Đối chiếu giấy tấm (ĐM ${f(dm)} tấm/thùng)</div>
@@ -1368,11 +1374,12 @@ function lsrMay(lsxNo){
   if(ng&&ptrs[pk])ng.value=ptrs[pk];
 }
 async function lsRecordSave(lsxNo){
-  const cd=v('lsr-cd');const qty=parseInt(v('lsr-qty'))||0;const huv=parseInt(v('lsr-hu'))||0;
-  if(!cd||(qty<=0&&huv<=0)){toast('Nhập SL đạt hoặc hư!');return;}
+  const cd=v('lsr-cd');const tt=parseInt(v('lsr-thucte'))||0;const hsx=parseInt(v('lsr-husx'))||0;const hg=parseInt(v('lsr-hugiay'))||0;
+  if(!cd||(tt<=0&&(hsx+hg)<=0)){toast('Nhập SL thực tế SX!');return;}
   clearLS();set('ls-lsx',lsxNo);lsLoadLSX();set('ls-cd',cd);lsUpdateMay();
   const mv=v('lsr-may');if(mv)set('ls-may',mv);
-  set('ls-date',todayISO());set('ls-qty',qty||0);set('ls-hu',huv);
+  set('ls-date',todayISO());set('ls-thucte',tt);set('ls-husx',hsx);set('ls-hugiay',hg);lsCalcDat();
+  const nt=v('lsr-note');if(nt)set('ls-note',nt);
   const t1=v('lsr-start'),t2=v('lsr-end');if(t1)set('ls-start',t1);if(t2)set('ls-end',t2);
   const ng=v('lsr-nguoi');if(ng)set('ls-nguoi',ng);
   if(t1&&t2)calcLSNS();
@@ -2025,7 +2032,12 @@ function lsLoadLSX(){
   set('ls-sp-info',`${lsx.spCode} – ${sp.name||''} ${sp.size||''} (SL lệnh: ${f(lsx.qty)} thùng)`);
   lsUpdateMay();
 }
+function lsCalcDat(){
+  const tt=parseInt(v('ls-thucte'))||0,hsx=parseInt(v('ls-husx'))||0,hg=parseInt(v('ls-hugiay'))||0;
+  set('ls-qty',Math.max(0,tt-hsx-hg));calcLSNS();
+}
 function calcLSNS(){
+  if(v('ls-cd')==='NHAP_KHO'){set('ls-ns-calc','— (nhập kho, không tính NS)');return;}
   const start=v('ls-start'),end=v('ls-end'),qty=parseInt(v('ls-qty'))||0;
   if(!start||!end||!qty){set('ls-ns-calc','—');return;}
   const [sh,sm]=start.split(':').map(Number);const [eh,em]=end.split(':').map(Number);
@@ -2034,14 +2046,14 @@ function calcLSNS(){
   set('ls-ns-calc',ns?f(ns)+' th/h • '+(ns/60).toFixed(1)+' th/ph ('+mins+'ph)':'—');
 }
 async function saveLS(){
-  const lsxNo2=v('ls-lsx'),cd=v('ls-cd'),qty=parseInt(v('ls-qty'))||0,lsHu=parseInt(v('ls-hu'))||0,date=v('ls-date');
-  if(!lsxNo2||!cd||(!qty&&!lsHu)||!date){toast('Nhập đủ thông tin (SL đạt hoặc hư)!');return;}
+  const lsxNo2=v('ls-lsx'),cd=v('ls-cd'),lsThucte=parseInt(v('ls-thucte'))||0,lsHuSx=parseInt(v('ls-husx'))||0,lsHuGiay=parseInt(v('ls-hugiay'))||0,date=v('ls-date');const lsHu=lsHuSx+lsHuGiay;const qty=Math.max(0,lsThucte-lsHu);
+  if(!lsxNo2||!cd||(!lsThucte&&!lsHu)||!date){toast('Nhập đủ thông tin (SL thực tế SX)!');return;}
   const lsx=myLSXs().find(l=>l.no===lsxNo2);if(!lsx){toast('Không tìm thấy LSX!');return;}
   const lsStart=v('ls-start'),lsEnd=v('ls-end');
   let lsMins=0;if(lsStart&&lsEnd){const[sh,sm]=lsStart.split(':').map(Number);const[eh,em]=lsEnd.split(':').map(Number);lsMins=(eh*60+em)-(sh*60+sm);if(lsMins<=0)lsMins+=24*60;}
-  const lsNs=lsMins>0?Math.round(qty/(lsMins/60)):0;
-  const lsId=EDIT.ls||Date.now();const lsObj={id:lsId,lsxNo:lsxNo2,spCode:lsx.spCode,poCode:lsx.poCode,date,ca:v('ls-ca'),cd,may:v('ls-may'),nguoi:v('ls-nguoi').trim(),qty,hu:lsHu,ns:lsNs,mins:lsMins,start:lsStart,end:lsEnd,note:v('ls-note').trim()};
-  lsObj.khId=curKhId;const _pl={id:lsId,lsx_no:lsxNo2,sp_code:lsx.spCode,po_code:lsx.poCode,date:date||null,ca:lsObj.ca,cd,may:lsObj.may,nguoi:lsObj.nguoi,qty,hu:lsHu,ns:lsNs,mins:lsMins,start_time:lsStart||null,end_time:lsEnd||null,note:lsObj.note,kh_id:curKhId};
+  const lsNs=(cd==='NHAP_KHO')?0:(lsMins>0?Math.round(qty/(lsMins/60)):0);
+  const lsId=EDIT.ls||Date.now();const lsObj={id:lsId,lsxNo:lsxNo2,spCode:lsx.spCode,poCode:lsx.poCode,date,ca:v('ls-ca'),cd,may:v('ls-may'),nguoi:v('ls-nguoi').trim(),qty,hu:lsHu,thucte:lsThucte,huSx:lsHuSx,huGiay:lsHuGiay,ns:lsNs,mins:lsMins,start:lsStart,end:lsEnd,note:v('ls-note').trim()};
+  lsObj.khId=curKhId;const _pl={id:lsId,lsx_no:lsxNo2,sp_code:lsx.spCode,po_code:lsx.poCode,date:date||null,ca:lsObj.ca,cd,may:lsObj.may,nguoi:lsObj.nguoi,qty,hu:lsHu,thuc_te:lsThucte,hu_sx:lsHuSx,hu_giay:lsHuGiay,ns:lsNs,mins:lsMins,start_time:lsStart||null,end_time:lsEnd||null,note:lsObj.note,kh_id:curKhId};
   const r=EDIT.ls?await sbPatch('lss',_pl,'?id=eq.'+lsId):await sbInsert('lss',_pl);
   if(!r){return;}
   let autoNkMsg='';
@@ -2058,11 +2070,11 @@ async function saveLS(){
   }
   renderAll();clearLS();toast(`✅ Đã lưu ${CD_LBL[cd]||cd}: ${f(qty)} thùng${autoNkMsg}`);
 }
-function clearLS(){set('ls-date',todayISO());set('ls-qty','');set('ls-hu','0');set('ls-ns-calc','—');set('ls-nguoi','');set('ls-note','');}
+function clearLS(){set('ls-date',todayISO());set('ls-thucte','');set('ls-husx','0');set('ls-hugiay','0');set('ls-qty','');set('ls-ns-calc','—');set('ls-nguoi','');set('ls-note','');}
 async function delLS(id){if(!confirm('Xóa?'))return;await sbDel('lss',id);logAct('Xóa','Lịch SX','');lss=lss.filter(l=>l.id!==id);renderLS();renderLSX();}
 function renderLS(){
   const today=todayISO();const todayLS=myLSs().filter(l=>l.date===today);
-  const mMap={};todayLS.forEach(l=>{if(!mMap[l.may])mMap[l.may]={cd:l.cd,qty:0,ns:[],nguoi:l.nguoi,pos:new Set()};mMap[l.may].qty+=l.qty;if(l.ns)mMap[l.may].ns.push(l.ns);mMap[l.may].nguoi=l.nguoi||mMap[l.may].nguoi;if(l.poCode)mMap[l.may].pos.add(l.poCode);});
+  const mMap={};todayLS.forEach(l=>{if(l.cd==='NHAP_KHO')return;if(!mMap[l.may])mMap[l.may]={cd:l.cd,qty:0,ns:[],nguoi:l.nguoi,pos:new Set()};mMap[l.may].qty+=l.qty;if(l.ns)mMap[l.may].ns.push(l.ns);mMap[l.may].nguoi=l.nguoi||mMap[l.may].nguoi;if(l.poCode)mMap[l.may].pos.add(l.poCode);});
   const cdCls={IN:'border-left:4px solid var(--b2)',CAN:'border-left:4px solid var(--p2)',BE:'border-left:4px solid var(--y2)',KIM:'border-left:4px solid var(--o2)',DAN:'border-left:4px solid var(--c2)',NHAP_KHO:'border-left:4px solid var(--g3)'};
   let mc='';if(!Object.keys(mMap).length)mc='<div class="al al-i">Chưa có dữ liệu hôm nay.</div>';
   Object.entries(mMap).forEach(([may,d])=>{const avgNS=d.ns.length?Math.round(d.ns.reduce((a,b)=>a+b,0)/d.ns.length):0;
@@ -2437,9 +2449,9 @@ function bcSXDetailHTML(po,sp){
   const usedTam=(nkNet+ss.totHu)*dm;const conTam=recvTam-usedTam;
   const lsxList=myLSXs().filter(l=>l.poCode===po&&l.spCode===sp);
   const lsxRows=lsxList.map(l=>{const nt=lsxNet(l.no);const nsArr=myLSs().filter(x=>x.lsxNo===l.no&&x.ns).map(x=>x.ns);const avgNs=nsArr.length?Math.round(nsArr.reduce((a,b)=>a+b,0)/nsArr.length):0;
-    const cell=c=>{const b=nt.byStage[c];return b.hu?(f(b.net)+'<sup style="color:var(--r2);font-size:8px">−'+f(b.hu)+'</sup>'):f(b.dat);};
-    const dgNet=nt.byStage.KIM.net+nt.byStage.DAN.net,dgHu=nt.byStage.KIM.hu+nt.byStage.DAN.hu,dgDat=nt.byStage.KIM.dat+nt.byStage.DAN.dat;
-    const dgCell=dgHu?(f(dgNet)+'<sup style="color:var(--r2);font-size:8px">−'+f(dgHu)+'</sup>'):f(dgDat);
+    const cell=c=>{const b=nt.byStage[c];return b.hu?(f(b.dat)+'<sup style="color:var(--r2);font-size:8px"> ⚠'+f(b.hu)+'</sup>'):f(b.dat);};
+    const dgHu=nt.byStage.KIM.hu+nt.byStage.DAN.hu,dgDat=nt.byStage.KIM.dat+nt.byStage.DAN.dat;
+    const dgCell=dgHu?(f(dgDat)+'<sup style="color:var(--r2);font-size:8px"> ⚠'+f(dgHu)+'</sup>'):f(dgDat);
     return '<tr><td class="tb">'+l.no+'</td><td class="r">'+f(l.qty)+'</td><td class="r cb">'+cell('IN')+'</td><td class="r cp">'+cell('CAN')+'</td><td class="r cy">'+cell('BE')+'</td><td class="r" style="color:var(--o2)">'+dgCell+'</td><td class="r cg">'+cell('NHAP_KHO')+'</td><td class="r">'+(avgNs?f(avgNs):'—')+'</td></tr>';}).join('')||'<tr><td colspan="8" style="color:var(--n3)">Chưa có lệnh SX</td></tr>';
   const ghArr=[];myGHs().filter(g=>g.poCode===po).forEach(g=>{(g.items||[]).filter(i=>i.spCode===sp).forEach(i=>{const dd=dds.find(d=>d.id===g.ddId)||{};ghArr.push('<tr><td>'+fdtt(g.datetime)+'</td><td>'+(dd.name||'—')+'</td><td class="r cb">'+f(i.qty)+'</td><td style="font-size:9px;color:var(--n3)">'+(g.pxk||'—')+'</td></tr>');});});
   const ghRows=ghArr.join('')||'<tr><td colspan="4" style="color:var(--n3)">Chưa giao</td></tr>';
@@ -2487,7 +2499,7 @@ function renderBaoCao(){
   });
   g_('bc-lsx-tbl').innerHTML=hl||`<tr><td colspan="11" style="text-align:center;color:var(--n3);padding:12px">Chưa có lệnh SX.</td></tr>`;
   // may
-  const mMap={};myLSs().forEach(l=>{if(!mMap[l.may])mMap[l.may]={cd:l.cd,qty:0,ns:[],nguoi:'',count:0};mMap[l.may].qty+=l.qty;if(l.ns)mMap[l.may].ns.push(l.ns);mMap[l.may].count++;mMap[l.may].nguoi=l.nguoi||mMap[l.may].nguoi;});
+  const mMap={};myLSs().forEach(l=>{if(l.cd==='NHAP_KHO')return;if(!mMap[l.may])mMap[l.may]={cd:l.cd,qty:0,ns:[],nguoi:'',count:0};mMap[l.may].qty+=l.qty;if(l.ns)mMap[l.may].ns.push(l.ns);mMap[l.may].count++;mMap[l.may].nguoi=l.nguoi||mMap[l.may].nguoi;});
   let hm='';Object.entries(mMap).forEach(([may,d])=>{const avgNS=d.ns.length?Math.round(d.ns.reduce((a,b)=>a+b,0)/d.ns.length):0;hm+=`<tr><td class="tb">${may}</td><td><span class="badge by">${CD_LBL[d.cd]||d.cd}</span></td><td class="r cb">${f(d.qty)}</td><td class="r cg">${avgNS?f(avgNS):'—'}</td><td class="r">${d.count}</td><td>${d.nguoi||'—'}</td></tr>`;});
   g_('bc-may-tbl').innerHTML=hm||`<tr><td colspan="6" style="text-align:center;color:var(--n3);padding:12px">Chưa có dữ liệu.</td></tr>`;
   // dd
@@ -3187,7 +3199,7 @@ async function renderLogs(){
 // ══════════════════════════
 function editNK(id){const n=nks.find(x=>x.id===id);if(!n)return;const b=document.querySelector('.sbb[onclick*="\'tp\'"]');if(b)sw('tp',b);const t=document.querySelector('#pane-tp .ptb');if(t)swPT('tp-nk',t);set('nk-po',n.poCode);nkLoadPO();set('nk-sp',n.spCode);nkLoadSP();const p=(n.datetime||'').split('T');set('nk-date',p[0]||'');set('nk-time',(p[1]||'').slice(0,5)||'08:00');set('nk-qty',n.qty);set('nk-ref',n.ref||'');set('nk-nguoi',n.nguoi||'');set('nk-note2',n.note||'');EDIT.nk=id;toast('✏️ Đang sửa phiếu nhập kho — bấm Nhập kho để lưu lại');}
 function editNVL(id){const n=nvls.find(x=>x.id===id);if(!n)return;const b=document.querySelector('.sbb[onclick*="\'nvl\'"]');if(b)sw('nvl',b);set('nvl-ncc',String(n.nccId||''));set('nvl-gy',String(n.gyId||''));set('nvl-sp',n.spCode);const p=(n.datetime||'').split('T');set('nvl-date',p[0]||'');set('nvl-time',(p[1]||'').slice(0,5)||'08:00');set('nvl-kho',n.kho||'');set('nvl-dai',n.dai||'');set('nvl-qty',n.qty);set('nvl-ref',n.ref||'');set('nvl-xe',n.xe||'');set('nvl-nguoi',n.nguoi||'');set('nvl-note',n.note||'');nvlCalc();EDIT.nvl=id;toast('✏️ Đang sửa phiếu nhập NVL — bấm Lưu để cập nhật');}
-function editLS(id){const l=lss.find(x=>x.id===id);if(!l)return;const b=document.querySelector('.sbb[onclick*="\'ls\'"]');if(b)sw('ls',b);set('ls-lsx',l.lsxNo);lsLoadLSX();set('ls-cd',l.cd);lsUpdateMay();set('ls-may',l.may||'');set('ls-date',l.date);set('ls-ca',l.ca||'S');set('ls-qty',l.qty);set('ls-hu',l.hu||0);set('ls-start',l.start||'');set('ls-end',l.end||'');set('ls-nguoi',l.nguoi||'');set('ls-note',l.note||'');calcLSNS();EDIT.ls=id;toast('✏️ Đang sửa ghi nhận SX — bấm Ghi nhận để lưu lại (lưu ý: phiếu nhập kho tự động cũ không đổi theo)');}
+function editLS(id){const l=lss.find(x=>x.id===id);if(!l)return;const b=document.querySelector('.sbb[onclick*="\'ls\'"]');if(b)sw('ls',b);set('ls-lsx',l.lsxNo);lsLoadLSX();set('ls-cd',l.cd);lsUpdateMay();set('ls-may',l.may||'');set('ls-date',l.date);set('ls-ca',l.ca||'S');set('ls-thucte',(l.thucte!=null?l.thucte:((l.qty||0)+(l.hu||0))));set('ls-husx',(l.huSx!=null?l.huSx:(l.hu||0)));set('ls-hugiay',l.huGiay||0);lsCalcDat();set('ls-start',l.start||'');set('ls-end',l.end||'');set('ls-nguoi',l.nguoi||'');set('ls-note',l.note||'');calcLSNS();EDIT.ls=id;toast('✏️ Đang sửa ghi nhận SX — bấm Ghi nhận để lưu lại (lưu ý: phiếu nhập kho tự động cũ không đổi theo)');}
 function editLSX(id){const l=lsxs.find(x=>x.id===id);if(!l)return;const b=document.querySelector('.sbb[onclick*="\'lsx\'"]');if(b)sw('lsx',b);set('lsx-po',l.poCode);lsxLoadPO();set('lsx-sp',l.spCode);lsxLoadSP();set('lsx-date',l.date);set('lsx-time',l.otime||'');set('lsx-due',l.due||'');set('lsx-qty',l.qty);set('lsx-note',l.note||'');lsxPtrFill(false);const pt=l.ptrs||{};setSelVal('lsx-ptr',l.ptr||'');setSelVal('lsx-ptr-in',pt.IN||'');setSelVal('lsx-ptr-can',pt.CAN||'');setSelVal('lsx-ptr-be',pt.BE||'');setSelVal('lsx-ptr-kim',pt.KIM||'');setSelVal('lsx-ptr-kho',pt.KHO||'');const mc=l.machines||{};set('lsx-m-in',mc.IN||'');set('lsx-m-can',mc.CAN||'');set('lsx-m-be',mc.BE||'');set('lsx-m-kim',mc.KIM||'');lsxNvlCheck();EDIT.lsx=id;toast('✏️ Đang sửa lệnh SX — bấm Tạo lệnh SX để lưu lại');}
 function editDH(id){const dh=dhs.find(d=>d.id===id);if(!dh)return;const b=document.querySelector('.sbb[onclick*="\'dh\'"]');if(b)sw('dh',b);set('dh-code',dh.code);set('dh-date',dh.date);set('dh-due',dh.due||'');set('dh-note',dh.note||'');document.querySelectorAll('#dh-rows .mr-item').forEach(e=>e.remove());dhRc=0;(dh.items||[]).forEach(it=>{addDHRow();const rid=`dhr-${dhRc}`;set(`${rid}-sp`,it.spCode);const sel=g_(`${rid}-sp`);if(sel&&sel.onchange)sel.onchange();set(`${rid}-ord`,it.ordQty);calcBH2(rid);});EDIT.dh=id;toast('✏️ Đang sửa PO — chỉnh xong bấm Lưu PO');}
 function editGH(id){const gh=ghs.find(g=>g.id===id);if(!gh)return;const b=document.querySelector('.sbb[onclick*="\'tp\'"]');if(b)sw('tp',b);const t=document.querySelectorAll('#pane-tp .ptb')[1];if(t)swPT('tp-gh',t);const p=(gh.datetime||'').split('T');set('gh-date',p[0]||'');set('gh-time',(p[1]||'').slice(0,5)||'08:00');set('gh-xong',gh.timexong||'');set('gh-dd',String(gh.ddId||''));set('gh-xe',String(gh.xeId||''));set('gh-po',gh.poCode||'');set('gh-nguoi-xk',gh.nguoiXK||'');set('gh-note',gh.note||'');document.querySelectorAll('#gh-rows .mr-item').forEach(e=>e.remove());ghRc=0;(gh.items||[]).forEach(it=>{addGHRow();const rid=`ghr-${ghRc}`;set(`${rid}-sp`,it.spCode);const sel=g_(`${rid}-sp`);if(sel&&sel.onchange)sel.onchange();set(`${rid}-bh`,it.buHao||0);set(`${rid}-qty`,it.qty);calcLuyCe(rid);});EDIT.gh=id;toast('✏️ Đang sửa phiếu giao — chỉnh xong bấm Lưu');}
