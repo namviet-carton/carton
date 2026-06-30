@@ -842,7 +842,7 @@ body.role-staff .btr{display:none!important;}
     </div>
     <div class="sh">📋 Lịch sử giao hàng</div>
     <div class="tw"><table>
-      <thead><tr><th>Ngày giờ</th><th>Xong lúc</th><th>Phiếu XK</th><th>PO</th><th>Địa điểm</th><th>Xe / Tài xế</th><th>NV xuất kho</th><th>SP</th><th class="r">Bù hao</th><th class="r">SL giao</th><th>Lưu kho</th><th class="c">Xóa</th></tr></thead>
+      <thead><tr><th>Ngày giờ</th><th>Xong lúc</th><th>Phiếu XK</th><th>PO</th><th>Địa điểm</th><th>Xe / Tài xế</th><th>NV xuất kho</th><th>SP</th><th class="r">Bù hao</th><th class="r">SL giao</th><th class="r">SL thực nhận</th><th>Lưu kho</th><th class="c">Xóa</th></tr></thead>
       <tbody id="gh-tbl"></tbody>
     </table></div>
   </div>
@@ -913,7 +913,7 @@ body.role-staff .btr{display:none!important;}
       <thead><tr>
         <th>Mã SP</th><th>Tên SP</th><th>Quy cách(mm)</th>
         <th class="r" style="background:#1e3a5f">Tồn TP đầu kỳ</th>
-        <th class="r">Nhập kho TP</th><th class="r">Giao KH</th>
+        <th class="r">Nhập kho TP</th><th class="r" title="Giao KH = SL giao + Bù hao (thực nhận)">Giao KH (thực nhận)</th>
         <th class="r" style="background:#14532d">Tồn TP cuối kỳ</th>
         <th class="r" style="background:#4c1d95">Tồn NVL đầu kỳ(tấm)</th>
         <th class="r">NVL nhập(tấm)</th><th class="r">NVL dùng SX(tấm)</th>
@@ -2231,12 +2231,12 @@ function clearGH(){set('gh-date',todayISO());set('gh-time','08:00');set('gh-xong
 async function delGH(id){if(!confirm('Xóa?'))return;await sbDel('ghs',id);logAct('Xóa','Giao hàng','');ghs=ghs.filter(g=>g.id!==id);renderNKHist();renderGHHist();renderTon();renderNXT();}
 function renderGHHist(){
   const _ghs=myGHs();
-  let h='';if(!_ghs.length)h=`<tr><td colspan="11" style="text-align:center;color:var(--n3);padding:10px">Chưa có giao hàng nào.</td></tr>`;
+  let h='';if(!_ghs.length)h=`<tr><td colspan="12" style="text-align:center;color:var(--n3);padding:10px">Chưa có giao hàng nào.</td></tr>`;
   [..._ghs].sort((a,b)=>b.datetime.localeCompare(a.datetime)).slice(0,40).forEach(gh=>{
     const dd=dds.find(d=>d.id===gh.ddId)||{name:'—'};const xe=xes.find(x=>x.id===gh.xeId)||{};
     (gh.items||[]).forEach((it,idx)=>{const sp=sps.find(s=>s.code===it.spCode)||{};const nkDT=findNKDT(it.spCode,gh.datetime);const lk=lkStr(nkDT,gh.datetime);
       h+=`<tr>${idx===0?`<td rowspan="${(gh.items||[]).length}" style="vertical-align:top">${fdtt(gh.datetime)}</td><td rowspan="${(gh.items||[]).length}" style="vertical-align:top;color:var(--n3)">${gh.timexong||'—'}</td><td rowspan="${(gh.items||[]).length}" style="vertical-align:top"><span class="badge bg">${gh.pxk}</span></td><td rowspan="${(gh.items||[]).length}" style="vertical-align:top;color:var(--n3)">${gh.poCode||'—'}</td><td rowspan="${(gh.items||[]).length}" style="vertical-align:top">${dd.name}</td><td rowspan="${(gh.items||[]).length}" style="vertical-align:top;font-size:10px">${xe.taixe||'—'} ${xe.so?xe.so:''}</td><td rowspan="${(gh.items||[]).length}" style="vertical-align:top;font-size:10px">${gh.nguoiXK||'—'}</td>`:''}
-        <td><b>${it.spCode}</b></td><td class="r cy">${f(it.buHao||0)}</td><td class="r cb tb">${f(it.qty)}</td>
+        <td><b>${it.spCode}</b></td><td class="r cy">${f(it.buHao||0)}</td><td class="r cb tb">${f(it.qty)}</td><td class="r tb" style="color:var(--g2)" title="SL thực nhận = SL giao + Bù hao">${f((it.qty||0)+(it.buHao||0))}</td>
         <td><span class="badge ${lk==='—'?'bn':lk.includes('ngày')?'by':'bg'}">${lk}</span></td>
         ${idx===0?`<td rowspan="${(gh.items||[]).length}" class="c"><button class="btn btb bic" onclick="editGH(${gh.id})">✏️</button> <button class="btn btr bic" onclick="delGH(${gh.id})">✕</button></td>`:''}
       </tr>`;
@@ -2377,7 +2377,7 @@ function renderTon(){
     const dkKy=dkRow?dkRow.ky:'—';
 
     // Nhập/xuất trong kỳ (nếu có lọc kỳ → lọc theo ngày)
-    let nkInKy=d.nk, outInKy=d.out;
+    let nkInKy=d.nk, outInKy=myGHs().reduce((tot,g)=>tot+(g.items||[]).filter(it=>it.spCode===s.code).reduce((t,it)=>t+(it.qty||0)+(it.buHao||0),0),0);
     let nvlNhapInKy=myNVLs().filter(n=>n.spCode===s.code).reduce((t,n)=>t+n.qty,0);
     let nvlDungInKy=s.dm?d.nk*s.dm:0;
     if(filterKy&&dkRow){
@@ -2386,7 +2386,7 @@ function renderTon(){
       const nextDK=dks.filter(dk=>dk.spCode===s.code&&dk.ngay>kyStart).sort((a,b)=>a.ngay.localeCompare(b.ngay))[0];
       const kyEnd=nextDK?nextDK.ngay:'9999-12-31';
       nkInKy=myNKs().filter(n=>n.spCode===s.code&&n.datetime>=kyStart&&n.datetime<kyEnd).reduce((t,n)=>t+n.qty,0);
-      outInKy=myGHs().reduce((tot,g)=>{if(g.datetime<kyStart||g.datetime>=kyEnd)return tot;return tot+(g.items||[]).filter(it=>it.spCode===s.code).reduce((t,it)=>t+it.qty,0);},0);
+      outInKy=myGHs().reduce((tot,g)=>{if(g.datetime<kyStart||g.datetime>=kyEnd)return tot;return tot+(g.items||[]).filter(it=>it.spCode===s.code).reduce((t,it)=>t+(it.qty||0)+(it.buHao||0),0);},0);
       nvlNhapInKy=myNVLs().filter(n=>n.spCode===s.code&&n.datetime>=kyStart&&n.datetime<kyEnd).reduce((t,n)=>t+n.qty,0);
       nvlDungInKy=s.dm?nkInKy*s.dm:0;
     }
