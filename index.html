@@ -1037,7 +1037,7 @@ body.role-staff .btr{display:none!important;}
 
   <div class="sh">📅 Tuổi tồn kho & Giao dư/thiếu theo PO <span style="font-weight:400;font-size:11px;color:var(--n3)">— xuất FIFO (nhập trước xuất trước)</span></div>
   <div class="tw"><table>
-    <thead><tr><th>PO</th><th>Mã SP</th><th>Hạn KH</th><th class="r">Đặt (đơn)</th><th class="r">Nhập kho</th><th class="r">Đã giao</th><th class="r">Tồn TP</th><th class="r">Giao dư/thiếu</th><th class="c">Tuổi tồn</th><th class="c">Trạng thái</th><th class="c">Kết thúc PO</th></tr></thead>
+    <thead><tr><th>PO</th><th>Mã SP</th><th>Hạn KH</th><th class="r">Đặt (đơn)</th><th class="r">Nhập kho</th><th class="r">Đã giao</th><th class="r">Bù hao</th><th class="r">SL thực nhận</th><th class="r" title="= Nhập kho − SL thực nhận">Tồn TP</th><th class="r">Giao dư/thiếu</th><th class="c">Tuổi tồn</th><th class="c">Trạng thái</th><th class="c">Kết thúc PO</th></tr></thead>
     <tbody id="nxt-po-tbl"></tbody>
   </table></div>
 
@@ -1257,15 +1257,43 @@ async function ld(){
     const gyDelMap={};(rGyDel||[]).forEach(d=>{if(!gyDelMap[d.gy_id])gyDelMap[d.gy_id]=[];gyDelMap[d.gy_id].push({id:d.id,sp:d.sp,qty:d.qty,date:d.date,ref:d.ref,timeStart:d.time_start,timeEnd:d.time_end,xe:d.xe,nguoi:d.nguoi,qc:d.qc,nvlId:d.nvl_id});});
     gys=(rGys||[]).map(g=>({id:g.id,date:g.date,nccId:g.ncc_id,giao:g.giao,dhCode:g.dh_code,poGiay:g.po_giay,done:g.done,note:g.note,khId:g.kh_id,items:gyItMap[g.id]||[],deliveries:gyDelMap[g.id]||[]}));
     lsxs=(rLsxs||[]).map(l=>({id:l.id,no:l.no,poCode:l.po_code,spCode:l.sp_code,date:l.date,due:l.due,qty:l.qty,note:l.note,ptr:l.ptr,ptrs:{IN:l.ptr_in,CAN:l.ptr_can,BE:l.ptr_be,KIM:l.ptr_kim,KHO:l.ptr_kho},machines:{IN:l.may_in,CAN:l.may_can,BE:l.may_be,KIM:l.may_kim},otime:l.o_time,status:l.status,khId:l.kh_id}));
-    lss=(rLss||[]).map(l=>{return{id:l.id,lsxNo:l.lsx_no,spCode:l.sp_code,poCode:l.po_code,date:l.date,ca:l.ca,cd:l.cd,may:l.may,nguoi:l.nguoi,qty:l.qty,ns:l.ns,mins:l.mins,start:l.start_time,end:l.end_time,note:l.note,hu:l.hu,thucte:l.thuc_te,huSx:l.hu_sx,huGiay:l.hu_giay}});
+    lss=(rLss||[]).map(l=>{return{id:l.id,lsxNo:l.lsx_no,spCode:l.sp_code,poCode:l.po_code,date:l.date,ca:l.ca,cd:l.cd,may:l.may,nguoi:l.nguoi,qty:l.qty,ns:l.ns,mins:l.mins,start:l.start_time,end:l.end_time,note:l.note,hu:l.hu,thucte:l.thuc_te,huSx:l.hu_sx,huGiay:l.hu_giay,khId:l.kh_id}});
     nks=(rNks||[]).map(n=>({id:n.id,datetime:n.datetime,spCode:n.sp_code,poCode:n.po_code,qty:n.qty,ref:n.ref,dbh:n.dbh,qc:n.qc,nccId:n.ncc_id,nguoi:n.nguoi,note:n.note,khId:n.kh_id}));
     const ghItMap={};(rGhIt||[]).forEach(it=>{if(!ghItMap[it.gh_id])ghItMap[it.gh_id]=[];ghItMap[it.gh_id].push({spCode:it.sp_code,qty:it.qty,buHao:it.bu_hao});});
     ghs=(rGhs||[]).map(g=>({id:g.id,datetime:g.datetime,timexong:g.timexong,ddId:g.dd_id,xeId:g.xe_id,poCode:g.po_code,pxk:g.pxk,khVt:g.kh_vt,note:g.note,nguoiXK:g.nguoi_xk,items:ghItMap[g.id]||[],khId:g.kh_id}));
-    nvls=(rNvls||[]).map(n=>{return{id:n.id,datetime:n.datetime,nccId:n.ncc_id,gyId:n.gy_id,spCode:n.sp_code,kho:n.kho,dai:n.dai,qty:n.qty,equiv:n.equiv,ref:n.ref,xe:n.xe,nguoi:n.nguoi,note:n.note}});
+    nvls=(rNvls||[]).map(n=>{return{id:n.id,datetime:n.datetime,nccId:n.ncc_id,gyId:n.gy_id,spCode:n.sp_code,kho:n.kho,dai:n.dai,qty:n.qty,equiv:n.equiv,ref:n.ref,xe:n.xe,nguoi:n.nguoi,note:n.note,khId:n.kh_id}});
     dks=(rDks||[]).map(d=>({id:d.id,spCode:d.sp_code,ky:d.ky,tonTP:d.ton_tp,tonNVL:d.ton_nvl,ngay:d.ngay,note:d.note,khId:d.kh_id}));
     if(rCfg&&rCfg[0]){const c=rCfg[0];cfg={cty:c.cty,mst:c.mst,ptr:c.ptr};pxkN=c.pxk_counter||1;}
+    resolveKhIds();
   } catch(e){ console.error('Load error',e);toast('⚠️ Lỗi kết nối: '+e.message); }
   showLoading(false);
+}
+
+// ══════════════════════════════════════
+// GÁN KHÁCH HÀNG CHO DỮ LIỆU THIẾU kh_id
+// Dữ liệu cũ (hoặc bản ghi lưu thiếu kh_id) được suy ra khách hàng
+// từ liên kết: PO → KH (qua kh_id/viết tắt), KH giấy → PO, LSX → PO/SP,
+// Lịch SX → LSX/PO/SP, Nhập kho & Giao hàng → PO/SP, NVL → KH giấy/SP.
+// Nhờ vậy mỗi khách hàng (Phulimex, Cathay, Nam Phi...) chỉ thấy đúng số liệu của mình.
+// ══════════════════════════════════════
+function resolveKhIds(){
+  const vtMap={};khs.forEach(k=>{if(k.vt)vtMap[k.vt]=k.id;});
+  const spByCode={};sps.forEach(s=>{if(s.code&&spByCode[s.code]===undefined)spByCode[s.code]=s;});
+  const spKh=c=>{const s=c?spByCode[c]:null;return s?(s.khId||null):null;};
+  dhs.forEach(d=>{if(!d.khId){d.khId=(d.khVt&&vtMap[d.khVt])||((d.items||[]).map(i=>spKh(i.spCode)).find(Boolean))||null;}});
+  const dhByCode={};dhs.forEach(d=>{if(d.code&&dhByCode[d.code]===undefined)dhByCode[d.code]=d;});
+  const poKh=c=>{const d=c?dhByCode[c]:null;return d?(d.khId||null):null;};
+  gys.forEach(g=>{if(!g.khId){g.khId=poKh(g.dhCode)||((g.items||[]).map(i=>spKh(i.spCode)).find(Boolean))||null;}});
+  const gyById={};gys.forEach(g=>{gyById[g.id]=g;});
+  lsxs.forEach(l=>{if(!l.khId)l.khId=poKh(l.poCode)||spKh(l.spCode)||null;});
+  const lsxByNo={};lsxs.forEach(l=>{if(l.no&&lsxByNo[l.no]===undefined)lsxByNo[l.no]=l;});
+  lss.forEach(l=>{if(!l.khId){const x=l.lsxNo?lsxByNo[l.lsxNo]:null;l.khId=(x&&x.khId)||poKh(l.poCode)||spKh(l.spCode)||null;}});
+  nks.forEach(n=>{if(!n.khId)n.khId=poKh(n.poCode)||spKh(n.spCode)||null;});
+  ghs.forEach(g=>{if(!g.khId){g.khId=poKh(g.poCode)||(g.khVt&&vtMap[g.khVt])||((g.items||[]).map(i=>spKh(i.spCode)).find(Boolean))||null;}});
+  nvls.forEach(n=>{if(!n.khId){const g=n.gyId?gyById[n.gyId]:null;n.khId=(g&&g.khId)||spKh(n.spCode)||null;}});
+  dks.forEach(d=>{if(!d.khId)d.khId=spKh(d.spCode)||null;});
+  // Địa điểm giao cũ: nếu chỉ duy nhất 1 KH từng giao tới đó thì gán cho KH đó; nếu chưa dùng thì giữ chung
+  dds.forEach(d=>{if(!d.khId){const _users=[...new Set(ghs.filter(g=>g.ddId===d.id).map(g=>g.khId).filter(Boolean))];if(_users.length===1)d.khId=_users[0];}});
 }
 
 function sv(){
@@ -1389,7 +1417,7 @@ function nkDoneForPOSP(poCode,spCode){
 function tamOrderedForPOSP(poCode,spCode){
   // total tấm ordered via KH giấy linked to this PO
   let tot=0;
-  gys.filter(g=>g.dhCode===poCode).forEach(g=>{
+  myGYs().filter(g=>g.dhCode===poCode).forEach(g=>{
     (g.items||[]).filter(it=>it.spCode===spCode).forEach(it=>tot+=(it.totalTam||0)+(it.buHaoTam||0));
     (g.deliveries||[]).filter(d=>d.sp===spCode).forEach(d=>tot+=0);// do not add deliveries here
   });
@@ -1398,7 +1426,7 @@ function tamOrderedForPOSP(poCode,spCode){
 function tamUsedForSP(spCode){
   // tấm = nk * dm
   const sp=sps.find(s=>s.code===spCode);const dm=sp?sp.dm||0:0;
-  return nks.filter(n=>n.spCode===spCode).reduce((s,n)=>s+n.qty,0)*dm;
+  return myNKs().filter(n=>n.spCode===spCode).reduce((s,n)=>s+n.qty,0)*dm;
 }
 function nvlTonForSP(spCode){
   const sp=sps.find(s=>s.code===spCode)||{};const dm=sp.dm||0;
@@ -1410,7 +1438,7 @@ function nvlTonForSP(spCode){
   return {recv,used,capLSX,ton,dm,canBoxes:dm?Math.floor(ton/dm):0};
 }
 function gyBuHaoForPOSP(poCode,spCode){
-  let t=0;gys.filter(g=>g.dhCode===poCode).forEach(g=>(g.items||[]).filter(i=>i.spCode===spCode).forEach(i=>t+=(i.buHaoTam||0)));return t;
+  let t=0;myGYs().filter(g=>g.dhCode===poCode).forEach(g=>(g.items||[]).filter(i=>i.spCode===spCode).forEach(i=>t+=(i.buHaoTam||0)));return t;
 }
 function nvlNccGiaoPO(poCode,spCode){
   if(!poCode)return 0;
@@ -1591,7 +1619,7 @@ async function saveKH(){
     email:v('kh-email').trim(),addr:v('kh-addr').trim()};
   await sbSaveKH();renderAll();toast('✅ Lưu thông tin khách hàng');
 }
-async function saveDD(){if(!EDIT.dd&&dds.length>=20){toast('Tối đa 20!');return;}const name=v('dd-name').trim(),addr=v('dd-addr').trim();if(!name||!addr){toast('Nhập tên & địa chỉ!');return;}const id=EDIT.dd||Date.now();const obj={id,name,addr,nguoi:v('dd-nguoi').trim(),sdt:v('dd-sdt').trim(),note:v('dd-note').trim()};const r=EDIT.dd?await sbPatch('dds',obj,'?id=eq.'+id):await sbInsert('dds',obj);if(!r)return;if(EDIT.dd){const i=dds.findIndex(x=>x.id===id);if(i>=0)dds[i]=obj;EDIT.dd=null;logAct('Sửa','Địa điểm giao',name);}else{dds.push(obj);logAct('Thêm','Địa điểm giao',name);}renderKH();clearDD();toast('✅ Đã lưu: '+name);}
+async function saveDD(){if(!EDIT.dd&&myDDs().length>=20){toast('Tối đa 20!');return;}const name=v('dd-name').trim(),addr=v('dd-addr').trim();if(!name||!addr){toast('Nhập tên & địa chỉ!');return;}const id=EDIT.dd||Date.now();const obj={id,name,addr,nguoi:v('dd-nguoi').trim(),sdt:v('dd-sdt').trim(),note:v('dd-note').trim(),khId:curKhId};const _pl={id,name,addr,nguoi:obj.nguoi||null,sdt:obj.sdt||null,note:obj.note||null,kh_id:curKhId};const r=EDIT.dd?await sbPatch('dds',_pl,'?id=eq.'+id):await sbInsert('dds',_pl);if(!r)return;if(EDIT.dd){const i=dds.findIndex(x=>x.id===id);if(i>=0)dds[i]=obj;EDIT.dd=null;logAct('Sửa','Địa điểm giao',name);}else{dds.push(obj);logAct('Thêm','Địa điểm giao',name);}renderKH();clearDD();toast('✅ Đã lưu: '+name);}
 async function delDD(id){if(!confirm('Xóa địa điểm này?'))return;await sbDel('dds',id);logAct('Xóa','Địa điểm giao','');dds=dds.filter(d=>d.id!==id);renderKH();}
 function clearDD(){['dd-name','dd-addr','dd-nguoi','dd-sdt','dd-note'].forEach(id=>set(id,''));}
 async function saveNCC(){const name=v('ncc-name').trim(),vt=v('ncc-vt').trim().toUpperCase();if(!name||!vt){toast('Nhập tên & viết tắt!');return;}const id=EDIT.ncc||Date.now();const obj={id,name,vt,mst:v('ncc-mst').trim(),sdt:v('ncc-sdt').trim(),contact:v('ncc-contact').trim(),email:v('ncc-email').trim(),addr:v('ncc-addr').trim(),note:v('ncc-note').trim()};const r=EDIT.ncc?await sbPatch('nccs',obj,'?id=eq.'+id):await sbInsert('nccs',obj);if(!r)return;if(EDIT.ncc){const i=nccs.findIndex(x=>x.id===id);if(i>=0)nccs[i]=obj;EDIT.ncc=null;logAct('Sửa','Nhà cung cấp',name);}else{nccs.push(obj);logAct('Thêm','Nhà cung cấp',name);}renderNCC();clearNCC();toast('✅ Đã lưu NCC: '+name);}
@@ -1626,8 +1654,8 @@ function renderKH(){
   // Hiện thông tin KH đang được chọn
   const _kh=khs.find(k=>String(k.id)===String(curKhId))||kh||{};
   set('kh-name',_kh.name||'');set('kh-vt',_kh.vt||'');set('kh-mst',_kh.mst||'');set('kh-phone',_kh.phone||'');set('kh-contact',_kh.contact||'');set('kh-email',_kh.email||'');set('kh-addr',_kh.addr||'');
-  let h='';if(!dds.length)h=`<tr><td colspan="6" style="text-align:center;color:var(--n3);padding:10px">Chưa có.</td></tr>`;
-  dds.forEach((d,i)=>h+=`<tr><td class="c">${i+1}</td><td class="tb">${d.name}</td><td>${d.addr}</td><td>${d.nguoi||'—'}</td><td>${d.sdt||'—'}</td><td style="font-size:10px;color:var(--y1)">${d.note||'—'}</td><td class="c"><button class="btn btb bic" onclick="editDD(${d.id})">✏️</button> <button class="btn btr bic" onclick="delDD(${d.id})">✕</button></td></tr>`);
+  const _dds=myDDs();let h='';if(!_dds.length)h=`<tr><td colspan="6" style="text-align:center;color:var(--n3);padding:10px">Chưa có.</td></tr>`;
+  _dds.forEach((d,i)=>h+=`<tr><td class="c">${i+1}</td><td class="tb">${d.name}</td><td>${d.addr}</td><td>${d.nguoi||'—'}</td><td>${d.sdt||'—'}</td><td style="font-size:10px;color:var(--y1)">${d.note||'—'}</td><td class="c"><button class="btn btb bic" onclick="editDD(${d.id})">✏️</button> <button class="btn btr bic" onclick="delDD(${d.id})">✕</button></td></tr>`);
   g_('dd-tbl').innerHTML=h;
   let nh='';if(!nccs.length)nh=`<tr><td colspan="4" style="text-align:center;color:var(--n3);padding:10px">Chưa có.</td></tr>`;
   nccs.forEach(n=>nh+=`<tr><td class="tb">${n.name}</td><td><span class="badge bc">${n.vt}</span></td><td>${n.sdt||'—'}</td><td class="c"><button class="btn btb bic" onclick="editNCC(${n.id})">✏️</button> <button class="btn btr bic" onclick="delNCC(${n.id})">✕</button></td></tr>`);
@@ -1734,8 +1762,10 @@ async function saveDH(){
   });
   if(!items.length){toast('Thêm ít nhất 1 SP!');return;}
   if(!EDIT.dh&&dhs.find(d=>d.code===code)){toast('Mã PO đã tồn tại!');return;}
-  const dhId=EDIT.dh||Date.now();const dhObj={id:dhId,code,khVt:kh.vt||'',date,due:v('dh-due'),note:v('dh-note').trim(),items};
-  dhObj.khId=curKhId;const _pl={id:dhId,code,kh_vt:dhObj.khVt,date:date||null,due:dhObj.due||null,note:dhObj.note,kh_id:curKhId};
+  const dhKhId=parseInt(v('dh-kh'))||curKhId;
+  const dhKh=khs.find(k=>String(k.id)===String(dhKhId))||kh||{};
+  const dhId=EDIT.dh||Date.now();const dhObj={id:dhId,code,khVt:dhKh.vt||kh.vt||'',date,due:v('dh-due'),note:v('dh-note').trim(),items};
+  dhObj.khId=dhKhId;const _pl={id:dhId,code,kh_vt:dhObj.khVt,date:date||null,due:dhObj.due||null,note:dhObj.note,kh_id:dhKhId};
   const r=EDIT.dh?await sbPatch('dhs',_pl,'?id=eq.'+dhId):await sbInsert('dhs',_pl);
   if(!r){return;}
   if(EDIT.dh)await sbDelWhere('dh_items','dh_id',dhId);
@@ -1797,7 +1827,7 @@ async function saveGY(){
   });
   if(!items.length){toast('Thêm ít nhất 1 SP!');return;}
   const gyId=Date.now();const gyObj={id:gyId,date,nccId:parseInt(v('gy-ncc'))||0,giao:v('gy-giao'),dhCode:v('gy-dh'),poGiay:v('gy-pog').trim(),note:v('gy-note').trim(),items,deliveries:[]};
-  gyObj.khId=curKhId;const r=await sbInsert('gys',{id:gyId,date:date||null,ncc_id:gyObj.nccId||null,giao:gyObj.giao||null,dh_code:gyObj.dhCode||null,po_giay:gyObj.poGiay||null,note:gyObj.note,kh_id:curKhId});
+  const _gyDh=gyObj.dhCode?dhs.find(d=>d.code===gyObj.dhCode):null;gyObj.khId=(_gyDh?_gyDh.khId:0)||curKhId;const r=await sbInsert('gys',{id:gyId,date:date||null,ncc_id:gyObj.nccId||null,giao:gyObj.giao||null,dh_code:gyObj.dhCode||null,po_giay:gyObj.poGiay||null,note:gyObj.note,kh_id:gyObj.khId});
   if(!r){return;}
   const gyRows=items.map(it=>({gy_id:gyId,sp_code:it.spCode,qty:it.qty,kho:it.kho||null,dai:it.dai||null,dm:it.dm||0,total_tam:it.totalTam||0,bu_hao_tam:it.buHaoTam||0}));
   if(gyRows.length)await sbInsert('gy_items',gyRows);
@@ -1842,8 +1872,8 @@ async function saveGYDel(gyId){
   // 🔗 Tự liên kết sang Kho NVL Giấy Tấm: tạo phiếu nhập NVL tương ứng
   const _it=(gy.items||[]).find(i=>i.spCode===sp)||{};const _sp=sps.find(x=>x.code===sp)||{};const _dm=_it.dm||_sp.dm||0;
   const _ndt=`${date}T${t1||'08:00'}`;
-  const _nvlObj={id:_nvlId,datetime:_ndt,nccId:gy.nccId||0,gyId:gyId,spCode:sp,kho:_it.kho||_sp.kho||'',dai:_it.dai||_sp.dai||'',qty,equiv:_dm?Math.floor(qty/_dm):0,ref,xe,nguoi,note:qc,khId:curKhId};
-  const _r2=await sbInsert('nvls',{id:_nvlId,datetime:_ndt,ncc_id:gy.nccId||null,gy_id:gyId,sp_code:sp,kho:_nvlObj.kho||null,dai:_nvlObj.dai||null,qty,equiv:_nvlObj.equiv,ref:ref||null,xe:xe||null,nguoi:nguoi||null,note:qc||null,kh_id:curKhId});
+  const _nvlObj={id:_nvlId,datetime:_ndt,nccId:gy.nccId||0,gyId:gyId,spCode:sp,kho:_it.kho||_sp.kho||'',dai:_it.dai||_sp.dai||'',qty,equiv:_dm?Math.floor(qty/_dm):0,ref,xe,nguoi,note:qc,khId:gy.khId||curKhId};
+  const _r2=await sbInsert('nvls',{id:_nvlId,datetime:_ndt,ncc_id:gy.nccId||null,gy_id:gyId,sp_code:sp,kho:_nvlObj.kho||null,dai:_nvlObj.dai||null,qty,equiv:_nvlObj.equiv,ref:ref||null,xe:xe||null,nguoi:nguoi||null,note:qc||null,kh_id:_nvlObj.khId});
   if(_r2){nvls.push(_nvlObj);}
   gy.deliveries=(gy.deliveries||[]);gy.deliveries.push(delObj);logAct('Thêm','NCC giao giấy',sp+' '+f(qty)+' tấm'+(ref?' ['+ref+']':''));
   renderAll();toast(`✅ Đã lưu phiếu nhập + tự cập nhật Kho NVL: ${f(qty)} tấm`);
@@ -1959,7 +1989,7 @@ async function saveLSX(){
    if(_t.dm>0&&_need>_t.ton){toast(`⚠️ Lưu ý: lệnh cần ${f(_need)} tấm > tồn kho NVL ${f(_t.ton<0?0:_t.ton)} tấm — vẫn cho tạo lệnh.`);}}
   const no=EDIT.lsx?(((lsxs.find(x=>x.id===EDIT.lsx)||{}).no)||(lsxNo(spCode,date)+'_'+Date.now().toString().slice(-4))):(lsxNo(spCode,date)+'_'+Date.now().toString().slice(-4));
   const lsxId=EDIT.lsx||Date.now();const lsxObj={id:lsxId,no,poCode,spCode,date,due:v('lsx-due'),qty,note:v('lsx-note').trim(),ptr:v('lsx-ptr').trim(),ptrs:{IN:v('lsx-ptr-in').trim(),CAN:v('lsx-ptr-can').trim(),BE:v('lsx-ptr-be').trim(),KIM:v('lsx-ptr-kim').trim(),KHO:v('lsx-ptr-kho').trim()},machines:{IN:v('lsx-m-in'),CAN:v('lsx-m-can'),BE:v('lsx-m-be'),KIM:v('lsx-m-kim')},otime:v('lsx-time'),status:'cho'};
-  lsxObj.khId=curKhId;const _pl={id:lsxId,no,po_code:poCode,sp_code:spCode,date:date||null,due:lsxObj.due||null,qty,note:lsxObj.note,ptr:lsxObj.ptr,ptr_in:lsxObj.ptrs.IN||null,ptr_can:lsxObj.ptrs.CAN||null,ptr_be:lsxObj.ptrs.BE||null,ptr_kim:lsxObj.ptrs.KIM||null,ptr_kho:lsxObj.ptrs.KHO||null,may_in:lsxObj.machines.IN||null,may_can:lsxObj.machines.CAN||null,may_be:lsxObj.machines.BE||null,may_kim:lsxObj.machines.KIM||null,o_time:lsxObj.otime||null,status:'cho',kh_id:curKhId};
+  const _lsxDh=dhs.find(d=>d.code===poCode);lsxObj.khId=(_lsxDh?_lsxDh.khId:0)||curKhId;const _pl={id:lsxId,no,po_code:poCode,sp_code:spCode,date:date||null,due:lsxObj.due||null,qty,note:lsxObj.note,ptr:lsxObj.ptr,ptr_in:lsxObj.ptrs.IN||null,ptr_can:lsxObj.ptrs.CAN||null,ptr_be:lsxObj.ptrs.BE||null,ptr_kim:lsxObj.ptrs.KIM||null,ptr_kho:lsxObj.ptrs.KHO||null,may_in:lsxObj.machines.IN||null,may_can:lsxObj.machines.CAN||null,may_be:lsxObj.machines.BE||null,may_kim:lsxObj.machines.KIM||null,o_time:lsxObj.otime||null,status:'cho',kh_id:lsxObj.khId};
   const r=EDIT.lsx?await sbPatch('lsxs',_pl,'?id=eq.'+lsxId):await sbInsert('lsxs',_pl);
   if(!r){return;}
   if(EDIT.lsx){const _i=lsxs.findIndex(x=>x.id===lsxId);if(_i>=0)lsxs[_i]=lsxObj;EDIT.lsx=null;logAct('Sửa','Lệnh SX',no);}else{lsxs.push(lsxObj);logAct('Thêm','Lệnh SX',no);}
@@ -2050,7 +2080,7 @@ async function saveLS(){
   let lsMins=0;if(lsStart&&lsEnd){const[sh,sm]=lsStart.split(':').map(Number);const[eh,em]=lsEnd.split(':').map(Number);lsMins=(eh*60+em)-(sh*60+sm);if(lsMins<=0)lsMins+=24*60;}
   const lsNs=(cd==='NHAP_KHO')?0:(lsMins>0?Math.round(qty/(lsMins/60)):0);
   const lsId=EDIT.ls||Date.now();const lsObj={id:lsId,lsxNo:lsxNo2,spCode:lsx.spCode,poCode:lsx.poCode,date,ca:v('ls-ca'),cd,may:v('ls-may'),nguoi:v('ls-nguoi').trim(),qty,hu:lsHu,thucte:lsThucte,huSx:lsHuSx,huGiay:lsHuGiay,ns:lsNs,mins:lsMins,start:lsStart,end:lsEnd,note:v('ls-note').trim()};
-  lsObj.khId=curKhId;const _pl={id:lsId,lsx_no:lsxNo2,sp_code:lsx.spCode,po_code:lsx.poCode,date:date||null,ca:lsObj.ca,cd,may:lsObj.may,nguoi:lsObj.nguoi,qty,hu:lsHu,thuc_te:lsThucte,hu_sx:lsHuSx,hu_giay:lsHuGiay,ns:lsNs,mins:lsMins,start_time:lsStart||null,end_time:lsEnd||null,note:lsObj.note,kh_id:curKhId};
+  lsObj.khId=lsx.khId||curKhId;const _pl={id:lsId,lsx_no:lsxNo2,sp_code:lsx.spCode,po_code:lsx.poCode,date:date||null,ca:lsObj.ca,cd,may:lsObj.may,nguoi:lsObj.nguoi,qty,hu:lsHu,thuc_te:lsThucte,hu_sx:lsHuSx,hu_giay:lsHuGiay,ns:lsNs,mins:lsMins,start_time:lsStart||null,end_time:lsEnd||null,note:lsObj.note,kh_id:lsObj.khId};
   const r=EDIT.ls?await sbPatch('lss',_pl,'?id=eq.'+lsId):await sbInsert('lss',_pl);
   if(!r){return;}
   let autoNkMsg='';
@@ -2060,8 +2090,8 @@ async function saveLS(){
     if(cd==='NHAP_KHO'){
       const _sp=sps.find(s=>s.code===lsx.spCode)||{};const _key=`${lsx.poCode}_${lsx.spCode}`;if(!nkN[_key])nkN[_key]=1;
       const _ref=`PNK-${lsx.poCode}-${lsx.spCode}-${String(nkN[_key]).padStart(3,'0')}`;const _nkId=lsId+1;
-      const _nkObj={id:_nkId,datetime:`${date}T${lsEnd||'08:00'}`,spCode:lsx.spCode,poCode:lsx.poCode,qty,ref:_ref,dbh:lsx.poCode,qc:_sp.size||'',nccId:0,nguoi:lsObj.nguoi,note:'Tự động từ Lịch SX',khId:curKhId};
-      const _r2=await sbInsert('nks',{id:_nkId,datetime:_nkObj.datetime,sp_code:lsx.spCode,po_code:lsx.poCode,qty,ref:_ref,dbh:lsx.poCode,qc:_nkObj.qc,ncc_id:null,nguoi:_nkObj.nguoi||null,note:_nkObj.note,kh_id:curKhId});
+      const _nkObj={id:_nkId,datetime:`${date}T${lsEnd||'08:00'}`,spCode:lsx.spCode,poCode:lsx.poCode,qty,ref:_ref,dbh:lsx.poCode,qc:_sp.size||'',nccId:0,nguoi:lsObj.nguoi,note:'Tự động từ Lịch SX',khId:lsObj.khId};
+      const _r2=await sbInsert('nks',{id:_nkId,datetime:_nkObj.datetime,sp_code:lsx.spCode,po_code:lsx.poCode,qty,ref:_ref,dbh:lsx.poCode,qc:_nkObj.qc,ncc_id:null,nguoi:_nkObj.nguoi||null,note:_nkObj.note,kh_id:lsObj.khId});
       if(_r2){nks.push(_nkObj);nkN[_key]=(nkN[_key]||1)+1;autoNkMsg=' → đã tự nhập kho TP '+_ref;renderNKHist();renderTon();renderNXT();}
     }
   }
@@ -2119,7 +2149,7 @@ function renderLSHist(){
   g_('ls-hist').innerHTML=h;
   // update selects
   const sl=g_('lf-lsx');const cl=sl.value;sl.innerHTML='<option value="">Tất cả LSX</option>';[...new Set(myLSs().map(l=>l.lsxNo))].forEach(n=>sl.innerHTML+=`<option value="${n}">${n}</option>`);sl.value=cl;
-  const sm=g_('lf-may');const cm=sm.value;sm.innerHTML='<option value="">Tất cả máy</option>';[...new Set(lss.map(l=>l.may))].forEach(m=>sm.innerHTML+=`<option value="${m}">${m}</option>`);sm.value=cm;
+  const sm=g_('lf-may');const cm=sm.value;sm.innerHTML='<option value="">Tất cả máy</option>';[...new Set(myLSs().map(l=>l.may))].forEach(m=>sm.innerHTML+=`<option value="${m}">${m}</option>`);sm.value=cm;
 }
 
 // ══════════════════════════
@@ -2165,7 +2195,7 @@ async function saveNK(){
   if(maxQty>0&&(prev+qty)>maxQty){if(!confirm(`⚠️ Tổng nhập (${f(prev+qty)}) vượt quá SL theo PO (${f(maxQty)}). Tiếp tục?`))return;}
   const ref=v('nk-ref');const sp=sps.find(s=>s.code===spCode)||{};
   const nkId=EDIT.nk||Date.now();const nkObj={id:nkId,datetime:`${date}T${time}`,spCode,poCode,qty,ref,dbh:poCode,qc:sp.size||'',nccId:parseInt(v('nk-ncc'))||0,nguoi:v('nk-nguoi').trim(),note:v('nk-note2').trim()};
-  nkObj.khId=curKhId;const _pl={id:nkId,datetime:nkObj.datetime,sp_code:spCode,po_code:poCode,qty,ref,dbh:poCode,qc:nkObj.qc,ncc_id:nkObj.nccId||null,nguoi:nkObj.nguoi||null,note:nkObj.note||null,kh_id:curKhId};
+  nkObj.khId=(po?po.khId:0)||curKhId;const _pl={id:nkId,datetime:nkObj.datetime,sp_code:spCode,po_code:poCode,qty,ref,dbh:poCode,qc:nkObj.qc,ncc_id:nkObj.nccId||null,nguoi:nkObj.nguoi||null,note:nkObj.note||null,kh_id:nkObj.khId};
   const r=EDIT.nk?await sbPatch('nks',_pl,'?id=eq.'+nkId):await sbInsert('nks',_pl);
   if(!r){return;}
   if(EDIT.nk){const _i=nks.findIndex(x=>x.id===nkId);if(_i>=0)nks[_i]=nkObj;EDIT.nk=null;logAct('Sửa','Nhập kho TP',ref);}
@@ -2213,8 +2243,9 @@ async function saveGH(){
   if(warns.length&&!confirm('⚠️ '+warns.join(', ')+'\nTiếp tục?'))return;
   const pxk=EDIT.gh?(((ghs.find(g=>g.id===EDIT.gh)||{}).pxk)||`PXK_${String(pxkN).padStart(4,'0')}`):`PXK_${String(pxkN).padStart(4,'0')}`;if(!EDIT.gh)pxkN++;
   const time=v('gh-time')||'08:00';
-  const ghId=EDIT.gh||Date.now();const ghObj={id:ghId,datetime:`${date}T${time}`,timexong:v('gh-xong'),ddId,xeId:parseInt(v('gh-xe'))||0,poCode:v('gh-po'),pxk,khVt:kh.vt||'',items,note:v('gh-note').trim(),nguoiXK:v('gh-nguoi-xk').trim()};
-  ghObj.khId=curKhId;const _pl={id:ghId,datetime:ghObj.datetime,timexong:ghObj.timexong||null,dd_id:ddId,xe_id:ghObj.xeId||null,po_code:ghObj.poCode||null,pxk,kh_vt:ghObj.khVt,note:ghObj.note||null,nguoi_xk:ghObj.nguoiXK||null,kh_id:curKhId};
+  const _ghPo=dhs.find(d=>d.code===v('gh-po'));const _ghKhId=(_ghPo?_ghPo.khId:0)||curKhId;const _ghKh=khs.find(k=>String(k.id)===String(_ghKhId))||kh||{};
+  const ghId=EDIT.gh||Date.now();const ghObj={id:ghId,datetime:`${date}T${time}`,timexong:v('gh-xong'),ddId,xeId:parseInt(v('gh-xe'))||0,poCode:v('gh-po'),pxk,khVt:_ghKh.vt||kh.vt||'',items,note:v('gh-note').trim(),nguoiXK:v('gh-nguoi-xk').trim()};
+  ghObj.khId=_ghKhId;const _pl={id:ghId,datetime:ghObj.datetime,timexong:ghObj.timexong||null,dd_id:ddId,xe_id:ghObj.xeId||null,po_code:ghObj.poCode||null,pxk,kh_vt:ghObj.khVt,note:ghObj.note||null,nguoi_xk:ghObj.nguoiXK||null,kh_id:_ghKhId};
   const r=EDIT.gh?await sbPatch('ghs',_pl,'?id=eq.'+ghId):await sbInsert('ghs',_pl);
   if(!r){return;}
   if(EDIT.gh)await sbDelWhere('gh_items','gh_id',ghId);
@@ -2290,10 +2321,10 @@ function renderNXTPO(){
       if(ag.ton>0){const a=ag.ageDays;ageColor=a<=7?'var(--g3)':a<=30?'var(--y2)':a<=60?'var(--o2)':'var(--r2)';ageTxt=a+' ngày';}
       const stB=dh.closed?'<span class="badge bg">🔒 Đã kết thúc</span>':((ag.giao>=ord&&ord>0)?'<span class="badge bg">✅ Hoàn tất</span>':'<span class="badge by">⏳ Theo dõi</span>');
       const btn=idx===0?`<button class="btn ${dh.closed?'btn_':'btr'} bsm" onclick="poClose(${dh.id})">${dh.closed?'🔓 Mở lại':'🔒 Kết thúc'}</button>`:'';
-      h+=`<tr${dh.closed?' style="opacity:.6"':''}><td class="tb">${idx===0?dh.code:''}</td><td class="tb">${it.spCode}</td><td style="font-size:10px;color:var(--n3)">${dh.due?fd(dh.due):'—'}</td><td class="r">${f(ord)}</td><td class="r cg">${f(ag.nk)}</td><td class="r cb">${f(ag.giao)}</td><td class="r tb">${f(ag.ton)}</td><td class="r">${diffTxt}</td><td class="c" style="color:${ageColor};font-weight:700">${ageTxt}</td><td class="c">${stB}</td><td class="c">${btn}</td></tr>`;
+      h+=`<tr${dh.closed?' style="opacity:.6"':''}><td class="tb">${idx===0?dh.code:''}</td><td class="tb">${it.spCode}</td><td style="font-size:10px;color:var(--n3)">${dh.due?fd(dh.due):'—'}</td><td class="r">${f(ord)}</td><td class="r cg">${f(ag.nk)}</td><td class="r cb">${f(ag.giao)}</td><td class="r cy">${f(ag.buHaoGiao||0)}</td><td class="r tb" style="color:var(--g2)" title="SL thực nhận = Đã giao + Bù hao">${f((ag.giao||0)+(ag.buHaoGiao||0))}</td><td class="r tb" title="= Nhập kho − SL thực nhận">${f(ag.ton)}</td><td class="r">${diffTxt}</td><td class="c" style="color:${ageColor};font-weight:700">${ageTxt}</td><td class="c">${stB}</td><td class="c">${btn}</td></tr>`;
     });
   });
-  if(!any)h='<tr><td colspan="11" style="text-align:center;color:var(--n3);padding:14px">Chưa có PO.</td></tr>';
+  if(!any)h='<tr><td colspan="13" style="text-align:center;color:var(--n3);padding:14px">Chưa có PO.</td></tr>';
   el.innerHTML=h;
 }
 function renderNXT(){
@@ -2319,7 +2350,7 @@ function renderNXT(){
   });
   g_('nxt-tbl').innerHTML=h;
   const ss=g_('nxt-sp');const cs=ss.value;ss.innerHTML='<option value="">Tất cả SP</option>';mySPs().forEach(s=>ss.innerHTML+=`<option value="${s.code}">${s.code} – ${s.name||''}</option>`);ss.value=cs;
-  const sd=g_('nxt-dd');const cd=sd.value;sd.innerHTML='<option value="">Tất cả ĐĐ</option>';dds.forEach(d=>sd.innerHTML+=`<option value="${d.id}">${d.name}</option>`);sd.value=cd;
+  const sd=g_('nxt-dd');const cd=sd.value;sd.innerHTML='<option value="">Tất cả ĐĐ</option>';myDDs().forEach(d=>sd.innerHTML+=`<option value="${d.id}">${d.name}</option>`);sd.value=cd;
   renderNXTPO();
 }
 
@@ -2331,7 +2362,7 @@ function dkLoadSP(){
   const spCode=v('dk-sp');const sp=sps.find(s=>s.code===spCode);
   if(!sp)return;
   // Gợi ý tồn từ lần khai báo gần nhất của SP này
-  const last=dks.filter(d=>d.spCode===spCode).sort((a,b)=>b.ngay.localeCompare(a.ngay))[0];
+  const last=myDKs().filter(d=>d.spCode===spCode).sort((a,b)=>b.ngay.localeCompare(a.ngay))[0];
   if(last){set('dk-ton-tp',last.tonTP||0);set('dk-ton-nvl',last.tonNVL||0);}
 }
 async function saveDK(){
@@ -2351,7 +2382,7 @@ function renderTon(){
   const filterKy=v('dk-filter-ky')||'';
 
   // Cập nhật datalist kỳ
-  const kyList=[...new Set(dks.map(d=>d.ky))].sort().reverse();
+  const kyList=[...new Set(myDKs().map(d=>d.ky))].sort().reverse();
   const dkKyList=document.getElementById('dk-ky-list');
   if(dkKyList)dkKyList.innerHTML=kyList.map(k=>`<option value="${k}">`).join('');
   const filterSel=document.getElementById('dk-filter-ky');
@@ -2381,7 +2412,7 @@ function renderTon(){
     if(filterKy&&dkRow){
       const kyStart=dkRow.ngay;
       // Tìm kỳ tiếp theo để giới hạn khoảng thời gian
-      const nextDK=dks.filter(dk=>dk.spCode===s.code&&dk.ngay>kyStart).sort((a,b)=>a.ngay.localeCompare(b.ngay))[0];
+      const nextDK=myDKs().filter(dk=>dk.spCode===s.code&&dk.ngay>kyStart).sort((a,b)=>a.ngay.localeCompare(b.ngay))[0];
       const kyEnd=nextDK?nextDK.ngay:'9999-12-31';
       nkInKy=myNKs().filter(n=>n.spCode===s.code&&n.datetime>=kyStart&&n.datetime<kyEnd).reduce((t,n)=>t+n.qty,0);
       outInKy=myGHs().reduce((tot,g)=>{if(g.datetime<kyStart||g.datetime>=kyEnd)return tot;return tot+(g.items||[]).filter(it=>it.spCode===s.code).reduce((t,it)=>t+(it.qty||0)+(it.buHao||0),0);},0);
@@ -2442,7 +2473,7 @@ function bcSXDetailHTML(po,sp){
   const spObj=sps.find(s=>s.code===sp)||{};const dm=spObj.dm||0;
   const nvlList=myNVLs().filter(n=>n.spCode===sp&&(gys.find(g=>g.id===n.gyId)||{}).dhCode===po);
   const nvlRows=nvlList.map(n=>{const g=gys.find(x=>x.id===n.gyId)||{};const ncc=nccs.find(c=>c.id===n.nccId)||{};return '<tr><td>'+fdtt(n.datetime)+'</td><td>'+(ncc.vt||ncc.name||'—')+'</td><td>'+(n.kho||'—')+'×'+(n.dai||'—')+'</td><td class="r cb">'+f(n.qty)+'</td><td style="font-size:9px;color:var(--n3)">'+(g.poGiay||'—')+'</td><td style="font-size:9px;color:var(--n3)">'+(n.ref||'—')+'</td></tr>';}).join('')||'<tr><td colspan="6" style="color:var(--n3)">Chưa nhập NVL</td></tr>';
-  let ordTam=0;gys.filter(g=>g.dhCode===po).forEach(g=>(g.items||[]).filter(i=>i.spCode===sp).forEach(i=>ordTam+=(i.totalTam||0)+(i.buHaoTam||0)));
+  let ordTam=0;myGYs().filter(g=>g.dhCode===po).forEach(g=>(g.items||[]).filter(i=>i.spCode===sp).forEach(i=>ordTam+=(i.totalTam||0)+(i.buHaoTam||0)));
   const recvTam=nvlNccGiaoPO(po,sp);const ss=poStageStats(po,sp);const nkNet=(ss.dat.NHAP_KHO||0)-(ss.hu.NHAP_KHO||0);
   const usedTam=(nkNet+ss.totHu)*dm;const conTam=recvTam-usedTam;
   const lsxList=myLSXs().filter(l=>l.poCode===po&&l.spCode===sp);
@@ -2804,7 +2835,7 @@ async function saveNVL(){
   const sp=sps.find(s=>s.code===spCode)||{};const dm=sp.dm||0;
   const nvlId=EDIT.nvl||Date.now();
   const nvlObj={id:nvlId,datetime:`${date}T${time}`,nccId,gyId:parseInt(v('nvl-gy'))||0,spCode,kho:v('nvl-kho').trim(),dai:v('nvl-dai').trim(),qty,equiv:dm?Math.floor(qty/dm):0,ref:v('nvl-ref').trim(),xe:v('nvl-xe').trim(),nguoi:v('nvl-nguoi').trim(),note:v('nvl-note').trim()};
-  nvlObj.khId=curKhId;const _pl={id:nvlId,datetime:nvlObj.datetime,ncc_id:nccId||null,gy_id:nvlObj.gyId||null,sp_code:spCode,kho:nvlObj.kho||null,dai:nvlObj.dai||null,qty,equiv:nvlObj.equiv,ref:nvlObj.ref||null,xe:nvlObj.xe||null,nguoi:nvlObj.nguoi||null,note:nvlObj.note||null,kh_id:curKhId};
+  const _nvlGy=nvlObj.gyId?gys.find(x=>x.id===nvlObj.gyId):null;nvlObj.khId=(_nvlGy?_nvlGy.khId:0)||curKhId;const _pl={id:nvlId,datetime:nvlObj.datetime,ncc_id:nccId||null,gy_id:nvlObj.gyId||null,sp_code:spCode,kho:nvlObj.kho||null,dai:nvlObj.dai||null,qty,equiv:nvlObj.equiv,ref:nvlObj.ref||null,xe:nvlObj.xe||null,nguoi:nvlObj.nguoi||null,note:nvlObj.note||null,kh_id:nvlObj.khId};
   const r=EDIT.nvl?await sbPatch('nvls',_pl,'?id=eq.'+nvlId):await sbInsert('nvls',_pl);
   if(!r){return;}
   if(EDIT.nvl){const _i=nvls.findIndex(x=>x.id===nvlId);if(_i>=0)nvls[_i]=nvlObj;EDIT.nvl=null;logAct('Sửa','Nhập NVL giấy',spCode+' '+f(qty)+' tấm');}else{nvls.push(nvlObj);logAct('Thêm','Nhập NVL giấy',spCode+' '+f(qty)+' tấm');}
@@ -2813,7 +2844,7 @@ async function saveNVL(){
 function clearNVL(){set('nvl-date',todayISO());set('nvl-time','08:00');set('nvl-ncc','');set('nvl-sp','');set('nvl-qty','');set('nvl-kho','');set('nvl-dai','');set('nvl-ref','');set('nvl-xe','');set('nvl-nguoi','');set('nvl-note','');set('nvl-gy','');set('nvl-equiv','');}
 async function delNVL(id){if(!confirm('Xóa?'))return;await sbDel('nvls',id);logAct('Xóa','Nhập NVL giấy','');nvls=nvls.filter(n=>n.id!==id);renderNVLHist();renderNVLTon();}
 function renderNVLHist(){
-  let h='';if(!nvls.length)h=`<tr><td colspan="14" style="text-align:center;color:var(--n3);padding:12px">Chưa có giao dịch nhập NVL giấy.</td></tr>`;
+  let h='';if(!myNVLs().length)h=`<tr><td colspan="14" style="text-align:center;color:var(--n3);padding:12px">Chưa có giao dịch nhập NVL giấy.</td></tr>`;
   [...myNVLs()].sort((a,b)=>b.datetime.localeCompare(a.datetime)).forEach(n=>{const ncc=nccs.find(c=>c.id===n.nccId)||{name:'—',vt:'—'};const gy=gys.find(g=>g.id===n.gyId);
     h+=`<tr><td>${fdtt(n.datetime)}</td><td><span class="badge bc">${n.ref||'—'}</span></td><td><b>${ncc.vt}</b></td><td style="font-size:10px;color:var(--n3)">${gy?fd(gy.date):'—'}</td><td style="font-size:10px;color:var(--n3)">${gy?(gy.dhCode||'—'):'—'}</td><td class="tb">${n.spCode}</td><td style="color:var(--n3)">${n.kho||'—'}</td><td style="color:var(--n3)">${n.dai||'—'}</td><td class="r cg tb">${f(n.qty)}</td><td class="r" style="color:var(--n3)">${n.equiv?'≈'+f(n.equiv):''}</td><td style="color:var(--n3);font-size:10px">${n.xe||'—'}</td><td style="font-size:10px">${n.nguoi||'—'}</td><td style="font-size:10px;color:${n.note&&(n.note.includes('ẩm')||n.note.includes('hỏng'))?'var(--r2)':'var(--n3)'}">${n.note||'—'}</td><td class="c"><button class="btn btb bic" onclick="editNVL(${n.id})">✏️</button> <button class="btn btr bic" onclick="delNVL(${n.id})">✕</button></td></tr>`;
   });const el=g_('nvl-tbl');if(el)el.innerHTML=h;
@@ -2996,8 +3027,8 @@ async function resetAll(){
   renderAll();toast('Đã xóa toàn bộ dữ liệu');
 }
 function exportCSV(){
-  let rows=[];nks.forEach(n=>{const sp=sps.find(s=>s.code===n.spCode)||{};const ncc=nccs.find(c=>c.id===n.nccId)||{vt:''};rows.push(`${n.datetime},NHAP_KHO,${n.poCode||''},${n.spCode},"${sp.name||''}","${n.qc||sp.size||''}",${n.qty},,${ncc.vt},,${n.ref||''},${n.dbh||''}`);});
-  ghs.forEach(g=>{const dd=dds.find(d=>d.id===g.ddId)||{name:''};const xe=xes.find(x=>x.id===g.xeId)||{so:''};(g.items||[]).forEach(it=>{const sp=sps.find(s=>s.code===it.spCode)||{};rows.push(`${g.datetime},GIAO_HANG,${g.poCode||''},${it.spCode},"${sp.name||''}","${sp.size||''}",${it.qty},"${dd.name}","${xe.so||''}","${g.pxk||''}","${g.poCode||''}",,`);});});
+  let rows=[];myNKs().forEach(n=>{const sp=sps.find(s=>s.code===n.spCode)||{};const ncc=nccs.find(c=>c.id===n.nccId)||{vt:''};rows.push(`${n.datetime},NHAP_KHO,${n.poCode||''},${n.spCode},"${sp.name||''}","${n.qc||sp.size||''}",${n.qty},,${ncc.vt},,${n.ref||''},${n.dbh||''}`);});
+  myGHs().forEach(g=>{const dd=dds.find(d=>d.id===g.ddId)||{name:''};const xe=xes.find(x=>x.id===g.xeId)||{so:''};(g.items||[]).forEach(it=>{const sp=sps.find(s=>s.code===it.spCode)||{};rows.push(`${g.datetime},GIAO_HANG,${g.poCode||''},${it.spCode},"${sp.name||''}","${sp.size||''}",${it.qty},"${dd.name}","${xe.so||''}","${g.pxk||''}","${g.poCode||''}",,`);});});
   const csv='Ngày giờ,Loại GD,PO,Mã SP,Tên SP,Quy cách,Số lượng,Địa điểm,NCC,Xe,Phiếu XK/NK,Mã DBH\n'+rows.join('\n');
   const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='bao-cao-carton-v3.csv';a.click();
@@ -3078,13 +3109,13 @@ function updateSels(){
   set('gh-pxk',`PXK_${String(pxkN).padStart(4,'0')}`);set('gh-kh',kh.vt||'');
   // dh-kh: dropdown chọn KH
   const dkh=g_('dh-kh');
-  if(dkh){const cur=dkh.value;dkh.innerHTML='<option value="">— Chọn khách hàng —</option>'+khOpts();if(cur)dkh.value=cur;if(!dkh.value&&curKhId)dkh.value=curKhId;}
+  if(dkh){const cur=dkh.value;dkh.innerHTML='<option value="">— Chọn khách hàng —</option>'+khOpts();if(EDIT.dh&&cur)dkh.value=cur;else if(curKhId)dkh.value=String(curKhId);if(!dkh.value&&cur)dkh.value=cur;}
   lsUpdateMay();
   updateNSDatalist();
   lsxPtrFill(true);
   // DK selects
   const dkSpEl=document.getElementById('dk-sp');if(dkSpEl){const c=dkSpEl.value;dkSpEl.innerHTML=spOpts();dkSpEl.value=c;}
-  const spKhEl=g_('sp-kh');if(spKhEl){const c=spKhEl.value;spKhEl.innerHTML=khOpts();spKhEl.value=c||String(curKhId||'');}
+  const spKhEl=g_('sp-kh');if(spKhEl){const c=spKhEl.value;spKhEl.innerHTML=khOpts();const _edSP=g_('sp-code')&&g_('sp-code').dataset.editing;spKhEl.value=(_edSP&&c)?c:String(curKhId||c||'');}
 }
 function renderKho(){renderNKHist();renderGHHist();renderTon();renderNXT();}
 function renderAll(){updateKHSelector();renderKHS();renderDashboard();renderKH();renderNCC();renderXe();renderNS();renderSP();renderDH();renderGY();renderLSX();renderLS();renderKHSX();renderNKHist();renderGHHist();renderTon();renderNXT();renderNVLHist();renderNVLTon();renderBaoCao();renderCFG();updateSels();}
@@ -3200,7 +3231,7 @@ function editNK(id){const n=nks.find(x=>x.id===id);if(!n)return;const b=document
 function editNVL(id){const n=nvls.find(x=>x.id===id);if(!n)return;const b=document.querySelector('.sbb[onclick*="\'nvl\'"]');if(b)sw('nvl',b);set('nvl-ncc',String(n.nccId||''));set('nvl-gy',String(n.gyId||''));set('nvl-sp',n.spCode);const p=(n.datetime||'').split('T');set('nvl-date',p[0]||'');set('nvl-time',(p[1]||'').slice(0,5)||'08:00');set('nvl-kho',n.kho||'');set('nvl-dai',n.dai||'');set('nvl-qty',n.qty);set('nvl-ref',n.ref||'');set('nvl-xe',n.xe||'');set('nvl-nguoi',n.nguoi||'');set('nvl-note',n.note||'');nvlCalc();EDIT.nvl=id;toast('✏️ Đang sửa phiếu nhập NVL — bấm Lưu để cập nhật');}
 function editLS(id){const l=lss.find(x=>x.id===id);if(!l)return;const b=document.querySelector('.sbb[onclick*="\'ls\'"]');if(b)sw('ls',b);set('ls-lsx',l.lsxNo);lsLoadLSX();set('ls-cd',l.cd);lsUpdateMay();set('ls-may',l.may||'');set('ls-date',l.date);set('ls-ca',l.ca||'S');set('ls-thucte',(l.thucte!=null?l.thucte:((l.qty||0)+(l.hu||0))));set('ls-husx',(l.huSx!=null?l.huSx:(l.hu||0)));set('ls-hugiay',l.huGiay||0);lsCalcDat();set('ls-start',l.start||'');set('ls-end',l.end||'');set('ls-nguoi',l.nguoi||'');set('ls-note',l.note||'');calcLSNS();EDIT.ls=id;toast('✏️ Đang sửa ghi nhận SX — bấm Ghi nhận để lưu lại (lưu ý: phiếu nhập kho tự động cũ không đổi theo)');}
 function editLSX(id){const l=lsxs.find(x=>x.id===id);if(!l)return;const b=document.querySelector('.sbb[onclick*="\'lsx\'"]');if(b)sw('lsx',b);set('lsx-po',l.poCode);lsxLoadPO();set('lsx-sp',l.spCode);lsxLoadSP();set('lsx-date',l.date);set('lsx-time',l.otime||'');set('lsx-due',l.due||'');set('lsx-qty',l.qty);set('lsx-note',l.note||'');lsxPtrFill(false);const pt=l.ptrs||{};setSelVal('lsx-ptr',l.ptr||'');setSelVal('lsx-ptr-in',pt.IN||'');setSelVal('lsx-ptr-can',pt.CAN||'');setSelVal('lsx-ptr-be',pt.BE||'');setSelVal('lsx-ptr-kim',pt.KIM||'');setSelVal('lsx-ptr-kho',pt.KHO||'');const mc=l.machines||{};set('lsx-m-in',mc.IN||'');set('lsx-m-can',mc.CAN||'');set('lsx-m-be',mc.BE||'');set('lsx-m-kim',mc.KIM||'');lsxNvlCheck();EDIT.lsx=id;toast('✏️ Đang sửa lệnh SX — bấm Tạo lệnh SX để lưu lại');}
-function editDH(id){const dh=dhs.find(d=>d.id===id);if(!dh)return;const b=document.querySelector('.sbb[onclick*="\'dh\'"]');if(b)sw('dh',b);set('dh-code',dh.code);set('dh-date',dh.date);set('dh-due',dh.due||'');set('dh-note',dh.note||'');document.querySelectorAll('#dh-rows .mr-item').forEach(e=>e.remove());dhRc=0;(dh.items||[]).forEach(it=>{addDHRow();const rid=`dhr-${dhRc}`;set(`${rid}-sp`,it.spCode);const sel=g_(`${rid}-sp`);if(sel&&sel.onchange)sel.onchange();set(`${rid}-ord`,it.ordQty);calcBH2(rid);});EDIT.dh=id;toast('✏️ Đang sửa PO — chỉnh xong bấm Lưu PO');}
+function editDH(id){const dh=dhs.find(d=>d.id===id);if(!dh)return;const b=document.querySelector('.sbb[onclick*="\'dh\'"]');if(b)sw('dh',b);set('dh-code',dh.code);set('dh-date',dh.date);set('dh-due',dh.due||'');set('dh-note',dh.note||'');const _dkh=g_('dh-kh');if(_dkh)_dkh.value=String(dh.khId||curKhId||'');document.querySelectorAll('#dh-rows .mr-item').forEach(e=>e.remove());dhRc=0;(dh.items||[]).forEach(it=>{addDHRow();const rid=`dhr-${dhRc}`;set(`${rid}-sp`,it.spCode);const sel=g_(`${rid}-sp`);if(sel&&sel.onchange)sel.onchange();set(`${rid}-ord`,it.ordQty);calcBH2(rid);});EDIT.dh=id;toast('✏️ Đang sửa PO — chỉnh xong bấm Lưu PO');}
 function editGH(id){const gh=ghs.find(g=>g.id===id);if(!gh)return;const b=document.querySelector('.sbb[onclick*="\'tp\'"]');if(b)sw('tp',b);const t=document.querySelectorAll('#pane-tp .ptb')[1];if(t)swPT('tp-gh',t);const p=(gh.datetime||'').split('T');set('gh-date',p[0]||'');set('gh-time',(p[1]||'').slice(0,5)||'08:00');set('gh-xong',gh.timexong||'');set('gh-dd',String(gh.ddId||''));set('gh-xe',String(gh.xeId||''));set('gh-po',gh.poCode||'');set('gh-nguoi-xk',gh.nguoiXK||'');set('gh-note',gh.note||'');document.querySelectorAll('#gh-rows .mr-item').forEach(e=>e.remove());ghRc=0;(gh.items||[]).forEach(it=>{addGHRow();const rid=`ghr-${ghRc}`;set(`${rid}-sp`,it.spCode);const sel=g_(`${rid}-sp`);if(sel&&sel.onchange)sel.onchange();set(`${rid}-bh`,it.buHao||0);set(`${rid}-qty`,it.qty);calcLuyCe(rid);});EDIT.gh=id;toast('✏️ Đang sửa phiếu giao — chỉnh xong bấm Lưu');}
 function gyQuickFromKHSX(poCode){const b=document.querySelector('.sbb[onclick*="\'gy\'"]');if(b)sw('gy',b);clearGY();set('gy-dh',poCode);gyLoadPO();toast('📄 Đã mở Đặt giấy cho PO '+poCode+' — kiểm tra số lượng rồi Lưu');}
 function lsxQuickOpen(poCode,spCode){const b=document.querySelector('.sbb[onclick*="\'lsx\'"]');if(b)sw('lsx',b);clearLSX();set('lsx-po',poCode);lsxLoadPO();set('lsx-sp',spCode);lsxLoadSP();set('lsx-date',todayISO());lsxPtrFill(true);toast('🔧 Đã mở form Lệnh SX cho PO '+poCode+' — nhập SL & phân công máy/người rồi Tạo lệnh');}
@@ -3244,8 +3275,8 @@ async function nvlInlineAdd(poCode,spCode,inputId){
   const it=(gy.items||[]).find(i=>i.spCode===spCode);const ord=it?((it.totalTam||0)+(it.buHaoTam||0)):0;
   if(ord>0){const recv=myNVLs().filter(n=>n.gyId===gy.id&&n.spCode===spCode).reduce((t,n)=>t+(n.qty||0),0);const cap=Math.floor(ord*1.1);if(recv+qty>cap){toast(`❌ Vượt 110% đặt (${f(cap)}), đã nhập ${f(recv)} tấm`);return;}}
   const sp=sps.find(s=>s.code===spCode)||{};const dm=sp.dm||0;const id=Date.now();
-  const obj={id,datetime:todayISO()+'T08:00',nccId:gy.nccId||0,gyId:gy.id,spCode,kho:(it&&it.kho)||sp.kho||'',dai:(it&&it.dai)||sp.dai||'',qty,equiv:dm?Math.floor(qty/dm):0,ref:'',xe:'',nguoi:'',note:'Nhập nhanh từ KH SX Tổng',khId:curKhId};
-  const r=await sbInsert('nvls',{id,datetime:obj.datetime,ncc_id:gy.nccId||null,gy_id:gy.id,sp_code:spCode,kho:obj.kho||null,dai:obj.dai||null,qty,equiv:obj.equiv,ref:null,xe:null,nguoi:null,note:obj.note,kh_id:curKhId});
+  const obj={id,datetime:todayISO()+'T08:00',nccId:gy.nccId||0,gyId:gy.id,spCode,kho:(it&&it.kho)||sp.kho||'',dai:(it&&it.dai)||sp.dai||'',qty,equiv:dm?Math.floor(qty/dm):0,ref:'',xe:'',nguoi:'',note:'Nhập nhanh từ KH SX Tổng',khId:gy.khId||curKhId};
+  const r=await sbInsert('nvls',{id,datetime:obj.datetime,ncc_id:gy.nccId||null,gy_id:gy.id,sp_code:spCode,kho:obj.kho||null,dai:obj.dai||null,qty,equiv:obj.equiv,ref:null,xe:null,nguoi:null,note:obj.note,kh_id:obj.khId});
   if(!r)return;
   nvls.push(obj);logAct('Thêm','Nhập NVL giấy',spCode+' '+f(qty)+' tấm (PO '+poCode+')');
   renderAll();toast(`✅ Đã nhập ${f(qty)} tấm cho PO ${poCode}`);
